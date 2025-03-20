@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joy Bose - Homepage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+        .sidebar {
+            width: 200px;
+            background: #f4f4f4;
+            padding: 20px;
+            height: 100vh;
+        }
+        .content {
+            padding: 20px;
+            flex: 1;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h3>Links</h3>
+        <ul>
+            <li><a href="https://joybose.github.io/">Home</a></li>
+            <li><a href="research.html">Research</a></li>
+            <li><a href="projects.html">Projects</a></li>
+            <li><a href="personallinks.html">Personal Links</a></li>
+            <li><a href="onlineresume.html">Online Resume</a></li>
+            <li><a href="JoyBoseCV.pdf">CV</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h1> Joy Bose's Research Work </h1>
+        <h2>Research during PhD at University of Manchester</h2>
+<p>My PhD work consisted of building software models for neural systems which are scalable, can store and retrieve sequences with state information. Below is a brief description: </p>
+<p>I am concerned mainly with rank-ordered N of M coded Kanerva (Sparse Distributed) memories. The Elman-Jordan network model is used to incorporate state information. The basic model is a two-layered neural network with recurrent connections. The idea is to decode the input pattern into high dimensional space, where it is much more likely to be linearly seperable. Hebbian learning takes place in only one of the two layers, while the weights are fixed in the other layer. The second of the two layers is a correlation matrix memory. I am currently working on time abstracted neural models which learn 'on the fly', that is, in a single pass. Such neural structures are claimed to have properties similar to the cerebellum in the brain.</p>
+<p>The novelty of the model is due to its scalability, similarity metrics, temporal properties due to the use of rank order coding, and speed of learning, which may be done in real time. The training and recall phases can be either seperated or done together. A generic finite state machine may be implemented by this network model. Multiple units of the two-layer model may be used to give additional flexibility. Hebbian learning is highly localised and this makes it easier to implement in hardware. Retrieval of correct output data on slightly errorenous input data, storing of sequences, etc are properties inherent in the neural memory model.</p>
+<p>The models are being implemented and tested in hardware, on an EPXA1 development board using Excalibur EPXA1 devices. Scalability and speedup due to hardware are the major motivations for modelling in hardware. Locally synchronous, globally asynchronous model is to be used for the hardware.</p>
+<p>Potential applications of ther work include pattern (like character/image) recognition, time series prediction, data classification or clustering, robot navigation, motif discovery, genome mapping in DNA sequences, learning of tunes etc.</p>
+<p>The ultimate goal of the hardware project is to create scalable neural chips using FPGA logic, which can be joined in a modular fashion to build a large-scale neural network, with the inter-chip communication limited to reporting of events(firing of the neuron). Altera chips are to be used, along with a hardware development board to design the functioning. Thus the project would also involve, at a later time, things about the high-level interface for programming the chip, the primitive communication protocol to be used for inter-chip communication, a primitive operating system for the microprocessor, etc. The Altera chips have a microprocessor and RAM memory to store the information. The software model, once it is developed, is to be transferred to the chips using Altera Excalibur EPXA1 Hardware Development Board (which uses an ARM processor along with APEX FPGA) and the Altera Quartus II Software. Verilog is the dominant HDL to be used.</p>
+<p>I am also interested in neural models for storing sequences of groups of neurons firing seperated in time. Implementing the above ideas in real time involves resolving the synchronisation problems between different waves of firing neurons, and maintaining their seperation as well as their order. Also, implementing the N of M model described above in real pulse-coded neurons involves getting only a specific fixed number of neurons with the highest activations to fire, the time of firing being in order of their activations. Use of/Comparision with other neural architectures/algorithms such as self organising maps, genetic algorithms or support vector machines may also be investigated. Modelling of non-linear functions is a subject of interest.</p>
+<p>Heres an overview of the sequence machine, in layman's terms:</p>
+<h2>Definition: What?</h2>
+<p>I have created a sequence machine using spiking neurons. Let me explain what that really means: a sequence macine is something that can "recognise" sequences of patterns. I am defining it as a deterministic automaton that can learn and predict sequences of patterns. Now the patterns can be anything such as notes in a tune or english alphabet or a sequence of images as in a movie.</p>
+<p>The main thing about a sequence is time: it is a collection of patterns in time. Now in our heads we also represent (store and retrieve) time, eg when we store a song and can replay it. Time is stored spatially, as the only means we have are the interconnected neurons in the brain, and the connections are what store the information.</p>
+<h2>Motivation: Why?</h2>
+<p>Its an intriguing question as to how biology does it, which I seek to understand through modelling. Also, if you have read a book by Jeff Hawkins (On Intelligence), the neocortex part of the human brain (in the forebrain, it is responsible for higher functions such as intelligence) works exactly this way: as a sequence memory and predictor. Its intuitive and easy to understand: we make predictions all the time witrh our senses: for example we predict every morning how our office is going to look like.</p>
+<p>As you may or may not know, all information in the brain is transmitted as spikes or action potentials, which are small electrical pulses. The beautiful scenery, the soothing music, the delicious dinner, etc all information gets transmitted to the brain in the language of spikes. And likewise for the brain commands to the motor organs (such as hands and legs) to do things such as move. If you want to know how that happens, you can see Fred Rieke's book called Spikes (MIT Press). Similarly, my sequence machine also first converts the patterns constituting a sequence as spikes following a specific code (which I will explain), and then stores the patterns in the connections of artificial neurons in the brain. The "spikes following a specific code" is in reality also a sequence of spikes, so I am storing a sequence of sequences of spikes in my artificial neural network, which in a way is like a mathematical abstracted model of the neurons in the brain. Also the interconnected neurons in this artificial neural network which I use to store the sequences spatially (just as in a real brain) in their connection strengths, can adapt themselves or 'learn' from the sequences that are input to them, and that is how they can make the right predictions.</p>
+<h2>Method or approach: How?</h2>
+<p>The approach is broadly based on how biology does things. It is a model of short and long term memory, and also a theory on how short term memory gets transformed into long term memory gradually. Besides, the network is robust (to a degree) to input error. There are some restrictions, however, on how much time the inputs must be separated by, so that the neural network may not confuse between two patterns.</p>
+<p>Technically speaking, I have used an associative memory to store the sequences. The spiking neural model is a variant of the standard leaky integrate and fire model (read a book by Mass called pulsed neural networks, MIT Press, to know about such models. The coding I have used to encode any pattern as a burst of spikes is called rank ordered N-M code, which comes from rank roder codes used by Thorpe (see article by Simon Thorpe in nature) and N-M codes used widely in asynchronous logic and also popularised by a paper by Furber in neural networks.</p>
+<p>Here's another question: why bother? Why should you be interested in this? Well, its a piece of research in an interesting field, memories. And also it might be possible (at a later stage) to build some interesting applications with this kind of model. A guy I met at a conference I recently went to, called Ander Maurer, trained a robot to see and reproduce guestures using a model quite similar to mine. And well, for those who have read Hawkins' book, this model is a concrete example (in a way) of the kind of things the book speaks about, though of course the structure of the network is nothing like the neocortex. Besides, there are some interesting problems I have attempted to treat by the side, such as how to develop a good capacity robust associative memory, the dynamics of complex systems involving layers of spiking neurons with feedback, how to best store time as space, how to have a distance metric between codes when the code you use to encode patterns does not have an inherent concept of distance, and thus what does the distance notion actually mean, etc.</p>
+<h2>Papers published during PhD</h2>
+<p>(1) An associative memory for the on-line recognition and prediction of temporal sequences. in IJCNN 2005, Montreal, Canada</p>
+<p>(2) A spiking neural sparse distributed memory implementation for learning and predicting temporal sequences. In ICANN 2005, Warsaw, Poland</p>
+<p>(3) A system for transmitting a coherent burst of activity through a network of spiking neurons. Published in WIRN 2005, Vietri Sul Mare, Italy</p>
+<p>(4) A neural network for recognition and prediction of temporal sequences of patterns , published in PREP 2005, Lancaster University</p>
+<p>(5) A sequence machine built with an asynchronous spiking neural network in 17th UK Asynchronous Forum, Southampton, Sep 2005 </p>
+<p>(6) An asynchronous spiking neural network which can learn temporal sequences in 18th UK Asynchronous Forum, Newcastle, Sep 2006 </p>
+<p>(7) Sparse Distributed Memory using Rank Order Neural Codes (Co-authored with Steve Furber, Gavin Brown, Mike Cumpstey and Jon Shapiro) in IEEE TNN, May 2007</p>
+<h2>Paper Drafts</h2>
+<p>Draft Paper: an online predictive sequence machine using rank order coded predictive spiking neurons</p>
+<h2>PhD Dissertation</h2>
+<p>Download my PhD dissertation titled "Engineering a sequence machine out of spiking neurons employing rank order codes" (5.23 MB, 216 pages)</p>
+<h2>Research and technical papers published at Samsung R&D Institute India- Bangalore</h2>
+<p>My work in Samsung R&D India (web team) consisted mainly of different aspects of mobile web browsers, TV and multiple screen scenarios, wearable devices and EEG sensors and assorted topics in mobile devices and connectivity. The focus is on improving the overall user experience. </p>
+<p>My work in the data intelligence team at Samsung R&D is focused on understanding the user behavior, context and intention, and recommend various services based on this. </p>
+<h2>Papers Published/ accepted</h2>
+<p>2018</p>
+<p>Amit Sarkar, Joy Bose. A Web Service to Generate Intelligent Previews of Web Links. ICWS 2018</p>
+<p>Kushal Singla, Joy Bose. System for User Context Determination in a Network of IoT Devices. ICOST 2018</p>
+<p>Sharvil Katariya, Joy Bose, Mopuru Vinod Reddy, Amritansh Sharma, Shambhu Tappashetty. A Personalized Health Recommendation System based on Smartphone Calendar Events. ICOST 2018</p>
+<p>Kushal Singla, Niloy Mukherjee, Joy Bose. Multimodal Language Independent App Classification Using Images and Text. NLDB 2018</p>
+<p>Kapil Kumar, Joy Bose. Inter Ecosystem Compatibility for Internet of Things using a Web Browser. CCNC 2018</p>
+<p>2017</p>
+<p>Anish Anil Patakar, Joy Bose. A method for resizing images by content perception. ICIP 2017</p>
+<p>Kapil Kumar, Joy Bose, Sandeep Kumar Soni. a generic visualization framework based on a data driven approach for the analytics data. INDICON 2017</p>
+<p>Ankit Kumar, V. Ajith Kumar, Joy Bose. Multiple copy and paste operation in mobile web browsers. ICACCI 2017: 2307-2312</p>
+<p>Suresh Kumar Gudla, Joy Bose, Venugopal Gajam, Srinath Srinivasa. Relevancy Ranking of User Recommendations of Services Based on Browsing Patterns. ICMLA 2017: 765-768</p>
+<p>Anish Anil Patankar, Joy Bose. Bias Discovery in News Articles Using Word Vectors. ICMLA 2017: 785-788</p>
+<p>Kaushik Das, Prabhavathi Perumal, Joy Bose. Security Mechanism for Packaged Web Applications. ICWS 2017: 612-619</p>
+<p>Sanjay Ghosh, Joy Bose, Rajkumar Darbar, Punyashlok Dash. Touch Shadow Interaction and Continuous Directional User Interface for Smartphone. INTERACT 2017: 66-74</p>
+<p>Suresh Kumar Gudla, Jitendra Kumar Sahoo, Abhishek Singh, Joy Bose, Nazeer Ahamed. A Systematic Framework to Optimize Launch Times of Web Apps. WWW (Companion Volume) 2017: 785-786</p>
+<p>2016</p>
+<p>Ramanujam R. Srinivasa, Joy Bose. System for NFC and audio multiplexing. DISCOVER 2016</p>
+<p>Kapil Kumar, Joy Bose, Samarth Tripathi. A unified web interface for the internet of things. INDICON 2016</p>
+<p>Siva Kumar Gunturi, Deepak Mittal, Joy Bose. Content driven web scene creation for a tab manager and window manager. INDICON 2016</p>
+<p>Ramanujam R. Srinivasa, Uthra P. Veluchamy, Joy Bose. Augmented Reality adaptive web content. CCNC 2016: 107-110</p>
+<p>Dipin Kollencheri Puthenveettil, Joy Bose. System for fast and seamless communication among user devices. CCNC 2016: 218-223</p>
+<p>Suresh Kumar Gudla, Sandeep Krishna Panchamukhi, Joy Bose, Girija Saride, Abhishek Maheshwari. Seamless Push service with flow control for embedded devices. CCNC 2016: 303-304</p>
+<p>Joy Bose, Amit Singhai, Anish Anil Patankar, Ankit Kumar. Attention Sensitive Web Browsing. COMPUTE 2016: 147-152</p>
+<p>Girija Saride, Jaya Balan Aaron, Joy Bose. Secure web Push system. COMSNETS 2016: 1-2</p>
+<p>Kiran Gajanan Javkar, Siddharth Hasmukh Vora, Amit Someshwarrao Rodge, Joy Bose, Hitesh Sharma. Best offer recommendation service. ICACCI 2016: 2430-2436</p>
+<p>Naveen Kumar SG, Pruthvi Kumar Madugundu, Joy Bose, Srirama Chandra Sekhar Mogali. A Hybrid Web Rendering Framework on Cloud. ICWS 2016: 602-608</p>
+<p>Suresh Kumar Gudla, Joy Bose. Intelligent Web Push Architecture with Push Flow Control and Push Continuity. ICWS 2016: 658-661</p>
+<p>Suresh Kumar Gudla, Jitendra Kumar Sahoo, Abhishek Singh, Joy Bose, Nazeer Ahamed. Framework to Improve the Web Application Launch Time. IEEE MS 2016: 73-78</p>
+<p>Anish Anil Patankar, Joy Bose. Bias Based Navigation for News Articles and Media. NLDB 2016: 465-470</p>
+<p>2015</p>
+<p>Amit Singhai, Ramaswamy S. Ramanujam, Joy Bose, Vandana Kumari. Implementation and analysis of pluggable Android applications. SPICES 2015</p>
+<p>Naveen Kumar S G, Sudarshan Parthasarathy, Arpita Bahuguna, Joy Bose. Dynamic website specific browser menus. IACC 2015</p>
+<p>Lokesh Chinnaga, Amit Rodge, Chandan Pramanik, Aditya Bhide, Joy Bose, Sandeep Kumar Soni. Enhancing the scalability of SPDY clients for testing with limited network resources. INDICON 2015</p>
+<p>Ankit Kumar, Joy Bose, Divya Bansal. A web browser responsive to the user interest level. INDICON 2015</p>
+<p>Amit Someshwarrao Rodge, S. K. Soni, L. Chinnaga, P. Johari, Joy Bose, C. Pramanik, A. Bhide. Scalable and Optimal Load Generation for AWS Clients. COMPUTE 2015: 95-100</p>
+<p>Divya Bansal, Joy Bose, Ankit Kumar. EEG based detection of area of interest in a web page. ICACCI 2015: 1320-1325</p>
+<p>Joy Bose, Amit Singhai, Ankur Trisal, Vinod Keshav, Utkarsh Dubey. A hands free browser using EEG and voice inputs. IJCNN 2015: 1-8</p>
+<p>2014</p>
+<p>Amit Singhai, Joy Bose. Reducing power consumption in graphic intensive Android applications. COMSNETS 2014: 1-4</p>
+<p>Kapil Kumar, Joy Bose. User data management by tabs during a browsing session. DICTAP 2014: 258-263</p>
+<p>Kapil Kumar, Joy Bose. Segregating user data by tabs in web browsers. APWiMob 2014</p>
+<p>Sowmya Sunkara, Ravitheja Tetali, Joy Bose. Responsive, adaptive and user personalized rendering on mobile browsers. ICACCI 2014: 259-265</p>
+<p>Utkarsh Dubey, Ankur Trisal, Joy Bose, Mani Brabhui, Nazeer Ahamed. A hybrid authentication system for websites on mobile browsers. ICACCI 2014: 266-270</p>
+<p>Tasleem Arif, Prasannita Singh, Joy Bose. A system for intelligent context based content mode in camera applications. ICACCI 2014: 1504-1508</p>
+<p>Vinod Keshav Seetharamu, Joy Bose, Sowmya Sunkara, Nitesh Tigga. TV remote control via wearable smart watch device. INDICON 2014</p>
+<p>Amit S. Rodge, Chandan Pramanik, Joy Bose, Sandeep Kumar Soni. Multicast routing with load balancing using Amazon web service. INDICON 2014</p>
+<p>Sowmya Sunkara, Ravitheja Tetali, Joy Bose. Rendering on browsers responsive to user head position and environmental conditions. INDICON 2014</p>
+<p>K. P. Dipin, Joy Bose, V. G. Vivek. A kiosk based model for employment generation in rural areas. GHTC-SAS 2014</p>
+<p>Amit Singhai, Joy Bose, Nagaraju Yendeti. Reducing power consumption in android applications. IACC 2014</p>
+<p>2013</p>
+<p>Joy Bose, Aditya Bhide, Dipin KP. Intelligent system for dynamically providing suggestions for meetup based on proximity. INDICON 2013</p>
+<p>Rahul Jain, Joy Bose, Tasleem Arif. Contextual adaptive user interface for Android devices. INDICON 2013</p>
+<p>Joy Bose, Dipin Kollencheri Puthenveettil, Sainath Gadhamsetty Kasi, Aditya Mohan Bhide. A framework for text summarization in mobile web browsers. ICACCI 2013</p>
+<p>Ravitheja Tetali, Joy Bose, Tasleem Arif. Browser with Clustering of Web Documents. ADCONS 2013: 164-168</p>
+<p>Joy Bose, Tasleem Arif. Encryption in mobile devices using sensors. SAS 2013</p>
+<p>2012</p>
+<p>Joy Bose, K. P. Dipin. A solution for a mobile computing device along with supporting infrastructure for the needs of illiterate users in rural areas. INDICON 2012</p>
+<p>Joy Bose, K. P. Dipin, Srimanu Prasad Nagaraju, V. G. Vivek. A two way emergency medical monitoring system with a computing device fitted on a rotating holder. INDICON 2012</p>
+<p>Gesture based sensor encryption (Co-authored with Tasleem Arif) in Second World Congress on information and Communication Technologies (WICT2012), Nov 2012</p>
+<h2>Patents filed in India patent office</h2>
+<p>Patents filed along with co inventors</p>
+<p>System and method for advanced communication device security with tracking using cloud infrastructure. India 3595/CHE/2012. Filed August 30, 2012.</p>
+<p>Summary: This talks of a foolproof way to locate a stolen device by using the hardware Ids and track the device using a cloud server.</p>
+<p>System and method for real time cloud assisted collaborative browsing across different user agents. India 3720/CHE/2012. Filed September 7, 2012</p>
+<p>Summary: This talks of user agent independent collaborative browsing by using different methods to translate events across different user agents.</p>
+<p>System and method for adapting the user interface based on pressure profiles generated by user interaction. India 4418/CHE/2012. Filed October 23, 2012</p>
+<p>Summary: This talks of having pressure sensors on the sides and back of a device to have novel pressure based gestures, and also a novel method of identifying the pressure gestures. </p>
+<p>Touch-based gestures on tagged images on mobile devices. India 492/CHE/2013. Filed February 4, 2013</p>
+<p>Summary: This talks of having contacting a group of tagged users in a photo via means such as call or email by having specific touch gestures for the same. </p>
+<p>METHOD AND SYSTEM FOR CONTENT DOWNLOAD ON REMOTE DEVICES. India 618/CHE/2013. Filed February 13, 2013</p>
+<p>Summary: This talks of a cloud server assisted remote download operation where the user can remotely control all aspects of the download from a mobile device</p>
+<p>Abstract: A method and system that enables a user to initiate remote content download using a browser on a communication device is disclosed. The user can select one or more remote devices onto which the download is triggered. The method provides the user with plurality of user controls such as scheduling, prioritizing, status tracking and controlling of the download operations. The method enables the user to choose best cost effective remote device by providing the user with list of remote devices along with their network information of the remote device. The method enables the server to cache the remote download requests if the remote devices are currently inactive (unavailable). The method enables the user to view status and control the download requests from any browser of any of the remote devices or communication device connected to the server.</p>
+<p>A METHOD AND SYSTEM TO PROVIDE AUTOMATED OPTICAL ZOOMING LEVEL FOR AN IMAGE CAPTURING DEVICE. India 3996/CHE/2013. Filed September 5, 2013</p>
+<p>Summary: This talks of assisting amateur photographers to set the zoom level automatically to optimal conditions, based on the actual picture composition, using commonly used professional photography techniques. </p>
+<p>Abstract: A method and system that enables a user to initiate remote content download using a browser on a communication device is disclosed. The user can select one or more remote devices onto which the download is triggered. The method provides the user with plurality of user controls such as scheduling, prioritizing, status tracking and controlling of the download operations. The method enables the user to choose best cost effective remote device by providing the user with list of remote devices along with their network information of the remote device. The method enables the server to cache the remote download requests if the remote devices are currently inactive (unavailable). The method enables the user to view status and control the download requests from any browser of any of the remote devices or communication device connected to the server.</p>
+<p>A system and method to browse efficiently using tabs or windows on small screen devices. India 4916/CHE/2013. Filed October 31, 2013</p>
+<p>Summary: This talks of a tabbed browsing case where the user doesn't have to leave the current browsing context while the tab opens in the background. </p>
+<p>METHOD AND APPARATUS FOR DISPLAYING DYNAMIC DATA CONTENTS OF A WEBPAGE ON A CLIENT DEVICE. India 524/CHE/2014. Filed February 4, 2014</p>
+<p>Summary: This talks of extracting relevant information during the loading time from currently browsed web pages and displaying it in the address bar or in preview. </p>
+<p>System and method for suggesting URLs in web browsers. India 3612/CHE/2013. Filed February 5, 2014</p>
+<p>Summary: This talks of methods to compute and suggest URLs to browse to the user on a mobile device without using any external server, based on the user's browsing history stored on the device. </p>
+<p>AN APPARATUS AND METHOD FOR PROVIDING POWER MANAGEMENT IN MOBILE DEVICES. India 843/CHE/2014. Filed February 20, 2014</p>
+<p>Summary: This talks of having a secondary micro controller to control device actions in the low power case, so the user can still use the device for some essential functions. </p>
+<p>Automatically setting zoom level of camera lens using detected faces in preview. India 1091/CHE/2014. Filed March 4, 2014</p>
+<p>Method and system for generating graphical transcript of a user during an interactive session. India 6328/CHE/2014. Filed December 22, 2014</p>
+<p>Summary: This talks of generating an EEG based graphical transcript of the emotions of the user during a chat session, which other users can see, along with a lie detector. </p>
+<p>A method for optimizing access to application using wearable device in communication with electronic device. India 6610/CHE/2014. Filed December 30, 2014</p>
+<p>Summary: This talks of various ways in which a wearable device can be used as a companion to complement the functions and applications on the main mobile device. </p>
+<p>Method and system of providing a web feed in a uniform resource identifier. India 6668/CHE/2014. Filed December 29, 2014</p>
+<p>Summary: This talks of methods to access, extract and store RSS feeds in the device from any visited URL. </p>
+<p>METHOD AND SYSTEM FOR PROVIDING DYNAMICALLY CUSTOMIZED WEB PUSH MESSAGES IN A WIRELESS NETWORK. India 3367/CHE/2014. Filed April 23, 2015</p>
+<p>Summary: This talks of an architecture, system and use cases to enable the gateway server to dynamically customize web push messages as per the user, device statistics and so on. </p>
+<h2>Patents filed in USPTO</h2>
+<p>Method for initiating communication in a computing device having a touch sensitive display and the computing device. US 20140223345 A1. https://www.google.com/patents/US20140223345. Filing Date February 3 2014</p>
+<p>Provided are a method of initiating communication in a computing device including a touch sensitive display and the computing device. The method includes detecting a touch gesture that is performed on at least one tagged object included in an image displayed on the touch sensitive display and initiating, in response to the detection of the touch gesture, communication to at least one individual...</p>
+<p>Method and apparatus for triggering URL load request from a browser. US 20150121257 A1. http://www.freepatentsonline.com/y2015/0121257.html Filing Date October 31 2014</p>
+<p>A method and apparatus that enables a user to trigger a Uniform Resource Locator (URL) load requests on one or more background tabs while displaying the current browsing webpage on the foreground tab, is provided. The method includes displaying a browsing webpage on a foreground tab of the browser, displaying a plurality of address spaces for entering URLs on the foreground tab of the browser, receiving a first URL in a first of the plurality of address spaces, opening a first background tab for the received first URL without diverting from the displayed current browsing webpage on the foreground tab, and issuing a webpage load request on the first background tab for the received first URL. The method eliminates the need to switch to a new tab to trigger one or more URL load requests in new tabs and enhances the browsing experience of the user.</p>
+    </div>
+</body>
+</html>
