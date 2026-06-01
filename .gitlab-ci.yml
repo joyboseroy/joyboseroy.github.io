@@ -4,7 +4,8 @@ pages:
   stage: deploy
   script:
     - mkdir -p public
-    - cp -r *.html *.pdf *.ico *.jpg *.xml *.txt public/ 2>/dev/null || true
+    - cp *.html *.pdf *.ico *.jpg *.xml *.txt *.png public/ 2>/dev/null || true
+    - cp favicon.ico robots.txt public/ 2>/dev/null || true
   artifacts:
     paths:
       - public
