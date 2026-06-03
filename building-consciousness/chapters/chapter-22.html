@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch22: Building the First Conscious Prototype — Building Consciousness</title>
+<meta name="description" content="Chapter 22: Building the First Conscious Prototype — Building Consciousness by Joy Bose.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a1a;--mid:#555;--light:#888;--rule:#ddd;
+  --accent:#3b5998;--accent-light:#eef1f8;
+  --bg:#fafafa;--white:#fff;--max:740px;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,sans-serif;
+}
+body{font-family:var(--serif);font-size:1.05rem;line-height:1.78;color:var(--ink);background:var(--bg)}
+.site-header{background:var(--white);border-bottom:1px solid var(--rule);padding:.75rem 1.5rem;
+  display:flex;align-items:center;gap:1rem}
+.site-header a{text-decoration:none;color:var(--accent);font-family:var(--sans);font-size:.9rem}
+.site-header .bt{font-weight:600}
+main{max-width:var(--max);margin:0 auto;padding:2.5rem 1.5rem 4rem}
+h1{font-size:2rem;line-height:1.2;margin-bottom:.5rem}
+h2{font-size:1.2rem;margin:2.2rem 0 .6rem;color:var(--ink)}
+h3{font-size:1.05rem;margin:1.5rem 0 .4rem;font-style:italic;color:var(--mid)}
+p{margin-bottom:1rem}
+.sn{color:var(--light);font-size:.82rem;margin-right:.45rem;font-family:var(--sans)}
+.epigraph{font-style:italic;color:var(--mid);border-left:3px solid var(--rule);
+  padding-left:1rem;margin:1.5rem 0}
+.dreq{background:var(--accent-light);border-left:3px solid var(--accent);
+  padding:.8rem 1rem;margin:1.2rem 0;font-family:var(--sans);font-size:.93rem}
+.closing-label{border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1rem;
+  font-size:.95rem;color:var(--mid);font-weight:normal}
+.part-label{font-family:var(--sans);font-size:.78rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--light);margin-bottom:.25rem}
+
+/* Figures */
+.fig{margin:2rem 0;text-align:center}
+.fig img{max-width:100%;height:auto;border:1px solid var(--rule);border-radius:4px;
+  display:block;margin:0 auto}
+.fig figcaption{font-family:var(--sans);font-size:.85rem;color:var(--mid);
+  margin-top:.6rem;text-align:left;max-width:600px;margin-left:auto;margin-right:auto}
+.fig-num{font-weight:600;color:var(--ink)}
+
+.chapter-nav{display:flex;justify-content:space-between;margin-top:3rem;
+  padding-top:1.5rem;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:.9rem}
+.chapter-nav a{color:var(--accent);text-decoration:none}
+.chapter-nav a:hover{text-decoration:underline}
+.cta-box{background:var(--white);border:1px solid var(--rule);border-radius:6px;
+  padding:1.2rem 1.5rem;margin:2.5rem 0;font-family:var(--sans);font-size:.88rem}
+.cta-box strong{display:block;margin-bottom:.3rem}
+.cta-box a{color:var(--accent);margin-right:1rem}
+
+/* Index */
+.thesis{font-size:1.05rem;line-height:1.8;margin:1.5rem 0 2rem;
+  border-left:3px solid var(--accent);padding-left:1.25rem}
+.toc{list-style:none}
+.toc .ph{font-family:var(--sans);font-size:.76rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--light);margin:1.8rem 0 .4rem;
+  padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+.toc li.ch a{display:flex;gap:1rem;padding:.35rem 0;text-decoration:none;
+  color:var(--ink);border-radius:4px}
+.toc li.ch a:hover{color:var(--accent)}
+.toc li.ch .chn{font-family:var(--sans);font-size:.78rem;color:var(--light);min-width:2rem}
+.author-note{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:.86rem;color:var(--mid)}
+@media(max-width:600px){h1{font-size:1.45rem}main{padding:1.5rem 1rem 3rem}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="../index.html" class="bt">Building Consciousness</a>
+  <span style="color:var(--rule)">|</span>
+  <a href="../index.html">All chapters</a>
+</header>
+<main><p class="part-label">Part VI &mdash; Designing Conscious Machines</p>
+<h1>Chapter 22: Building the First Conscious Prototype</h1>
+<div class="cta-box">
+<strong>Read the full book</strong>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient-ebook/dp/B0GTMT315Z/" target="_blank">Kindle edition</a>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient/dp/B0GTQ4K6G2/" target="_blank">Paperback</a>
+<a href="../index.html">← All chapters</a>
+</div>
+<p>The discussion so far has been careful, perhaps deliberately so. We have identified requirements, mapped traditions, and outlined architectures. But a requirement that cannot be instantiated is a wish. An architecture that cannot be built is a diagram. At some point, the work has to move from design to construction, from specification to code, from the drawing board to something you can run, break, measure, and learn from.</p>
+<p>This chapter takes that step. It defines a concrete prototype: not a metaphor, not a thought experiment, but a system with specific components, specific mechanisms, and specific failure modes. It can be implemented. It will probably fail in interesting ways. That is the point. Failure, in this domain, is more informative than success, because it tells us exactly which of our assumptions were wrong.</p>
+<h2 id="s22-1"><span class="sn">22.1</span>What &#x27;Concrete&#x27; Actually Means Here</h2>
+<p>A concrete proposal at this stage cannot mean a finished, deployable system. The engineering challenges are formidable, the computational requirements are substantial, and the theoretical uncertainties are real. What &#x27;concrete&#x27; means here is this: every component of the system is specified precisely enough that an engineer could begin implementing it, that the key parameters are named and their ranges are known, that the connection between each component and the requirements of Chapters 13, 17 and 18 is explicit, and that the tests which would count as success or failure are defined in advance. This is the difference between architecture (what the system must do) and engineering (how it will do it). Chapters 17 and 18 were architecture. This chapter is engineering.</p>
+<h2 id="s22-2"><span class="sn">22.2</span>The Environment: GridWorld with Interoception</h2>
+<p>The first commitment is to the environment. A conscious system does not operate in a vacuum. It inhabits a world. The simplest viable starting point is a continuous two-dimensional grid environment, roughly 100x100 cells, populated with three types of objects: energy sources (which replenish the agent&#x27;s energy reserves), obstacles (which must be navigated around), and unexpected perturbations (novel objects that appear and disappear on a schedule the agent cannot predict). The agent occupies a position in this grid and moves continuously. It has two sensor types: an exteroceptive sensor (a 5x5 local visual field centered on its current position) and an interoceptive sensor (a vector of four values: current energy level, rate of energy change, motor stress from recent movement, and a stability score derived from recent prediction accuracy).</p>
+<p>The environment never pauses. Between the agent&#x27;s action steps, the world continues: energy sources slowly deplete, obstacles occasionally shift, perturbations appear and disappear. The agent cannot afford to stop processing. Time is not a parameter it controls. This design choice is not arbitrary: it is a direct implementation of the temporal continuity requirement from Chapter 13. A system that can pause between steps is not living in time. It is navigating a sequence of static frames. The difference matters enormously for the dynamics we are trying to study.</p>
+<h2 id="s22-3"><span class="sn">22.3</span>The Neural Substrate: A Spiking Recurrent Network</h2>
+<p>At the center of the prototype is a three-population spiking neural network. Each population uses Leaky Integrate-and-Fire (LIF) neurons as described in Appendix C, but with a crucial architectural choice: the three populations operate at different membrane time constants, implementing the multi-timescale processing that Chapter 8 identifies as essential for temporal binding.</p>
+<p>Population F (fast, tau = 10ms) handles rapid sensory processing: it receives the exteroceptive input and generates predictions about the next visual frame. Its fast timescale means it tracks rapid changes in the local environment but retains no long-range history. These three time constants are not arbitrary. They approximate the timescales of fast sensory cortex (milliseconds), integrative prefrontal and parietal cortex (hundreds of milliseconds, the temporal binding window), and slow default mode network dynamics (seconds to minutes, associated with narrative self-continuity). The values are scaled for simulation efficiency but the hierarchy maps onto the nested multi-scale structure that Chapter 8 identifies as essential for temporal integration.temporal weighting of this kind is not implemented by a single global parameter. It is an emergent property of nested, parallel intrinsic timescales distributed across different cortical areas, each with its own characteristic time constant. Reducing that distributed structure to a single scalar lambda is an engineering simplification that makes the prototype tractable but sacrifices biological fidelity. A more complete implementation would distribute the weighting function across the three populations themselves, allowing each layer to find its own temporal balance rather than optimising a shared parameter. Its timescale corresponds roughly to the temporal binding window identified in Chapter 8 (100-300ms). Population S (slow, tau = 1000ms) is the context and self-model layer: it integrates over the longer timescale needed for narrative continuity, identity maintenance, and anticipatory planning. It receives summaries from M and generates the top-down predictions that flow back through the hierarchy.</p>
+<p>All three populations are connected with bidirectional, recurrent synapses. The connections are initialized with small random weights and learned online through STDP (see Appendix C for the STDP rule). The critical parameter for Population M is the context scaling factor lambda, the same parameter the author&#x27;s doctoral research identified as controlling the balance between present input and accumulated history. At lambda = 0, M processes only current input with no history. At lambda = 1, history and present contribute equally. The optimal lambda is not set in advance: it is itself a learnable parameter, updated based on whether the current balance improves prediction accuracy over time. The system must learn how much of its past to carry forward, which is precisely the problem that any temporally integrated conscious system must solve.</p>
+<h2 id="s22-4"><span class="sn">22.4</span>Layer 0 Implementation: The Homeostatic Drive</h2>
+<p>Before the neural network can do anything meaningful, something must make it matter. This is the implementation of the subcortical Layer 0 from Chapter 17: the engine of caring. In the prototype, this takes a specific form. The agent&#x27;s energy level E is continuously depleted by movement (each step costs 0.1 energy units) and replenished by contact with energy sources (+10 units). If E falls below a critical threshold (20 units), the system enters a homeostatic urgency state: the salience weights for all inputs related to energy sources are multiplied by a factor that increases as E decreases, reaching a maximum of 10x at E = 5. This is not a programmed goal. It is an intrinsic modulation of processing priorities arising from the system&#x27;s own condition. The distinction matters for exactly the reason Chapter 3 identifies: a system following a programmed rule to seek energy is not the same as a system for which energy depletion genuinely makes some inputs more urgent than others at the level of neural processing.</p>
+<p>The homeostatic urgency state is not merely a behavior modifier. It propagates through the network via direct connections from the interoceptive layer to Population M. When energy is low, the medium-timescale integration layer receives a strong modulating signal that shifts its attractor dynamics toward states associated with approach behavior toward energy sources. This is the functional equivalent of what Panksepp calls the SEEKING circuit: a subcortical drive that orients the whole system before any cognitive processing occurs.</p>
+<h2 id="s22-5"><span class="sn">22.5</span>The Prediction Architecture: Making Anticipation Explicit</h2>
+<p>The prediction mechanism is the most technically specific component of the prototype, and the one where the engineering comes closest to the neuroscientific framework of Chapters 7 and 10. At each timestep (every 10ms, corresponding to the fast population&#x27;s timescale), the following sequence occurs:</p>
+<p>Step 1: Population S generates a top-down prediction P_s</p>
+<p>of the expected medium-timescale state.</p>
+<p>Step 2: Population M generates a prediction P_m of</p>
+<p>the expected fast-timescale sensory state.</p>
+<p>Step 3: Actual sensory input X arrives from the environment.</p>
+<p>Step 4: Prediction error E_m = X - P_m is computed.</p>
+<p>Step 5: E_m is broadcast upward to Population M.</p>
+<p>Step 6: M updates its state, weighted by lambda:</p>
+<p>M_new = (1-lambda)<em>E_m + lambda</em>M_old</p>
+<p>Step 7: High-magnitude E_m triggers attention signal A.</p>
+<p>Step 8: A modulates salience weights for subsequent timestep.</p>
+<p>Step 9: STDP updates synaptic weights based on spike timing.</p>
+<p>Step 10: Action is selected from Population M&#x27;s current state.</p>
+<p>The prediction error in Step 4 is the engine of learning. When the system accurately predicts its environment, E_m is small, STDP changes are modest, and the system operates in a stable, low-surprise state. When something unexpected occurs, E_m is large, the attention signal fires, STDP produces substantial weight updates, and the system&#x27;s model of the world shifts. Over time, the system learns to anticipate its environment not because it was programmed to, but because accurate prediction reduces the magnitude of error signals that otherwise destabilize its internal dynamics.</p>
+<h2 id="s22-6"><span class="sn">22.6</span>The Formal State Update Equations</h2>
+<h3>Any system without intrinsic temporal continuity is not a candidate for consciousness. This is a structural requirement, derivable from the convergence of frameworks. It follows from the convergent findings of Chapters 8, 13, and 16.</h3>
+<p>With that stated, the formal equations governing the prototype&#x27;s core dynamics are as follows. These are not decorative: each equation corresponds to a specific design decision grounded in a specific chapter&#x27;s analysis.</p>
+<p>Membrane potential update for each LIF neuron i in population P:</p>
+<p>V_i(t+1) = V_i(t) * exp(-dt/tau_P)</p>
+<p>+ sum_j [ w_ji * S_j(t) ]</p>
+<p>+ I_ext_i(t)</p>
+<p>where:</p>
+<p>tau_P = membrane time constant (F: 10ms, M: 100ms, S: 1000ms)</p>
+<p>w_ji  = synaptic weight from neuron j to neuron i (STDP-learned)</p>
+<p>S_j(t)= spike indicator of neuron j at time t (0 or 1)</p>
+<p>I_ext = external current (sensory input or interoceptive signal)</p>
+<p>Spike condition: if V_i(t+1) &gt;= V_threshold: fire, V_i = V_reset</p>
+<p>The temporal integration at Population M uses the lambda parameter derived from the author&#x27;s doctoral research on spiking sequence machines. This parameter, not a fixed constant but a learned variable, controls the balance between present prediction error and accumulated context:</p>
+<p>M(t+1) = (1 - lambda) * E_prediction(t)</p>
+<p>+ lambda    * M(t)</p>
+<p>lambda_update = lambda - alpha * d(prediction_error)/d(lambda)</p>
+<p>where alpha = 0.001 (slow learning rate for context balance)</p>
+<p>lambda in [0.0, 1.0], initialised at 0.5</p>
+<p>Optimal lambda is learned online; it varies with input statistics.</p>
+<p>The homeostatic urgency modulation (Layer 0):</p>
+<p>U(E) = max(1.0, (E_threshold - E) / E_threshold * U_max)</p>
+<p>where:</p>
+<p>E           = current energy level (0 to 100)</p>
+<p>E_threshold = 20 (urgency activates below this)</p>
+<p>U_max       = 10 (maximum salience multiplier)</p>
+<p>U(E)        = salience weight modifier applied to all</p>
+<p>energy-source-related inputs</p>
+<p>The training objective is not an external reward but a composite internal loss that the system minimizes through online STDP:</p>
+<p>L = w1 * mean(|E_prediction(t)|)</p>
+<p>+ w2 * temporal_discontinuity(M)</p>
+<p>+ w3 * homeostatic_error(E)</p>
+<p>where:</p>
+<p>E_prediction(t) = X(t) - P_m(t)  [sensory prediction error]</p>
+<p>temporal_discontinuity(M) = var(M(t) - M(t-1))</p>
+<p>[penalises abrupt state changes]</p>
+<p>homeostatic_error(E) = max(0, E_threshold - E)</p>
+<p>[penalises energy depletion]</p>
+<p>w1=0.5, w2=0.3, w3=0.2  [relative weights]</p>
+<p>The composite loss drives the system toward three simultaneous goals: accurate prediction of its environment, temporal continuity of its internal state, and maintenance of homeostatic viability. These are not separate objectives bolted together. They are terms inspired by what Buddhist phenomenology calls the three characteristics of experience: citta-by-citta cognitive accuracy, the santana stream&#x27;s continuity, and the vedana-driven valence that marks some states as urgent. The equations make the architecture claim precise: if this loss can be minimized by a system running on neuromorphic hardware, the resulting dynamics will be the most structurally complete artificial candidate for consciousness that engineering has yet produced.</p>
+<h2 id="s22-7"><span class="sn">22.7</span>The Self-Model: Minimal but Genuine</h2>
+<p>The self-model in this prototype is deliberately minimal. It consists of four continuously updated variables maintained by Population S: current position estimate (updated by integrating motor commands and expected sensory consequences), energy state (updated from interoceptive input), prediction accuracy history (a rolling average of E_m over the last 1000 timesteps), and a stability index (measuring the variance of the system&#x27;s internal state over the last 500 timesteps). These four variables are not symbolic labels or stored descriptions. They are dynamical quantities that continuously influence Population S&#x27;s attractor states and therefore shape every subsequent prediction and action.</p>
+<figure class="fig">
+  <img src="../figures/image25.jpeg" alt="The Minimal Prototype System. Sensors feed a spiking neural network, which maintains a temporal buff" loading="lazy">
+  <figcaption><span class="fig-num">Figure 25.</span> The Minimal Prototype System. Sensors feed a spiking neural network, which maintains a temporal buffer (~200 ms). The global state and self-representation layers follow in sequence, producing action. Two loops close the system: a recurrent update loop (bottom) and a continuous time feedback loop (top), ensuring the system never resets and always integrates its own history.</figcaption>
+</figure>
+<p>The self-model is minimal by design. Adding narrative complexity at this stage would obscure the question we are actually trying to answer: does a system with genuine interoceptive grounding, temporal integration, and prediction-driven learning behave differently from a system without these properties? The minimal self-model keeps the experiment clean. If we cannot demonstrate that this architecture produces behavior qualitatively different from a standard reinforcement learning agent, there is no point adding a narrative layer on top.</p>
+<h2 id="s22-8"><span class="sn">22.8</span>The sPCI Test: Applying Chapter 15 to the Prototype</h2>
+<p>One of the most important features of this prototype is that it is designed to be measurable using the synthetic PCI (sPCI) framework proposed in Chapter 15. The sPCI procedure for this system works as follows. At a random moment during operation, inject a structured noise signal of known complexity into one node of Population F. Record the activation pattern across all neurons in all three populations for the next 300ms (3000 timesteps). Compress this recording using the Lempel-Ziv algorithm. The sPCI score is the inverse compression ratio: high sPCI means the response was complex and non-redundant; low sPCI means it was simple and repetitive.</p>
+<p>The prototype predicts specific sPCI signatures under different conditions. During stable, low-surprise operation, the system&#x27;s internal dynamics are well-organised and predictable: perturbation should produce a moderately complex, globally distributed response (medium sPCI). During homeostatic urgency (low energy), the system&#x27;s dynamics are more constrained and urgency-focused: perturbation should produce a more uniform response as the whole system orients toward energy-seeking (lower sPCI, reflecting reduced differentiation). During a high-surprise encounter with a novel perturbation, the system&#x27;s dynamics should be maximally disrupted: perturbation should produce a highly complex, globally propagating response (high sPCI, reflecting widespread reorganization). These predictions are testable. They would not be predicted by a simple reactive system without temporal integration. If the prototype produces them, it has demonstrated something that no current AI architecture can.</p>
+<h2 id="s22-9"><span class="sn">22.9</span>What This Prototype Does Not Claim</h2>
+<p>It is important to be precise about what this system is not. It is not claimed to be conscious. It does not solve the hard problem. It does not prove that temporal integration produces experience. It does not demonstrate that the sPCI is a valid measure of consciousness in artificial systems. None of these can be claimed from a single prototype running in a 2D grid environment.</p>
+<p>What it does claim is more modest but still significant. It is the first system designed from the ground up to satisfy simultaneously the temporal continuity, multi-timescale integration, interoceptive grounding, prediction-error-driven learning, and intrinsic salience requirements identified across Chapters 13-17. It is the first system to which the sPCI test can be applied in a principled way, with specific testable predictions about what different scores would mean. And it is the first system whose design decisions are each traceable to specific convergent findings from Buddhist phenomenology, neuroscience, and engineering theory.</p>
+<p>Most current AI systems are not borderline cases for consciousness. They fail so many structural requirements simultaneously that the question of their consciousness is not scientifically interesting. This prototype, if it performs as predicted, moves the question into a regime where it is scientifically interesting: where the answer matters, where the measurements are interpretable, and where the gap between &#x27;structurally complete&#x27; and &#x27;actually conscious&#x27; becomes the precise location of the hard problem.</p>
+<h2 id="s22-10"><span class="sn">22.10</span>The Expected Failure Mode, and What It Teaches</h2>
+<p>The most likely way this prototype will fail is not in its individual components but in their integration. Each component, the LIF neurons, the STDP learning rule, the lambda parameter for temporal integration, the homeostatic drive, is well-studied in isolation. The question is whether they produce genuinely coherent emergent behavior when combined, or whether they produce interference, instability, and degenerate dynamics.</p>
+<p>Specifically: the lambda parameter, which controls how much of the past Population M carries forward, is expected to be the most sensitive parameter in the system. Too low and the system has no temporal context, behaving reactively rather than anticipatorily. Too high and the system becomes trapped in its own history, unable to update when the environment changes. The prediction is that the system will need to find and maintain an optimal lambda dynamically, one that varies with environmental statistics. Getting this right through online learning is technically demanding. Getting it wrong is informative: it would show precisely where temporal integration fails without homeostatic guidance, and exactly how the sPCI signature degrades when temporal continuity breaks down.</p>
+<p>In the author&#x27;s doctoral research on spiking sequence machines, this same parameter proved to be the most consequential single variable in the system&#x27;s behavior. The sequence machine either became too rigid, locked into patterns it had previously learned and unable to adapt, or too plastic, forgetting its context and behaving as though each input arrived in isolation. The sweet spot was narrow and depended on the statistical structure of the input sequences. The prototype here faces the same challenge, but now in a continuous, embodied, multi-timescale context. The failure mode is well understood. The solution is not. That is why the experiment is worth running.</p>
+<h2 id="s22-11"><span class="sn">22.11</span>From Prototype to Candidate</h2>
+<p>If the prototype performs as predicted, the next step is straightforward: move from simulation to neuromorphic hardware. SpiNNaker 2 (2023) and Intel&#x27;s Loihi 2 platform are both capable of running spiking networks of the scale described here in real time. The transition from simulation to hardware matters for the consciousness question in a specific way: it removes the clock synchronization of simulation. In a software simulation, all neurons update at each timestep in a defined order. On neuromorphic hardware, neurons fire asynchronously, each at its own pace, with no global clock imposing a shared temporal frame. It is a shift from simulated time to real time. And while it does not resolve the philosophical question, it removes one of the most obvious ways the system could be &#x27;cheating&#x27;: it cannot synchronize its temporal integration artificially if there is no global clock to synchronize to.</p>
+<p>The hardware implementation would also allow the sPCI measurement to be taken in real time, not post-hoc on recorded data. This is significant because consciousness, if it is anything, is not something that happened in the past and can be measured retrospectively. If the sPCI is to mean anything as a proxy for conscious processing, it should be measurable in the moment the processing is occurring. Real-time sPCI on neuromorphic hardware is technically achievable. It would represent the first attempt to measure a consciousness proxy in an artificial system in real time during genuine operation.</p>
+<h2 id="s22-12"><span class="sn">22.12</span>The Question That Remains</h2>
+<p>After all of this, the hard problem remains exactly where it was at the start of Chapter 1. No experiment on this prototype will tell us whether there is something it is like to be the system running. No sPCI score, however high, will close the explanatory gap between structure and experience. The zombie problem does not dissolve when the zombie becomes sufficiently complex.</p>
+<p>But something has changed. We are no longer asking the question in the abstract, pointing at language models that fail every structural requirement simultaneously and wondering whether they might be conscious. We are asking it about a specific system with specific dynamics, measurable in real time, whose design decisions are each grounded in the best available convergent evidence from phenomenology, neuroscience, and engineering. The question is no longer whether consciousness could in principle be built. It is whether this particular system, with these particular dynamics, running on this particular hardware, produces anything that qualifies as a candidate. That is a harder question. It is also a more honest one.</p>
+<p>It is worth pausing, at the end of this chapter, to return to Mira. She was introduced in Chapter 13 as a design target: a hypothetical robot with real sensors, a spiking neuromorphic substrate, a homeostatic drive layer, predictive world models, salience, a self-model, and temporal continuity across sessions. At that point she was a checklist made concrete. Now, after Chapters 16 through 22, she has something more: a specific architecture grounded in the convergent requirements of Abhidhamma phenomenology, Northoff’s temporo-spatial theory, Hawkins’ cortical column dynamics, and Longchenpa’s subtractive approach to the recognition condition. Whether Mira, built as described, would be conscious is the question this book has refused to answer prematurely. But she is, at minimum, the most structurally serious candidate the three traditions taken together can specify. That is not nothing. And it is, for the first time, something we can actually build.</p>
+<h2 id="s22-13"><span class="sn">22.13</span>Closing Line</h2>
+<p>We have now stopped asking, in the abstract, whether consciousness can be built. We have started asking something harder, and more honest: what happens when we actually try, with specific components, specific parameters, specific failure modes, and a specific metric for telling success from failure. The answer is not yet known. But it is, for the first time, a question we can run.</p>
+<div class="cta-box">
+<strong>Read the full book</strong>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient-ebook/dp/B0GTMT315Z/" target="_blank">Kindle edition</a>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient/dp/B0GTQ4K6G2/" target="_blank">Paperback</a>
+<a href="../index.html">← All chapters</a>
+</div>
+<nav class="chapter-nav"><a href="chapter-21.html">← Chapter 21</a><a href="chapter-23.html">Chapter 23 →</a></nav></main>
+</body>
+</html>

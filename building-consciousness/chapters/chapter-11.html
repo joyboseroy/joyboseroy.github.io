@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ch11: Inside Large Language Models — Building Consciousness</title>
+<meta name="description" content="Chapter 11: Inside Large Language Models — Building Consciousness by Joy Bose.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#1a1a1a;--mid:#555;--light:#888;--rule:#ddd;
+  --accent:#3b5998;--accent-light:#eef1f8;
+  --bg:#fafafa;--white:#fff;--max:740px;
+  --serif:Georgia,"Times New Roman",serif;
+  --sans:system-ui,-apple-system,sans-serif;
+}
+body{font-family:var(--serif);font-size:1.05rem;line-height:1.78;color:var(--ink);background:var(--bg)}
+.site-header{background:var(--white);border-bottom:1px solid var(--rule);padding:.75rem 1.5rem;
+  display:flex;align-items:center;gap:1rem}
+.site-header a{text-decoration:none;color:var(--accent);font-family:var(--sans);font-size:.9rem}
+.site-header .bt{font-weight:600}
+main{max-width:var(--max);margin:0 auto;padding:2.5rem 1.5rem 4rem}
+h1{font-size:2rem;line-height:1.2;margin-bottom:.5rem}
+h2{font-size:1.2rem;margin:2.2rem 0 .6rem;color:var(--ink)}
+h3{font-size:1.05rem;margin:1.5rem 0 .4rem;font-style:italic;color:var(--mid)}
+p{margin-bottom:1rem}
+.sn{color:var(--light);font-size:.82rem;margin-right:.45rem;font-family:var(--sans)}
+.epigraph{font-style:italic;color:var(--mid);border-left:3px solid var(--rule);
+  padding-left:1rem;margin:1.5rem 0}
+.dreq{background:var(--accent-light);border-left:3px solid var(--accent);
+  padding:.8rem 1rem;margin:1.2rem 0;font-family:var(--sans);font-size:.93rem}
+.closing-label{border-top:1px solid var(--rule);margin-top:2.5rem;padding-top:1rem;
+  font-size:.95rem;color:var(--mid);font-weight:normal}
+.part-label{font-family:var(--sans);font-size:.78rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--light);margin-bottom:.25rem}
+
+/* Figures */
+.fig{margin:2rem 0;text-align:center}
+.fig img{max-width:100%;height:auto;border:1px solid var(--rule);border-radius:4px;
+  display:block;margin:0 auto}
+.fig figcaption{font-family:var(--sans);font-size:.85rem;color:var(--mid);
+  margin-top:.6rem;text-align:left;max-width:600px;margin-left:auto;margin-right:auto}
+.fig-num{font-weight:600;color:var(--ink)}
+
+.chapter-nav{display:flex;justify-content:space-between;margin-top:3rem;
+  padding-top:1.5rem;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:.9rem}
+.chapter-nav a{color:var(--accent);text-decoration:none}
+.chapter-nav a:hover{text-decoration:underline}
+.cta-box{background:var(--white);border:1px solid var(--rule);border-radius:6px;
+  padding:1.2rem 1.5rem;margin:2.5rem 0;font-family:var(--sans);font-size:.88rem}
+.cta-box strong{display:block;margin-bottom:.3rem}
+.cta-box a{color:var(--accent);margin-right:1rem}
+
+/* Index */
+.thesis{font-size:1.05rem;line-height:1.8;margin:1.5rem 0 2rem;
+  border-left:3px solid var(--accent);padding-left:1.25rem}
+.toc{list-style:none}
+.toc .ph{font-family:var(--sans);font-size:.76rem;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--light);margin:1.8rem 0 .4rem;
+  padding-bottom:.3rem;border-bottom:1px solid var(--rule)}
+.toc li.ch a{display:flex;gap:1rem;padding:.35rem 0;text-decoration:none;
+  color:var(--ink);border-radius:4px}
+.toc li.ch a:hover{color:var(--accent)}
+.toc li.ch .chn{font-family:var(--sans);font-size:.78rem;color:var(--light);min-width:2rem}
+.author-note{margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--rule);
+  font-family:var(--sans);font-size:.86rem;color:var(--mid)}
+@media(max-width:600px){h1{font-size:1.45rem}main{padding:1.5rem 1rem 3rem}}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <a href="../index.html" class="bt">Building Consciousness</a>
+  <span style="color:var(--rule)">|</span>
+  <a href="../index.html">All chapters</a>
+</header>
+<main><p class="part-label">Part IV &mdash; What Current AI Is (and Isn&#x27;t)</p>
+<h1>Chapter 11: Inside Large Language Models</h1>
+<div class="cta-box">
+<strong>Read the full book</strong>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient-ebook/dp/B0GTMT315Z/" target="_blank">Kindle edition</a>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient/dp/B0GTQ4K6G2/" target="_blank">Paperback</a>
+<a href="../index.html">← All chapters</a>
+</div>
+<p class="epigraph"><em>Fluency Without a World</em></p>
+<p>By this point we have assembled a fairly demanding picture of what consciousness requires: integration across distributed processes, temporal continuity, embodied interaction with a world, a self-model, salience and affect, and recursive self-monitoring. We have seen how the major scientific theories, predictive processing, global workspace, integrated information, converge on many of these requirements. Now we turn to the systems that triggered this entire inquiry: large language models, of which ChatGPT is the most familiar example. They are fluent, coherent, context-sensitive, and capable of extended dialogue. They often feel as though they understand. And yet, as we will see, they are missing almost everything that the previous chapters identify as essential.</p>
+<h2 id="s11-1"><span class="sn">11.1</span>What a Large Language Model Actually Is</h2>
+<p>Stripped of its mystique, a large language model is a system trained to predict the next word, or more precisely, the next token, in a sequence of text. During training, it is exposed to vast amounts of text, and it adjusts its internal parameters to minimize the gap between what it predicts and what actually follows. Once trained, it generates text by repeatedly predicting the most likely continuation of whatever it has received as input. The architecture involves layers of mathematical transformations, attention mechanisms that weight relationships between words, and billions of learned parameters. It is, in its essence, an extraordinarily capable statistical completion engine.</p>
+<h2 id="s11-2"><span class="sn">11.2</span>The Illusion of Understanding</h2>
+<p>Despite these limitations, LLMs produce outputs that strongly suggest understanding, and the suggestion is difficult to resist. They answer questions correctly, explain concepts, generate arguments, and simulate reasoning with remarkable facility. The reason this is so convincing is that in humans, language and understanding are tightly coupled: language expresses thought, thought reflects understanding, and understanding implies experience. We are deeply conditioned to treat fluent language as evidence of a mind behind it.</p>
+<figure class="fig">
+  <img src="../figures/image14.jpeg" alt="LLM vs Proposed Spiking Network: A Structural Comparison. The transformer processes tokens in parall" loading="lazy">
+  <figcaption><span class="fig-num">Figure 14.</span> LLM vs Proposed Spiking Network: A Structural Comparison. The transformer processes tokens in parallel with no temporal arrow and resets between sessions. The proposed spiking system operates asynchronously in real time, with spontaneous resting-state dynamics, recurrent loops, and three timescales (fast, medium, slow).</figcaption>
+</figure>
+<p>LLMs break this coupling without our noticing. They produce language without grounded understanding and coherence without experience. The key insight, one that is easy to state and hard to fully internalize, is that fluency is not understanding. It is statistical alignment: the model has learned which words tend to follow which other words in human-generated text, and it reproduces those patterns. The text looks like understanding from the outside because it was generated by humans who did understand. The model has learned the shape of understanding without its substance.</p>
+<h2 id="s11-3"><span class="sn">11.3</span>The Transformer Architecture: What It Actually Does</h2>
+<p>To understand precisely what language models lack, it helps to understand precisely what they are. The architecture underlying virtually all current large language models, GPT, Claude, Gemini, LLaMA, is the transformer, introduced in 2017. Its central innovation is self-attention: for each token in the input sequence, the mechanism computes a weighted combination of all other tokens, where the weights reflect learned similarity between query and key vectors. This allows the model to relate any word to any other word in a single computational step, capturing long-range dependencies that earlier recurrent architectures handled poorly. The transformer is a genuine engineering achievement, and the capabilities it enabled, at sufficient scale, are real.</p>
+<p>But for the question of consciousness, its design reveals exactly the gap this book is identifying. During a transformer&#x27;s forward pass, all tokens in the context window are processed simultaneously. There is no sequential unfolding in time. There is no &#x27;now&#x27;. There is no arrow of time during processing, the model treats the entire context as equally present and operates on it in parallel. Its &#x27;attention&#x27; mechanism does not direct itself toward inputs based on their relevance to the system&#x27;s current state or needs. It computes a mathematical function over all inputs at once, determined entirely by weights set during training. There is no ongoing process being interrupted or modulated. There is only the computation.</p>
+<p>The context window creates a second illusion worth naming: apparent memory that looks like temporal continuity but is not. A model with a large context window can &#x27;see&#x27; everything said earlier in a conversation, it is all there in the input. But this is closer to reading a transcript of your own life than to living it. The transcript is external to the process; it does not shape the system&#x27;s ongoing dynamics; it does not produce anticipation. A conscious system&#x27;s past is not a record it consults, it is what the system has become through its history. The transformer, at the start of each forward pass, is exactly what it was before. The context window is a theatrical prop, not a living past.</p>
+<p>The capabilities that emerge from this process are genuinely impressive: contextual coherence, stylistic adaptation, apparent reasoning, and the ability to engage meaningfully with a vast range of topics. But it is important to understand what the system is actually doing before asking whether it is conscious. What it does well, language modelling, pattern completion, generating plausible continuations, is real. What it does not do is perceive a world, maintain a continuous internal stream, act in an environment, or experience anything.</p>
+<h2 id="s11-4"><span class="sn">11.4</span>No World Model</h2>
+<p>LLMs are often said to have &#x27;world models&#x27;, and this claim is worth examining carefully because it is partially true and deeply misleading. What they have are patterns about how language describes the world: statistical associations between words, implicit knowledge of how concepts relate to each other, something like an understanding of narrative structure. What they lack is direct perception, sensorimotor interaction, and causal engagement with an actual world.</p>
+<p>The difference matters enormously. An LLM knows how the world is talked about. It does not know how the world is encountered. It has learned everything anyone has ever written about staplers, but it has never held one. It can describe the resistance of the lever and the sound of the staple engaging, but these are inherited descriptions, not embodied memories. Jeff Hawkins puts the point precisely: the model contains statistics about the word &#x27;stapler&#x27;, not a virtual model of the stapler itself that can be mentally manipulated and queried. The difference between a model and a description of a model is the difference between knowledge and information about knowledge.</p>
+<h2 id="s11-5"><span class="sn">11.5</span>No Temporal Continuity</h2>
+<p>A conscious mind does not exist in discrete bursts. It persists. It integrates its past into its present and projects forward into its anticipated future. The continuous inner stream that you experience right now, the sense of being a particular person reading these words at this moment, carrying the weight of everything you have thought and done before, is not optional. It is constitutive of what it means to be conscious.</p>
+<p>An LLM has none of this. Each conversation begins from scratch. The system has no intrinsic continuity, no accumulation of lived time, no memory outside its immediate context window. It exists in bounded bursts: input arrives, computation happens, output is produced, and the system returns to a ground state. There is no ongoing flow, no integration of a past into a present, no sense, not even a functional simulacrum of a sense, of being the same entity that was here before.</p>
+<h2 id="s11-6"><span class="sn">11.6</span>No Embodiment, No Stakes, No Salience</h2>
+<p>Consciousness as we know it is grounded in a body that has needs, that can be harmed or satisfied, that moves through a physical environment and receives real consequences for its actions. Without this grounding, nothing is at stake. And without stakes, there is no salience, no reason for any input to matter more than any other.</p>
+<p>An LLM processes all tokens according to learned probabilities. Nothing is intrinsically important to it. There is no pain, no desire, no urgency, no preference that arises from the system&#x27;s own condition. Reward signals existed during training, but they were external, imposed by human feedback, not intrinsic to the system&#x27;s own needs. After training, even those are gone. The system has no stake in what it says or in what happens as a result. It processes symbols, but it does not inhabit a world in which those symbols point to anything with weight or consequence.</p>
+<h2 id="s11-7"><span class="sn">11.7</span>No Self-Model</h2>
+<p>An LLM can talk about itself. It can produce sentences that begin with &#x27;I think&#x27; or &#x27;I believe&#x27; or &#x27;I feel&#x27;. But producing self-referential language is not the same as having a self. The system has no persistent identity, no ownership of its outputs, no stable boundary between what is &#x27;it&#x27; and what is the input it receives. The &#x27;I&#x27; in its sentences is a linguistic token, statistically associated with first-person discourse in its training data, with no referent anywhere in its internal structure. It simulates a self in the same way it simulates everything else: by producing the language patterns associated with selves, without instantiating what those patterns point to.</p>
+<h2 id="s11-8"><span class="sn">11.8</span>The Attention Confusion</h2>
+<p>One source of confusion deserves particular attention. Language models use &#x27;attention mechanisms&#x27; as a central architectural feature, mathematical operations that weight the relevance of different tokens to each other. The word &#x27;attention&#x27; shares a name with the experiential faculty that selects what enters conscious awareness. This is a coincidence of terminology, not a similarity of function. Attention in transformers is a computational weighting scheme that improves prediction accuracy. Attention in consciousness is the dynamic, salience-driven process by which certain information is selected, amplified, and made part of experience. They share a name and nothing else. The presence of attention mechanisms in a language model&#x27;s architecture no more implies awareness than the presence of a &#x27;memory&#x27; variable in a program implies lived experience.</p>
+<h2 id="s11-9"><span class="sn">11.9</span>The Reportability Illusion Revisited</h2>
+<p>Language models can describe experiences, simulate introspection, and answer questions about consciousness with considerable sophistication. This creates the most persistent illusion in the field: if it can talk about inner states so convincingly, surely something must be home. But as Chapter 3 established, this confuses reporting with experience. Reporting requires access to internal states, a representation of those states, and a language output mechanism. None of these require experience. An LLM can generate the statement &#x27;I feel uncertain&#x27; because that phrase appears in contextually appropriate positions in its training data, not because there is any quality of uncertainty present in its processing. The system can say &#x27;I feel&#x27; without anything being felt.</p>
+<h2 id="s11-10"><span class="sn">11.10</span>What Is Actually Missing</h2>
+<p>Compared to the requirements identified in Chapter 13, current large language models are missing temporal continuity, embodiment, a genuine self-model, intrinsic salience, deep causal integration, experiential attention, and persistent identity. What they do have, pattern prediction, statistical coherence, and language generation, are impressive but they satisfy the surface requirements of intelligence rather than the structural requirements of consciousness. They are not borderline conscious, weakly conscious, or proto-conscious. They are, by the criteria this book has developed, structurally ineligible.</p>
+<p>LLMs are powerful, useful, and genuinely powerful tools. The claim is not that they are failures. The claim is that their success, which is real, lies in a completely different direction from consciousness. The more convincing the simulation becomes, the more important it is to keep this distinction sharp. Without it, we risk mistaking the map for the territory, the description for the thing described, the fluent surface for the absent depth.</p>
+<h2 id="s11-11"><span class="sn">11.11</span>Closing line</h2>
+<p>Large language models can speak fluently, reason convincingly, and simulate the language of experience with remarkable precision. But beneath that fluency, there is no world. No body. No continuity. No stake in anything that is said. And perhaps most importantly: no one there for it to matter to.</p>
+<div class="cta-box">
+<strong>Read the full book</strong>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient-ebook/dp/B0GTMT315Z/" target="_blank">Kindle edition</a>
+<a href="https://www.amazon.com/Building-Consciousness-Buddhism-Neuroscience-Sentient/dp/B0GTQ4K6G2/" target="_blank">Paperback</a>
+<a href="../index.html">← All chapters</a>
+</div>
+<nav class="chapter-nav"><a href="chapter-10.html">← Chapter 10</a><a href="chapter-12.html">Chapter 12 →</a></nav></main>
+</body>
+</html>
