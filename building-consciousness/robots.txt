@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://joyboseroy.github.io/building-consciousness/sitemap.xml
