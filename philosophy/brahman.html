@@ -74,23 +74,49 @@
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   footer p { margin: 6px 0; }
+  .disclaimer {
+    background: #fff8e1;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0 2rem 0;
+    font-size: 0.88rem;
+    color: #444;
+  }
+  .disclaimer strong { color: #b45309; }
+  .disclaimer a { color: #b45309; }
+  .disclaimer p { margin: 0.5rem 0 0 0; }
 </style>
 </head>
 <body>
 <div class="nav"><a href="index.html">&larr; All concepts</a></div>
 <h1>Brahman</h1>
 <div class="subtitle">Five schools of Indian philosophy, compared</div>
+<div class="disclaimer">
+  <strong>&#9888;&#65039; Demo Notice</strong>
+  <p>This website is a <strong>technical demonstration</strong> of knowledge graph and
+  LLM capabilities, not an authoritative reference on Indian philosophy. It makes
+  <strong>no claims about the correctness, completeness, or scholarly accuracy</strong>
+  of any philosophical position shown here.</p>
+  <p>The underlying data (<a href="https://github.com/joyboseroy/darshana-graph" target="_blank">darshana-graph</a>)
+  was extracted automatically from source texts using LLMs. Source texts may be incomplete,
+  mistranslated, or mis-attributed. Concept tagging, school labels, and relation types may
+  contain errors. LLM-generated summaries may hallucinate or misrepresent philosophical
+  positions. A known production bug where non-Vedanta traditions (Buddhism, Jainism) were
+  shown Vedantic content due to a retrieval fallback error has been fixed, but other errors
+  may remain.</p>
+  <p>For reliable study of Indian philosophy, please consult qualified teachers and established
+  scholarly sources. This tool is provided for research and exploration only.</p>
+</div>
 
 <h2>What each school says</h2>
-<div class="school-block"><div class="school-name">Advaita Vedanta</div><div>In the Advaita school of philosophy, the concept of Brahman is closely tied to the idea of Atman, with the two being considered identical (cite: edge_021429). The Prasna Upanishad is quoted as saying "the Self is verily Brahman", reinforcing this idea (cite: edge_021430). This identity between Atman and Brahman is a central tenet of Advaita philosophy, with multiple sources repeating this notion (cite: edge_021438). Additionally, Dharma is seen as a qualified aspect of Brahman in this school of thought (cite: edge_020753).</div></div>
-<div class="school-block"><div class="school-name">Dvaita Vedanta</div><div>In the school of Dvaita, the concept of Brahman is complex, with the atman being described as both distinct from and identical to Brahman (cite: edge_007811, cite: edge_007829). The atman is also seen as a qualified aspect of Brahman, with the ability to comprehend its attributes (cite: edge_007787, cite: edge_007749). Additionally, the atman is said to be the cause of Brahman, with the soul reaching Para, or Brahman, through its actions (cite: edge_008014, cite: edge_008016). Overall, the relationship between the atman and Brahman in Dvaita philosophy is multifaceted and nuanced (cite: edge_008036).
+<div class="school-block"><div class="school-name">Advaita Vedanta</div><div>In the school of Advaita, Brahman is considered to be identical to the atman, or the Self (cite: edge_021429). This idea is repeated throughout various Upanishads, with statements such as "the Self is verily Brahman" (cite: edge_021430). The school of Advaita also suggests that dharma, or duty, is a qualified aspect of Brahman (cite: edge_020753). Ultimately, the goal of Advaita is to realize that the atman and Brahman are one and the same (cite: edge_021404).</div></div>
+<div class="school-block"><div class="school-name">Dvaita Vedanta</div><div>In the Dvaita school of philosophy, the concept of Brahman is complex, with some texts suggesting that the atman (individual self) is distinct from Brahman (cite: edge_007811). However, other texts imply that the atman can become one with Brahman, or is a qualified aspect of it (cite: edge_007787). The relationship between atman and Brahman is also described as causal, with the atman being able to reach or enter into Brahman (cite: edge_008016). Ultimately, the Dvaita school seems to suggest that the atman and Brahman are related but distinct entities, with the atman being able to comprehend or experience Brahman in some way (cite: edge_007792).</div></div>
+<div class="school-block"><div class="school-name">Vishishtadvaita</div><div>In the Vishishtadvaita school of philosophy, the concept of Brahman is closely related to the atman, or individual soul. According to this school, the atman is a qualified aspect of Brahman, meaning it is connected to and derives from the ultimate reality of Brahman (cite: edge_006693). The atman is described as reaching Brahman through various paths, ultimately attaining true knowledge and freedom from evil (cite: edge_006683). The Vishishtadvaita school also suggests that the atman, while distinct from Brahman, is an integral part of it, with the highest Self being the causal substance of all (cite: edge_006703, cite: edge_006640). The atman's relationship with Brahman is one of qualified non-duality, with the atman possessing attributes of the individual soul while being part of the larger Brahman (cite: edge_006761).
 
 [Note: this summary may contain an unverified citation.]</div></div>
-<div class="school-block"><div class="school-name">Vishishtadvaita</div><div>In the Vishishtadvaita school of philosophy, the concept of Brahman is closely related to the atman, or individual soul. According to this school, the atman is a qualified aspect of Brahman, meaning it is connected to and derives from the ultimate reality of Brahman (cite: edge_006693). The atman is described as reaching Brahman through various paths, ultimately attaining true knowledge and freedom from evil (cite: edge_006683). The Vishishtadvaita school also suggests that the atman, while distinct from Brahman, is intimately connected to it and can manifest itself in its own form within Brahman (cite: edge_006703, cite: edge_006698).
-
-[Note: this summary may contain an unverified citation.]</div></div>
-<div class="school-block"><div class="school-name">Achintya Bhedabheda</div><div>In the achintya_bhedabheda school of philosophy, the concept of brahman is closely related to the atman, or individual self. According to this school, the atman is sometimes considered identical to brahman, as stated in the Bhagavad Gita, "the Self is verily Brahman" (cite: edge_003283). At other times, the atman is seen as a qualified aspect of brahman, with the Bhagavad Gita describing all living beings as "part and parcel of Me" (cite: edge_003142). This school also suggests that the self-realized person can enjoy unlimited happiness by concentrating on the Supreme, implying a deep connection between the atman and brahman (cite: edge_003226). Ultimately, the achintya_bhedabheda school seems to emphasize the complex and multifaceted relationship between the atman and brahman (cite: edge_003964).</div></div>
-<div class="school-block"><div class="school-name">Dvaitadvaita</div><div>In the school of dvaitadvaita, the concept of brahman is closely tied to the idea of atman, with the two being considered identical (cite: edge_001077). This idea is repeated throughout various sources, emphasizing the oneness of atman and brahman (cite: edge_001074). The dvaitadvaita school suggests that realizing this identity is key to understanding the nature of brahman (cite: edge_001076). Ultimately, the school of dvaitadvaita views atman and brahman as one and the same, highlighting their interconnectedness (cite: edge_001075).</div></div>
+<div class="school-block"><div class="school-name">Achintya Bhedabheda</div><div>In the achintya_bhedabheda school of philosophy, the concept of brahman is closely related to the atman, or individual self. According to this school, the atman is sometimes considered identical to brahman, as stated in the Bhagavad Gita, "the Self is verily Brahman" (cite: edge_003283). At other times, the atman is seen as a qualified aspect of brahman, with the Bhagavad Gita stating that "all living beings are but part of Me" (cite: edge_003142). This school also suggests that the atman can become one with brahman, as described in the Bhagavad Gita, "becoming one with the Absolute" (cite: edge_004489). Overall, the achintya_bhedabheda school presents a complex and multifaceted understanding of the relationship between the atman and brahman (cite: edge_003142).</div></div>
+<div class="school-block"><div class="school-name">Dvaitadvaita</div><div>According to the Dvaitadvaita school of philosophy, the atman is identical to Brahman (cite: edge_001077). This idea is repeated consistently throughout the school's teachings, emphasizing the oneness of the individual self and the ultimate reality (cite: edge_001074). The Dvaitadvaita school suggests that one should realize the atman as one with what governs the beings, which is Brahman (cite: edge_001076). This understanding of the atman and Brahman is central to the Dvaitadvaita philosophy (cite: edge_001075).</div></div>
 
 <h2>Where schools disagree</h2>
 <div class="contradiction"><span class="pair">atman &harr; brahman</span>

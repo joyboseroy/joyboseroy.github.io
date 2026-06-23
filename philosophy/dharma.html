@@ -74,23 +74,51 @@
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   footer p { margin: 6px 0; }
+  .disclaimer {
+    background: #fff8e1;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0 2rem 0;
+    font-size: 0.88rem;
+    color: #444;
+  }
+  .disclaimer strong { color: #b45309; }
+  .disclaimer a { color: #b45309; }
+  .disclaimer p { margin: 0.5rem 0 0 0; }
 </style>
 </head>
 <body>
 <div class="nav"><a href="index.html">&larr; All concepts</a></div>
 <h1>Dharma</h1>
 <div class="subtitle">Five schools of Indian philosophy, compared</div>
+<div class="disclaimer">
+  <strong>&#9888;&#65039; Demo Notice</strong>
+  <p>This website is a <strong>technical demonstration</strong> of knowledge graph and
+  LLM capabilities, not an authoritative reference on Indian philosophy. It makes
+  <strong>no claims about the correctness, completeness, or scholarly accuracy</strong>
+  of any philosophical position shown here.</p>
+  <p>The underlying data (<a href="https://github.com/joyboseroy/darshana-graph" target="_blank">darshana-graph</a>)
+  was extracted automatically from source texts using LLMs. Source texts may be incomplete,
+  mistranslated, or mis-attributed. Concept tagging, school labels, and relation types may
+  contain errors. LLM-generated summaries may hallucinate or misrepresent philosophical
+  positions. A known production bug where non-Vedanta traditions (Buddhism, Jainism) were
+  shown Vedantic content due to a retrieval fallback error has been fixed, but other errors
+  may remain.</p>
+  <p>For reliable study of Indian philosophy, please consult qualified teachers and established
+  scholarly sources. This tool is provided for research and exploration only.</p>
+</div>
 
 <h2>What each school says</h2>
-<div class="school-block"><div class="school-name">Advaita Vedanta</div><div>In Advaita philosophy, dharma is often associated with karma, as it is gathered from various texts that dharma pertains to the duties of different stages of life, which can help in the rise of knowledge (cite: edge_018604). Dharma is also seen as related to karma in terms of the enjoyment of the fruits of our deeds (cite: edge_018991) and the performance of obligatory duties to ward off evil consequences (cite: edge_019482). However, it's also noted that knowledge is independent of rites, and dharma can be distinct from karma in certain contexts (cite: edge_018126). Additionally, dharma is sometimes connected to the concept of atman, particularly in relation to meditation and faith (cite: edge_020055).</div></div>
-<div class="school-block"><div class="school-name">Dvaita Vedanta</div><div>In the school of Dvaita, dharma is seen as a qualified aspect of karma, as it is related to the paths to the lordship of the objects of enjoyment (cite: edge_000250). Dharma is also considered a qualified aspect of brahma, with reference to the different results to which the gods are entitled (cite: edge_007650). Additionally, dharma is distinct from karma, as it involves doing what is permitted, rather than just doing what one pleases (cite: edge_007791). Dharma is also considered a cause of moksha, as even a small act of righteousness can become great and everlasting (cite: edge_007917).</div></div>
-<div class="school-block"><div class="school-name">Vishishtadvaita</div><div>In the Vishishtadvaita school of philosophy, dharma is closely related to ahimsa, or non-harming, as it is said "let him not harm any creature" (cite: edge_006198). Dharma is also connected to the concept of moksha, or liberation, as it is stated that one becomes "righteous and obtains everlasting peace" through dharma (cite: edge_001307). Additionally, dharma is linked to karma, or action, as it is said that "success is quickly attained by men through action" (cite: edge_000559). Overall, dharma is seen as an important aspect of achieving spiritual goals and living a virtuous life in the Vishishtadvaita tradition (cite: edge_002616).</div></div>
-<div class="school-block"><div class="school-name">Achintya Bhedabheda</div><div>In the achintya_bhedabheda school of philosophy, dharma is qualified as an aspect of scriptural rules, devotional service, and karma (cite: edge_004209, edge_004357, edge_004232). Dharma is also seen as distinct from adharma, or the irreligious way of life (cite: edge_004431). Additionally, dharma is connected to the concept of atman, with some evidence suggesting that atman is a cause of dharma (cite: edge_002956) and that atman is qualified as an aspect of dharma (cite: edge_004037). Overall, dharma is an important concept in achintya_bhedabheda philosophy, and is linked to various other ideas such as karma, devotional service, and the attainment of moksha (cite: edge_004014).
+<div class="school-block"><div class="school-name">Advaita Vedanta</div><div>In the school of Advaita, dharma is often associated with karma, as seen in the idea that "only the duties pertaining to the stages of life, they are also helpful in the rise of knowledge" (cite: edge_018604). Dharma is also considered to be related to the performance of virtuous deeds, which "do not come into conflict with the knowledge arising from the scriptures" (cite: edge_018708). Additionally, dharma is linked to the concept of atman, with "rites are enjoined for others" (cite: edge_018553) and "for the sake of meditation" (cite: edge_020055). However, it's also noted that dharma is distinct from karma in certain contexts, such as in the case of the Jyotistoma sacrifice (cite: edge_018126).</div></div>
+<div class="school-block"><div class="school-name">Dvaita Vedanta</div><div>In the school of Dvaita, dharma is seen as a qualified aspect of karma, meaning it is related to the path of works (cite: edge_000250). Dharma is also considered a qualified aspect of brahman, referring to the different results that gods and others are entitled to (cite: edge_007650). Additionally, dharma is distinct from karma, with the idea that doing what one pleases means doing only permitted duties or acts (cite: edge_007791). Dharma is also considered a cause of moksha, with even a small act of righteousness becoming great and everlasting (cite: edge_007917).</div></div>
+<div class="school-block"><div class="school-name">Vishishtadvaita</div><div>In the Vishishtadvaita school of philosophy, dharma is closely related to ahimsa, or non-harming, as it is said "let him not harm any creature" (cite: edge_006198). Dharma is also considered an aspect of vedanta, which is consistent with the idea that "which is consistent with Dharma" (cite: edge_002616). Additionally, dharma is seen as a path to moksha, or liberation, as it is stated that "he becomes righteous and obtains everlasting peace" (cite: edge_001307). Dharma is also connected to karma, or action, as it is said that "for success is quickly attained by men through action" (cite: edge_000559) (cite: edge_006522).</div></div>
+<div class="school-block"><div class="school-name">Achintya Bhedabheda</div><div>In the achintya_bhedabheda school of philosophy, dharma is qualified as an aspect of scriptural rules, devotional service, and karma (cite: edge_004209, edge_004357, edge_004232). Dharma is also seen as distinct from adharma, or the irreligious way of life (cite: edge_004431). Additionally, dharma is connected to the concept of atman, with some evidence suggesting that atman is a cause of dharma (cite: edge_002956) and that atman is qualified as an aspect of dharma (cite: edge_004037). Overall, dharma is an important concept in this school of philosophy, leading to moksha, or liberation (cite: edge_004014).
 
 [Note: this summary may contain an unverified citation.]</div></div>
-<div class="school-block"><div class="school-name">Dvaitadvaita</div><div>According to the dvaitadvaita school of philosophy, dharma is considered a qualified aspect of atman, meaning it is a part of or related to the self (cite: edge_012375). Dharma is also seen as a cause of atman, implying that it has an influence on the self (cite: edge_011726). The relationship between dharma and atman is further emphasized by the idea that dharma is a part of the laws of spiritual life (cite: edge_011729). Overall, dharma is closely tied to the concept of atman, and is seen as an important aspect of the self (cite: edge_026325).</div></div>
-<div class="school-block"><div class="school-name">Buddhism (Pali Canon)</div><div>In Buddhist philosophy, dharma is seen as a cause of karma (cite: edge_009656) and is also considered a qualified aspect of karma (cite: edge_009666). Dharma is distinct from karma (cite: edge_010207) and from atman, or the self (cite: edge_008723). Additionally, dharma is believed to lead to happiness (cite: edge_008656) and is a qualified aspect of good deeds (cite: edge_010103), ultimately contributing to the goal of moksha, or liberation (cite: edge_008798).</div></div>
-<div class="school-block"><div class="school-name">Jainism (general)</div><div>In Jain philosophy, dharma refers to attributes that can be primary or secondary. A primary dharma is called 'arpita' when it's being considered, according to the need of expression (cite: edge_022649). On the other hand, secondary dharmas are referred to as 'anarpita' when they're not being considered (cite: edge_022650). These secondary dharmas are also described as 'gauṇa', highlighting their secondary nature (cite: edge_022650).</div></div>
+<div class="school-block"><div class="school-name">Dvaitadvaita</div><div>According to the dvaitadvaita school of philosophy, dharma is considered a qualified aspect of atman, as it is related to the laws of spiritual life (cite: edge_011729). Dharma is also seen as a cause of atman, as it can awaken dormant and unrealized powers (cite: edge_011726). Additionally, dharma is associated with the eternal and is considered a remedy for the elemental Self (cite: edge_028056). Overall, dharma is viewed as an important aspect of atman, guiding individuals towards the right path and helping them achieve spiritual growth (cite: edge_026325).</div></div>
+<div class="school-block"><div class="school-name">Buddhism (Pali Canon)</div><div>In Buddhist philosophy, dharma is seen as a cause of karma (cite: edge_009656) and happiness (cite: edge_008656). It is also considered a qualified aspect of good deeds (cite: edge_010103) and is distinct from karma (cite: edge_009931) and atman (cite: edge_008723). Additionally, dharma is viewed as a means to achieve moksha, or liberation (cite: edge_008798), and is considered distinct from desire (cite: edge_009546).</div></div>
+<div class="school-block"><div class="school-name">Jainism (general)</div><div>In Jain philosophy, dharma refers to attributes that can be primary or secondary (cite: edge_022649). The primary attribute of dharma is called 'arpita' or 'upanīta' (cite: edge_022649). On the other hand, secondary attributes of dharma are referred to as 'anarpita' and are considered gauṇa, or secondary, aspects (cite: edge_022650). These distinctions help to clarify the concept of dharma in Jain thought (cite: edge_022650).</div></div>
 
 <h2>Where schools disagree</h2>
 <div class="contradiction"><span class="pair">dharma &harr; karma</span>

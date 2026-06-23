@@ -48,6 +48,18 @@
   footer a { color: var(--accent); text-decoration: none; }
   footer a:hover { text-decoration: underline; }
   footer p { margin: 6px 0; }
+  .disclaimer {
+    background: #fff8e1;
+    border-left: 4px solid #f59e0b;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0 2rem 0;
+    font-size: 0.88rem;
+    color: #444;
+  }
+  .disclaimer strong { color: #b45309; }
+  .disclaimer a { color: #b45309; }
+  .disclaimer p { margin: 0.5rem 0 0 0; }
 </style>
 </head>
 <body>
@@ -55,6 +67,22 @@
 <p class="intro">Ten core concepts from Hindu and Buddhist philosophy, each grounded in
 real citations from primary texts, browsable two ways: by concept (how schools differ
 on one idea) or by school (what one school says across all ideas).</p>
+<div class="disclaimer">
+  <strong>&#9888;&#65039; Demo Notice</strong>
+  <p>This website is a <strong>technical demonstration</strong> of knowledge graph and
+  LLM capabilities, not an authoritative reference on Indian philosophy. It makes
+  <strong>no claims about the correctness, completeness, or scholarly accuracy</strong>
+  of any philosophical position shown here.</p>
+  <p>The underlying data (<a href="https://github.com/joyboseroy/darshana-graph" target="_blank">darshana-graph</a>)
+  was extracted automatically from source texts using LLMs. Source texts may be incomplete,
+  mistranslated, or mis-attributed. Concept tagging, school labels, and relation types may
+  contain errors. LLM-generated summaries may hallucinate or misrepresent philosophical
+  positions. A known production bug where non-Vedanta traditions (Buddhism, Jainism) were
+  shown Vedantic content due to a retrieval fallback error has been fixed, but other errors
+  may remain.</p>
+  <p>For reliable study of Indian philosophy, please consult qualified teachers and established
+  scholarly sources. This tool is provided for research and exploration only.</p>
+</div>
 
 <h2>By concept</h2>
 <ul>
