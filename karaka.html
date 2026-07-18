@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karaka: Sanskrit Grammar as a Programming Idea | Joy Bose</title>
+<meta name="description" content="How Panini's karaka grammar became a programming language experiment. Devanagari examples, honest limits, and everything reviewers corrected along the way. By Joy Bose.">
+<meta name="author" content="Joy Bose">
+<meta name="keywords" content="karaka, Panini, Sanskrit, Hindi grammar, programming languages, logic programming, karaka-lang, Joy Bose">
+<style>
+body{margin:0;background:#fff;color:#1F1C19;font-family:"Palatino Linotype",Palatino,Georgia,serif;font-size:17px;line-height:1.65}
+.page{max-width:44rem;margin:0 auto;padding:2.2rem 1.25rem 4rem}
+a{color:#245F94}
+a:hover{color:#B3402F}
+h1{font-size:1.9rem;line-height:1.25;margin:.5rem 0 .4rem}
+h2{font-size:1.25rem;margin:2.2rem 0 .7rem;border-top:1px solid #E5E1DA;padding-top:1.5rem}
+.dv{font-family:"Noto Serif Devanagari","Tiro Devanagari Sanskrit",Mangal,"Kohinoor Devanagari",serif}
+.ex{font-family:"Noto Serif Devanagari","Tiro Devanagari Sanskrit",Mangal,serif;font-size:1.45rem;line-height:2;margin:.9rem 0}
+.lede,.note{color:#6B655E}
+.lede{font-size:1.02rem}
+.note{font-size:.88rem}
+.karta{color:#B3402F}.karma{color:#245F94}.karana{color:#8A6400}
+.sampradana{color:#2E7D4F}.apadana{color:#7A4B94}.adhikarana{color:#0E7575}
+.sambandha{color:#6B655E}.verb{font-weight:700}
+pre{font-family:Consolas,Menlo,monospace;font-size:.85rem;background:#FAF8F5;border:1px solid #E5E1DA;border-radius:.4rem;padding:.75rem 1rem;overflow-x:auto;line-height:1.55}
+table{border-collapse:collapse;width:100%;font-size:.95rem;margin:1rem 0}
+th,td{border:1px solid #E5E1DA;padding:.45rem .6rem;text-align:left;vertical-align:top}
+th{background:#FAF8F5}
+td .dv{font-size:1.1rem}
+.trade{border-left:3px solid #2E7D4F;padding:.1rem 0 .1rem 1rem;margin:1.1rem 0}
+.foot{margin-top:2.6rem;border-top:1px solid #E5E1DA;padding-top:1.3rem;font-size:.95rem}
+.home{font-size:.85rem;color:#6B655E}
+@media (max-width:520px){.ex{font-size:1.2rem}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<p class="home"><a href="index.html">&larr; joyboseroy home</a></p>
+
+<h1>कारक: the grammar you learned in school, as a programming idea</h1>
+<p class="lede">A 2,500-year-old piece of Sanskrit grammar turns out to address a real problem in programming language design. This page explains the idea with examples in a script you already read, and is honest about exactly where the idea stops working. Every correction that reviewers and readers sent me is on this page. The working code and formal paper are on <a href="https://github.com/joyboseroy/karaka-lang">GitHub</a>.</p>
+
+<h2>The sentence that carries the whole idea</h2>
+<p>Here is a sentence every Sanskrit textbook uses. Each word carries its role in its own ending:</p>
+<p class="ex"><span class="karta">रामः</span> <span class="karma">रावणं</span> <span class="karana">बाणेन</span> <span class="verb">हन्ति</span></p>
+<p><span class="karta">रामः</span> ends in <span class="dv">‑ः</span>, so Rama is the doer (<span class="karta">कर्ता</span>). <span class="karma">रावणं</span> ends in <span class="dv">‑ं</span>, so Ravana is the one it is done to (<span class="karma">कर्म</span>). <span class="karana">बाणेन</span> ends in <span class="dv">‑एन</span>, so the arrow is the instrument (<span class="karana">करण</span>).</p>
+<p>Because each word carries its own role, word order carries no meaning. All of these are the same sentence:</p>
+<p class="ex"><span class="karma">रावणं</span> <span class="karta">रामः</span> <span class="karana">बाणेन</span> <span class="verb">हन्ति</span><br>
+<span class="verb">हन्ति</span> <span class="karana">बाणेन</span> <span class="karma">रावणं</span> <span class="karta">रामः</span></p>
+<p>Every one of them parses to the identical structure:</p>
+<pre>Frame(हन्ति, karta=राम, karma=रावण, karana=बाण)</pre>
+<p class="note">In the paper this is Theorem 1 (Order Invariance), and the proof is two lines: role binding depends only on each word's own marker, never on its position, so no permutation can change the result. The test suite exercises it directly.</p>
+
+<h2>आपने यह स्कूल में पढ़ा था &middot; You learned this in school</h2>
+<p>If you studied Hindi grammar, you already know कारक. It is the chapter with <span class="dv">ने, को, से, में</span>. Hindi marks the same roles with small words after the noun instead of endings on it:</p>
+<p class="ex"><span class="karta">राम ने</span> <span class="karma">रावण को</span> <span class="karana">बाण से</span> <span class="verb">मारा</span></p>
+<table>
+<tr><th>कारक (role)</th><th>Hindi marker</th><th>Sanskrit ending</th><th>Meaning</th></tr>
+<tr><td><span class="karta">कर्ता</span></td><td class="dv">ने</td><td class="dv">‑ः</td><td>who did it</td></tr>
+<tr><td><span class="karma">कर्म</span></td><td class="dv">को</td><td class="dv">‑ं / ‑म्</td><td>done to what</td></tr>
+<tr><td><span class="karana">करण</span></td><td class="dv">से</td><td class="dv">‑एन</td><td>with what tool</td></tr>
+<tr><td><span class="sampradana">सम्प्रदान</span></td><td class="dv">को / के लिए</td><td class="dv">‑आय</td><td>for whom</td></tr>
+<tr><td><span class="apadana">अपादान</span></td><td class="dv">से</td><td class="dv">‑आत्</td><td>from where</td></tr>
+<tr><td><span class="adhikarana">अधिकरण</span></td><td class="dv">में / पर</td><td class="dv">‑ए</td><td>in / at which place</td></tr>
+<tr><td><span class="sambandha">संबंध</span></td><td class="dv">का / की / के</td><td class="dv">‑स्य</td><td>whose</td></tr>
+</table>
+<p class="note">Notice that Hindi reuses <span class="dv">से</span> for both instrument and source, and <span class="dv">को</span> for both object and recipient. Sanskrit keeps every role distinct, one ending each. That distinctness, formalized by Panini in the Ashtadhyayi around the 4th century BCE, is why this experiment borrows from Sanskrit rather than Hindi.</p>
+
+<h2>The programming problem</h2>
+<p>Programming languages mostly bind function inputs by position. Here is a realistic line from Prolog, a logic programming language:</p>
+<pre>causes_harm(X, Y, Z, W, V, U).</pre>
+<p>Which of the six is the person responsible? Which is the thing damaged? You cannot tell. You must find the definition and count positions. Modern languages patched this with named arguments:</p>
+<pre>connect(host="db.local", port=5432, timeout=30)</pre>
+<p>Readable, but the names are private to each function. One function calls its source <code>src=</code>, another <code>from_=</code>, another <code>origin=</code>. There is no shared vocabulary of roles across a program, so nothing can be written once against "the source" and apply everywhere.</p>
+<p>Sanskrit's fix for sentences was a small, <strong>fixed set of roles that every verb shares</strong>. The experiment: use that as a calling convention for logic programming. I call it the Karaka Calling Convention (KCC), implemented in a tested project called <a href="https://github.com/joyboseroy/karaka-lang">karaka-lang</a>.</p>
+
+<h2>What a program statement looks like</h2>
+<p>A legal-style fact, "the man harms the field with the flood, from the reservoir":</p>
+<p class="ex"><span class="karta">मनुष्यः</span> <span class="sampradana">क्षेत्राय</span> <span class="karana">जलेन</span> <span class="apadana">जलाशयात्</span> <span class="verb">हरति</span></p>
+<p>It parses into a Frame, and the same Frame compiles two ways with no translation layer, because a verb with role-labeled arguments is already the shape of a small graph: one event, labeled edges to each participant.</p>
+<pre>Frame(हरति, karta=मनुष्य, sampradana=क्षेत्र, karana=जल, apadana=जलाशय)
+
+As Prolog facts:                As a graph-database write (Cypher):
+event(e1, hara).                MERGE (e:Event {verb: "hara"})
+karta(e1, man).                 MERGE (n1:Entity {name: "man"})
+sampradana(e1, field).            MERGE (e)-[:KARTA]-&gt;(n1)
+karana(e1, flood).              MERGE (n2:Entity {name: "flood"})
+apadana(e1, reservoir).           MERGE (e)-[:KARANA]-&gt;(n2)   ...</pre>
+<p>And there is a question mode. Leave the doer open, <span class="dv">?कः</span> means "who?", and the very same structure compiles to a query instead of a statement:</p>
+<p class="ex"><span class="karta">?कः</span> <span class="karana">बाणेन</span> <span class="verb">हन्ति</span></p>
+<pre>event(E, hanti), karana(E, arrow), karta(E, K).     % who kills with the arrow?</pre>
+<p class="note">Statement or question is decided by one thing only: whether any role was left open.</p>
+
+<h2>What this actually buys</h2>
+<p>Here is the one demonstration the whole idea rests on. Two sentences, two <em>different</em> verbs:</p>
+<p class="ex"><span class="karta">मनुष्यः</span> <span class="sampradana">क्षेत्राय</span> <span class="karana">जलेन</span> <span class="verb">हरति</span> <span class="note">(harms the field with the flood)</span><br>
+<span class="karta">नरः</span> <span class="sampradana">पुत्राय</span> <span class="karana">धनेन</span> <span class="verb">ददाति</span> <span class="note">(provides for the son by means of wealth)</span></p>
+<p>Now one rule, which mentions no verb at all, only "has an instrument and has a recipient":</p>
+<pre>rule: requires {has:karana, has:sampradana}
+      add class = "mediated-transfer"</pre>
+<p>Applied to both, straight from the project's test suite:</p>
+<pre>Frame(hara, class=mediated-transfer, karana=jal,  karta=man, sampradana=ksetr)
+Frame(dada, class=mediated-transfer, karana=dhan, karta=nar, sampradana=putr)</pre>
+<p>Both classified by a single rule that knows nothing about either verb. Named arguments do not have this property. In Python, <code>agent=</code> means whatever each function decides. Even PropBank, the largest role-labeling system in natural language processing, defines its roles per verb: its <code>ARG0</code> means "the wanter" for <em>want</em>, "the sleeper" for <em>sleep</em>, "the creator" for <em>develop</em>. Same label, three meanings, resolved through a lookup table. A karaka carries no lookup: <span class="karta">कर्ता</span> means the doer for every verb, by construction.</p>
+<div class="trade"><p><strong>The honest framing is a trade, not a victory.</strong> You give up naming freedom and get cross-predicate operability, the way a database schema or a standard vocabulary like schema.org trades freedom for interoperability. Single-author code with no rule layer gains nothing from the trade. Systems where independent predicates must work together, rule engines, knowledge graphs, legal fact bases, are where it pays.</p></div>
+
+<h2>सीमाएँ &middot; Where this honestly stops</h2>
+<p>Readers and reviewers pushed back hard, and the best objections drew the real boundary of the idea.</p>
+<p><strong>"Why should all functions have the same parameters?"</strong> They should not, and nothing here requires it. The killing sentence binds three roles, the flood sentence binds four. Predicates take however many roles they genuinely have. The only claim: <em>when</em> a predicate has a doer, it calls that argument <span class="karta">कर्ता</span> instead of inventing a private name. Shared vocabulary, not shared arity.</p>
+<p><strong>"Then map this:"</strong> a reviewer sent the best counterexample the project received:</p>
+<pre>z = OR(XOR(AND(a,b), AND(c,d)), e)</pre>
+<p>It cannot be mapped to karakas, and the reason is instructive. In <code>AND(a,b)</code> the inputs are interchangeable: <code>AND(a,b) = AND(b,a)</code>. A karaka exists to carry information that distinguishes arguments; for a symmetric operator there is no information to carry, so calling <code>a</code> the doer would be semantically false, not just awkward. The asymmetric operators fail from the other side: subtraction's minuend and implication's antecedent are real roles, but private to their operator; there is no shared vocabulary under which "minuend" and "antecedent" are the same role. So the boundary has a precise shape: role-marking applies only where swapping arguments changes meaning <em>and</em> the distinctions come from a shared vocabulary of participant roles. Boolean logic fails the first test, arithmetic fails the second, and both sit outside anything this convention claims.</p>
+<p><strong>"What about <code>connect(host, port, timeout)</code>?"</strong> Also outside. Karakas are participant roles in events: who acted, on what, with what, from where. A timeout is not a participant in anything. Configuration parameters are what keyword arguments are genuinely good at, and this project does not compete there. Its territory is event-shaped data: who did what to whom, with what, from where. Legal facts, provenance, knowledge graphs.</p>
+<p><strong>"Your <code>Frame(hara, karta=man, ...)</code> looks exactly like keyword arguments anyway."</strong> It does; the syntax is indistinguishable, and that concession is in the paper. The entire difference is the one property shown above: the names are a closed set with fixed meanings across every predicate. Also: nobody needs to learn Sanskrit to use this. The roles in code are seven ASCII words; the full Sanskrit morphology layer is real but optional.</p>
+<p><strong>"What if a relation needs more than six roles?"</strong> A role's value can be a whole nested sub-event instead of a plain thing: "instrument: the flood" can become "instrument: a flooding event, itself caused by rainfall." Nesting removes the ceiling without inventing new roles, at the honest cost of trading a flat one-liner for a small tree.</p>
+
+<h2>About that NASA story</h2>
+<p>You may have heard that "NASA declared Sanskrit the best language for computers." That never happened. The real source is a genuinely interesting 1985 paper by Rick Briggs, a NASA researcher, in <em>AI Magazine</em>. His actual claim was narrow and useful: karaka-marked sentences are structurally equivalent to the semantic networks AI researchers were then building by hand, because case-marked roles let you drop word order without losing meaning. This project builds only on the narrow, true claim; the shuffled sentence at the top of this page is that claim, written out.</p>
+
+<h2>What came before, honestly</h2>
+<p>Most "Sanskrit programming languages" you will find online translate keywords: <code>if</code> becomes <span class="dv">यदि</span>, <code>function</code> becomes <span class="dv">कार्य</span>, and the grammar underneath stays C or Python. That uses nothing structural about Sanskrit. On the serious side, real computational Sanskrit exists and this project stands on it: Gerard Huet's Sanskrit Heritage Engine, the actively maintained <a href="https://github.com/ambuda-org/vidyut">vidyut</a> toolkit, and <a href="https://github.com/kmadathil/sanskrit_parser">sanskrit_parser</a>, which builds karaka dependency graphs from real merged Sanskrit text.</p>
+<p>One disclosure that matters: after I first claimed this niche was empty, a search proved me wrong. A Devanagari-first language called Karaka, by Sunil Prakash, appeared on the Rust package registry within weeks of my work, using the same six roles as labels in an imperative language. I verified this from its published source code, and the paper contains the precise comparison. Two independent implementations in one season means the idea is in the air. What this version does that his does not: roles carried by word endings rather than labels, compilation to logic facts and graph databases, the rule engine below, and the question mode above.</p>
+
+<h2>उत्सर्ग और अपवाद &middot; When rules collide, the Panini way</h2>
+<p>Panini's grammar resolves conflicts with a principle every Indian grammar student meets: a general rule (<span class="dv">उत्सर्ग</span>) applies by default, and a more specific exception (<span class="dv">अपवाद</span>) overrides it. If you know CSS, this is specificity: the more specific selector wins.</p>
+<p>The project's rule engine derives "more specific" mechanically: a rule is more specific if its required conditions strictly contain another's. When two matching rules are incomparable, neither containing the other, the engine refuses to guess; it raises an error and asks for an explicit tie-breaking rule, which is precisely how Panini's commentators handled genuinely undecided conflicts. My first version used hand-set priority numbers; reviewers pointed out that numbers do not compose when two people's rules meet, and they were right, so the numbers went.</p>
+
+<h2>व्याकरण ने मेरी वर्तनी सुधारी &middot; The grammar corrected my spelling</h2>
+<p>The word endings on this page are the real thing, not decoration. Through the vidyut-prakriya engine, the project generates declensions by actually running Panini's rules. Here is <span class="dv">देव</span> through all seven roles:</p>
+<p class="ex"><span class="karta">देवः</span>&ensp;<span class="karma">देवम्</span>&ensp;<span class="karana">देवेन</span>&ensp;<span class="sampradana">देवाय</span>&ensp;<span class="apadana">देवात्</span>&ensp;<span class="sambandha">देवस्य</span>&ensp;<span class="adhikarana">देवे</span></p>
+<p>And every generated form carries a receipt: the exact Ashtadhyayi rules that produced it. "By horse," <span class="dv">अश्वेन</span>, derives in ten traced steps:</p>
+<pre>aSvena = aSva + Trtiya (karana)
+sutras: 1.2.45 &rarr; 4.1.2 &rarr; 1.3.7 &rarr; 1.3.9 &rarr; 1.4.13
+        &rarr; 7.1.12 &rarr; 1.4.18 &rarr; 1.4.14 &rarr; 6.1.87 &rarr; 8.4.68</pre>
+<p>A detail I enjoyed: while testing I misspelled "horse" with the wrong sibilant, and the engine produced a different, phonologically correct form through a real retroflexion rule instead of what I expected. The 2,500-year-old grammar caught my typo.</p>
+
+<h2>जो अभी बाकी है &middot; What is still open</h2>
+<p>Three things this project has not shown, stated plainly. There is no user study yet demonstrating that role-marked facts are actually easier to read than positional Prolog; that claim is argued, not measured, and it is the biggest missing piece of evidence. The graph output is faithful going in, but a graph database will not stop a later writer from attaching two doers to one event, so the schema honesty lives in the compiler, not the store. And real Sanskrit complicates the ending-to-role mapping under passive voice, so a full system needs a per-verb surface table, whose output would still be the same fixed roles, keeping the cross-verb rules intact.</p>
+
+<div class="foot">
+<p><strong>Go deeper:</strong>
+<a href="https://github.com/joyboseroy/karaka-lang">Code, 23 passing tests, and the formal paper (GitHub)</a> &nbsp;&middot;&nbsp;
+<a href="https://joyboseroy.medium.com/i-used-a-2-500-year-old-sanskrit-grammar-to-fix-a-modern-programming-problem-3fbc4819b0b9">The Medium article</a> &nbsp;&middot;&nbsp;
+<a href="index.html">Back to home</a></p>
+<p class="note">Every quoted output on this page comes from the project's test suite. Corrections welcome; several sections of this page exist because someone sent one.</p>
+</div>
+
+</div>
+</body>
+</html>
