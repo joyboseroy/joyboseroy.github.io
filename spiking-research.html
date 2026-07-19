@@ -203,6 +203,16 @@
   .dir h3 .t{font-family:var(--mono);font-size:.85rem;color:var(--brass);font-weight:700}
   .dir p{max-width:66ch;margin:0}
 
+  /* ---------- companion essays ---------- */
+  .esslist{margin-top:1.5rem}
+  .essay{border-top:1px solid var(--line-soft);padding:1.6rem 0}
+  .essay:first-child{border-top:none}
+  .essay .emeta{font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-bottom:.45rem}
+  .essay h3{margin:0 0 .5rem;font-size:1.22rem;line-height:1.2;max-width:34ch}
+  .essay h3 a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line)}
+  .essay h3 a:hover{color:var(--petrol);border-color:var(--petrol)}
+  .essay p{margin:0;max-width:70ch}
+
   /* ---------- two philosophies ---------- */
   .versus{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2rem 0 .5rem}
   .versus .col{background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1.4rem 1.3rem}
@@ -240,9 +250,11 @@
     <nav>
       <a href="#origin">Origin</a>
       <a href="#papers">Papers</a>
+      <a href="#cousins">HTM cousins</a>
       <a href="#transformers">Better transformers</a>
       <a href="#thread">The thread</a>
       <a href="#timeline">Timeline</a>
+      <a href="#essays">Essays</a>
     </nav>
   </header>
 </div>
@@ -320,8 +332,8 @@
   <div class="wrap measure">
     <p class="eyebrow">Where it started</p>
     <h2>A machine that learned sequences out of spikes</h2>
-    <p class="first">My PhD at Manchester, finished in 2007, was a machine that learned sequences using spiking neurons. The title was long and the problem, looking back, was oddly modern: how can a machine represent a sequence, remember what just happened, use that recent history to tell apart otherwise identical moments, fetch the right continuation, and keep learning as it goes.</p>
-    <p>The trick was to stop storing information only as dense numbers. Instead, information lived in <b>which neurons fired and the order in which they fired</b>. Rank order codes, a sparse "N of M" representation, a running memory of recent context, and an associative store called Sparse Distributed Memory did the work together.</p>
+    <p class="first">My PhD at Manchester, finished in 2007, was <a href="https://raw.githubusercontent.com/joyboseroy/sequence-machine-revisited/main/papers/JoyBose_PhD.pdf">a machine that learned sequences using spiking neurons</a>. The title was long and the problem, looking back, was oddly modern: how can a machine represent a sequence, remember what just happened, use that recent history to tell apart otherwise identical moments, fetch the right continuation, and keep learning as it goes.</p>
+    <p>The trick was to stop storing information only as dense numbers. Instead, information lived in <b>which neurons fired and the order in which they fired</b>. Rank order codes, a sparse "N of M" representation, a running memory of recent context, and an associative store called Sparse Distributed Memory did the work together. The neurons were a leaky integrate and fire variant I called the Rate Driven LIF, tuned so that the firing order within a burst, not the firing rate and not the absolute timing, carried the meaning of each symbol.</p>
     <p>Why does order matter so much? Because the same input means different things in different company. Seeing X after A then B is not the same situation as seeing X after C then D. The input is identical. The context is not. So the order itself has to carry information.</p>
 
     <div class="orderdemo" aria-hidden="false">
@@ -346,7 +358,7 @@
     <h2>Rereading the old design in the language invented after 2017</h2>
     <p>Around 2025 I started asking a simple question. If I described that old system using words that only exist because of transformers, attention, and modern associative memory, what would it look like? A rough mapping fell out almost on its own.</p>
     <p>A rank order spike code plays the role of a token embedding. Spike timing plays the role of positional information. The running context state plays the role of the query. Stored patterns play the roles of keys and values. Similarity based retrieval in the memory plays the role of attention. Winner take all readout plays the role of decoding.</p>
-    <p>None of these map perfectly, and pretending they do would weaken the point. What actually holds up is that <b>both systems have to do the same handful of jobs</b>: encode the input, hold context, compare the current state against stored states, pull back what is relevant, and produce the next output. We started calling the reconstructed version STSM, the Spiking Transformer Sequence Machine, partly as an architecture and partly as a bridge for thinking.</p>
+    <p>None of these map perfectly, and pretending they do would weaken the point. What actually holds up is that <b>both systems have to do the same handful of jobs</b>: encode the input, hold context, compare the current state against stored states, pull back what is relevant, and produce the next output. We started calling the reconstructed version STSM, the Spiking Transformer Sequence Machine, partly as an architecture and partly as a bridge for thinking. I worked through the full layer by layer mapping, down to the neuron model and the learning rule, in <a href="https://medium.com/@joyboseroy/what-i-built-in-2007-and-why-it-looks-a-bit-like-a-transformer-dbf3683a0ebe">a companion essay</a>.</p>
   </div>
 </section>
 
@@ -372,6 +384,7 @@
             <p><span class="q">What it shows.</span> Both perform the same five jobs: encoding, holding context, associative retrieval, storage, and readout. The shared move underneath is comparing high dimensional vectors by similarity, the cosine or dot product. I also work out a "Phase Latency Isomorphism": the sine and cosine position signal a transformer uses and the spike timing a neuron uses are just two coordinate systems for the same ordered quantity, and the dot product in attention does not care which one you feed it, up to a single scale factor.</p>
             <p><span class="q">The experiment.</span> When I squash the position signal until positions stop being distinguishable, a copy task stops converging. A plain learned rank based position does as well as the sinusoid, sometimes better. So the sine waves are not the magic. What matters is that positions stay far enough apart under the similarity lookup.</p>
             <p><span class="q">Why it matters.</span> If attention is a special case of similarity based retrieval, and position encoding is really about keeping order distinguishable rather than about any particular formula, then the design space for both is much wider than it looks.</p>
+            <p><span class="q">Not just theory.</span> Spiking versions of this memory have already been shown to match conventional ones in capacity, across several neuron models, in <a href="https://arxiv.org/abs/2109.03111">Ajwani, Lalan, Sen Bhattacharya, and Bose (2021)</a>, which built a spiking Sparse Distributed Memory on the Nengo framework. So the retrieval mechanism at the heart of the comparison is a working system, not a thought experiment.</p>
           </div>
           <div class="chips">
             <a class="chip" href="https://arxiv.org/abs/2605.00662"><span class="k">arXiv</span> 2605.00662</a>
@@ -440,13 +453,28 @@
   </div>
 </section>
 
+<!-- ============ HTM COUSINS ============ -->
+<section id="cousins">
+  <div class="wrap measure">
+    <p class="eyebrow">A related family</p>
+    <h2>The cousins: HTM and the cortical column</h2>
+    <p>Not every neighbour is spiking in the strict sense. Hierarchical Temporal Memory, from Jeff Hawkins and Numenta, and its successor the Thousand Brains theory, model the cortex as columns of neurons using sparse distributed representations and a sequence memory that keeps predicting the next input. I treat them as close cousins of my spiking work, because they run on the same genes: sparse codes, associative sequence memory, and learning that happens online from a live stream with no separate training and testing split. The open htm.core library is where a lot of this lives in practice.</p>
+    <p>With two colleagues I put that online property to work on a real problem. HTM watches a stream of telecom performance metrics and notices when the pattern starts to shift, and a Sequential Probability Ratio Test decides when a shift is a genuine change rather than noise. The hybrid caught data drift with fewer false alarms than standard statistical tests such as Kolmogorov Smirnov and Wasserstein. It is the cousin family earning its keep on live data, not just on paper.</p>
+    <div class="chips">
+      <a class="chip" href="https://arxiv.org/abs/2504.18599"><span class="k">arXiv</span> 2504.18599</a>
+      <a class="chip" href="https://github.com/joyboseroy/htm_drift_detection"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg><span class="k">code</span> htm_drift_detection</a>
+    </div>
+    <p class="note">The point where the two lineages actually touch is the Thousand Brains paper above, where I drop rank order spikes into Numenta's Monty framework. That is the spiking line and the HTM line meeting at a single spot.</p>
+  </div>
+</section>
+
 <!-- ============ BETTER TRANSFORMERS ============ -->
 <section id="transformers">
   <div class="wrap">
     <div class="measure">
       <p class="eyebrow">What this suggests for modern AI</p>
       <h2>Five ways this could make transformers better</h2>
-      <p>Some of these are close to ready and some are still ideas. The point is not to replace transformers or to resurrect old neural networks unchanged. It is to find the functional job each part does and ask whether a sparser, more temporal, more memory based version could do it too.</p>
+      <p>Some of these are close to ready and some are still ideas. The point is not to replace transformers or to resurrect old neural networks unchanged. It is to find the functional job each part does and ask whether a sparser, more temporal, more memory based version could do it too. I sketch <a href="https://medium.com/@joyboseroy/novel-transformer-architectures-with-rnns-spiking-and-shallow-ml-models-3d485f960154">concrete hybrid designs along these lines</a> in a separate essay.</p>
     </div>
 
     <div style="margin-top:1.5rem">
@@ -542,18 +570,65 @@
 </section>
 
 <!-- ============ FOOTER ============ -->
+<!-- ============ COMPANION ESSAYS ============ -->
+<section id="essays">
+  <div class="wrap measure">
+    <p class="eyebrow">The long reads</p>
+    <h2>Companion essays on Medium</h2>
+    <p>Everything above is the short version. These are the essays where I take the same ideas slowly, plus the wider landscape they sit in. All written for a general reader.</p>
+
+    <div class="esslist">
+
+      <article class="essay">
+        <div class="emeta">Mar 2026 · 15 min read</div>
+        <h3><a href="https://medium.com/@joyboseroy/what-i-built-in-2007-and-why-it-looks-a-bit-like-a-transformer-dbf3683a0ebe">What I Built in 2007, and Why It Looks a Bit Like a Transformer</a></h3>
+        <p>The full retrospective behind this page. I lay the 2007 sequence machine next to a transformer, layer by layer: the rank ordered N of M encoder as token embedding, the context layer with its forgetting parameter as a scalar ancestor of both the KV cache and Mamba style gating, the Sparse Distributed Memory address decoder as the QK dot product, the max outer product Hebbian rule as a one shot local alternative to backpropagation, and the burst stability analysis as a spiking version of the vanishing and exploding gradient problem. This is the plain language source for the origin and the first paper above.</p>
+      </article>
+
+      <article class="essay">
+        <div class="emeta">Jul 2025 · 14 min read</div>
+        <h3><a href="https://medium.com/@joyboseroy/novel-transformer-architectures-with-rnns-spiking-and-shallow-ml-models-3d485f960154">Novel transformer architectures with RNNs, spiking and shallow ML models</a></h3>
+        <p>The fuller version of the five directions above. A thought experiment walking through seven hybrids, each aimed at one transformer weakness: attention over an LSTM for temporal order, a spiking transformer for energy, an HTM transformer for online learning and anomaly gated attention, a binary associative memory to cache repeated lookups, a Hopfield memory as principled content addressable retrieval, a shallow ML early exit gate for adaptive compute, and a Mamba style state space hybrid for linear cost long context.</p>
+      </article>
+
+      <article class="essay">
+        <div class="emeta">Jul 2025 · 7 min read</div>
+        <h3><a href="https://medium.com/@joyboseroy/neuromorphic-ai-and-generative-ai-two-approaches-to-intelligence-70783d0b398a">Neuromorphic AI and Generative AI: Two approaches to Intelligence</a></h3>
+        <p>The big picture framing. Generative AI mimics the output. Neuromorphic AI tries to mimic how the brain gets there, with spikes, event driven compute, and memory fused into processing. I cover the hardware (Loihi, TrueNorth, and Manchester's SpiNNaker), HTM and the Thousand Brains theory, the energy gap, and where the two approaches are likely to converge rather than compete.</p>
+      </article>
+
+      <article class="essay">
+        <div class="emeta">Apr 2025 · 3 min read</div>
+        <h3><a href="https://medium.com/@joyboseroy/recent-papers-related-to-spiking-neurons-and-llms-c737a1c32ff2">Recent papers related to spiking neurons and LLMs</a></h3>
+        <p>A short field guide to what other people are building at this intersection, so my own work has a map to sit on: BrainTransformers, SpikeGPT, SpikeBERT, SpikeLLM, Meta SpikeFormer, the Neuro LIFT drone framework, and a Loihi reinforcement learning controller, among others.</p>
+      </article>
+
+      <article class="essay">
+        <div class="emeta">Jun 2026 · 20 min read · members only</div>
+        <!-- Full article URL truncated in source PDF; profile link used as placeholder. Replace href with the exact article URL. -->
+        <h3><a href="https://medium.com/@joyboseroy">The Hardware Lottery: Why Transformers Won, What Could Replace Them, and How the AI Bubble Could Burst</a></h3>
+        <p>The economic and hardware backdrop for why any of this matters. Transformers won partly because their math happened to fit GPUs, not because they were the only good answer. I go through the efficient alternatives (xLSTM, Mamba, RWKV, state space models), custom silicon and neuromorphic hardware including SpiNNaker, the cheap Chinese models reshaping the market, and the financial bet riding on the current setup. This is the context that makes sparse, memory based, temporally aware designs worth taking seriously.</p>
+      </article>
+
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="wrap">
     <p class="eyebrow" style="margin-bottom:1.2rem">Everything, in one place</p>
     <div class="flinks">
       <a href="https://arxiv.org/a/bose_j_1">arXiv author page</a>
       <a href="https://github.com/joyboseroy">GitHub profile</a>
+      <a href="https://medium.com/@joyboseroy">Medium essays</a>
       <a href="https://arxiv.org/abs/2605.00662">Spiking machines &amp; transformers</a>
       <a href="https://arxiv.org/abs/2607.02967">Rank order memory</a>
       <a href="https://arxiv.org/abs/2507.22146">Pendulum neuron</a>
       <a href="https://arxiv.org/abs/2605.22206">Temporal coding for TBT</a>
+      <a href="https://arxiv.org/abs/2109.03111">Spiking SDM on Nengo (2021)</a>
+      <a href="https://raw.githubusercontent.com/joyboseroy/sequence-machine-revisited/main/papers/JoyBose_PhD.pdf">2007 PhD thesis (PDF)</a>
     </div>
-    <p class="fnote">Joy Bose · independent researcher, Bengaluru · joy.bose@ieee.org · PhD supervised by Steve Furber and Jon Shapiro. The 2007 thesis, "Engineering a sequence machine out of spiking neurons employing rank order codes," is where this all begins.</p>
+    <p class="fnote">Joy Bose · independent researcher, Bengaluru · joy.bose@ieee.org · PhD supervised by Steve Furber and Jon Shapiro. The 2007 thesis, <a href="https://raw.githubusercontent.com/joyboseroy/sequence-machine-revisited/main/papers/JoyBose_PhD.pdf">Engineering a sequence machine out of spiking neurons employing rank order codes</a>, is where this all begins.</p>
   </div>
 </footer>
 
