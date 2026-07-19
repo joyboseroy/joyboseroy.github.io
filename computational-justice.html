@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Computational Justice — Joy Bose</title>
+<meta name="description" content="Joy Bose's legal-tech research programme: from diagnosing why Indian courts are slow to graph-verified legal AI and citizen-accessible legal language.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F7F6F2;
+    --ink:#1B1B22;
+    --ink-soft:#4A4A55;
+    --thread:#9E2B2B;        /* the red tape of Indian court files */
+    --thread-soft:#C96A5E;
+    --graph:#2E4A62;         /* slate blue for data & graphs */
+    --rule:#DDD9CF;
+    --card:#FFFFFF;
+    --mono:'IBM Plex Mono',monospace;
+    --serif:'Spectral',Georgia,serif;
+    --sans:'Inter',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.65;
+  }
+  a{color:var(--thread);text-decoration:none;border-bottom:1px solid var(--thread-soft)}
+  a:hover{border-bottom-color:var(--thread)}
+  a:focus-visible,button:focus-visible{outline:2px solid var(--thread);outline-offset:3px}
+
+  .wrap{max-width:880px;margin:0 auto;padding:0 24px}
+
+  /* ---------- the red thread rail ---------- */
+  .threaded{position:relative}
+  .threaded::before{
+    content:"";
+    position:absolute;
+    left:11px;top:0;bottom:0;
+    width:2px;
+    background:linear-gradient(var(--thread) 0%, var(--thread) 92%, transparent 100%);
+    opacity:.85;
+  }
+  .knot{
+    position:absolute;
+    left:3px;
+    width:18px;height:18px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--thread);
+  }
+  .knot::after{
+    content:"";
+    position:absolute;inset:4px;
+    border-radius:50%;
+    background:var(--thread);
+  }
+
+  /* ---------- hero ---------- */
+  header{padding:80px 0 56px;border-bottom:2px solid var(--ink)}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--thread);
+    margin-bottom:20px;
+  }
+  h1{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(34px,5.4vw,56px);
+    line-height:1.12;
+    letter-spacing:-.01em;
+    max-width:20ch;
+  }
+  h1 em{font-style:italic;color:var(--thread)}
+  .thesis{
+    margin-top:28px;
+    max-width:62ch;
+    font-family:var(--serif);
+    font-size:clamp(18px,2.2vw,21px);
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+  .thesis strong{color:var(--ink);font-weight:600}
+  .byline{margin-top:26px;font-family:var(--mono);font-size:13px;color:var(--ink-soft)}
+  .byline a{color:var(--ink)}
+
+  /* ---------- section scaffolding ---------- */
+  section{padding:64px 0 8px}
+  .sec-label{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  h2{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:clamp(26px,3.4vw,34px);
+    line-height:1.2;
+    margin-bottom:20px;
+    max-width:26ch;
+  }
+  h3{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:20px;
+    margin-bottom:8px;
+  }
+  p{max-width:66ch;margin-bottom:18px}
+  p.lede{font-size:18.5px;color:var(--ink-soft)}
+
+  /* ---------- question arc ---------- */
+  .arc{margin:36px 0 40px;padding-left:44px}
+  .arc-item{position:relative;padding-bottom:34px}
+  .arc-item:last-child{padding-bottom:8px}
+  .arc-q{
+    font-family:var(--serif);
+    font-size:19px;
+    font-weight:500;
+    margin-bottom:4px;
+  }
+  .arc-a{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--thread);
+  }
+  .arc .knot{top:2px}
+
+  /* ---------- layer blocks ---------- */
+  .layer{margin:44px 0 0;padding-left:44px;position:relative}
+  .layer .knot{top:6px}
+  .layer-tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.12em;
+    text-transform:uppercase;
+    color:#fff;
+    background:var(--graph);
+    padding:3px 10px;
+    border-radius:3px;
+    margin-bottom:12px;
+  }
+  .layer:nth-of-type(odd) .layer-tag{background:var(--thread)}
+  .layer h3{font-size:23px;margin-bottom:6px}
+  .layer .q{
+    font-family:var(--serif);
+    font-style:italic;
+    color:var(--ink-soft);
+    margin-bottom:16px;
+  }
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0 28px}
+  @media(max-width:700px){.cards{grid-template-columns:1fr}}
+  .card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-top:3px solid var(--graph);
+    padding:20px 22px;
+    border-radius:4px;
+  }
+  .card.red{border-top-color:var(--thread)}
+  .card h4{
+    font-family:var(--serif);
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .card .meta{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .card p{font-size:15.5px;margin-bottom:12px;color:var(--ink-soft)}
+  .card .links{font-family:var(--mono);font-size:12.5px}
+  .card .links a{margin-right:14px}
+  .stat{
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--paper);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    padding:2px 7px;
+    display:inline-block;
+    margin:0 6px 6px 0;
+    color:var(--ink);
+  }
+
+  /* ---------- pipeline figure ---------- */
+  .pipeline{
+    background:var(--ink);
+    color:#EDEAE2;
+    border-radius:6px;
+    padding:34px 30px;
+    margin:36px 0;
+    font-family:var(--mono);
+    font-size:13.5px;
+    line-height:1.7;
+    overflow-x:auto;
+  }
+  .pipeline .pl-title{
+    color:var(--thread-soft);
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    font-size:12px;
+    margin-bottom:18px;
+  }
+  .pipeline pre{font-family:inherit;white-space:pre}
+  .pipeline .hl{color:#E8B4A8}
+  .pipeline .dim{color:#8B8B96}
+
+  /* ---------- portfolio table ---------- */
+  .tbl-scroll{overflow-x:auto;margin:28px 0 40px;border:1px solid var(--rule);border-radius:4px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:15px}
+  th{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    text-align:left;
+    color:var(--ink-soft);
+    padding:14px 18px;
+    border-bottom:2px solid var(--ink);
+    background:var(--paper);
+  }
+  td{padding:13px 18px;border-bottom:1px solid var(--rule);vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.w{font-family:var(--serif);font-weight:600;white-space:nowrap}
+  td.lv{font-family:var(--mono);font-size:12.5px;color:var(--graph);white-space:nowrap}
+
+  /* ---------- ideas ---------- */
+  .ideas{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:28px 0 40px}
+  @media(max-width:700px){.ideas{grid-template-columns:1fr}}
+  .idea{
+    border-left:3px solid var(--thread);
+    padding:4px 0 4px 18px;
+  }
+  .idea h4{font-family:var(--serif);font-size:17.5px;font-weight:600;margin-bottom:6px}
+  .idea p{font-size:15px;color:var(--ink-soft);margin-bottom:0}
+
+  /* ---------- footer ---------- */
+  footer{
+    margin-top:60px;
+    border-top:2px solid var(--ink);
+    padding:36px 0 56px;
+  }
+  footer p{font-size:15px;color:var(--ink-soft)}
+  footer .fin{
+    font-family:var(--serif);
+    font-size:19px;
+    color:var(--ink);
+    max-width:60ch;
+    margin-bottom:18px;
+  }
+  .foot-links{font-family:var(--mono);font-size:13px;margin-top:14px}
+  .foot-links a{margin-right:18px}
+
+  blockquote{
+    font-family:var(--serif);
+    font-size:21px;
+    line-height:1.5;
+    border-left:3px solid var(--thread);
+    padding:6px 0 6px 22px;
+    margin:30px 0;
+    max-width:56ch;
+    color:var(--ink);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Research programme · Joy Bose</div>
+  <h1>Computational Justice: following the <em>red thread</em> through the Indian legal system</h1>
+  <p class="thesis">Indian court files are still bound with red tape, the literal kind. This body of work pulls on that thread. It studies the Indian justice system at three levels: <strong>what makes the system slow</strong>, <strong>what patterns exist inside particular kinds of litigation</strong>, and <strong>how AI can reason over law reliably enough to make it accessible to ordinary people</strong>.</p>
+  <div class="byline">Joy Bose · PhD, University of Manchester · <a href="https://github.com/joyboseroy">github.com/joyboseroy</a></div>
+</header>
+
+<section id="arc">
+  <div class="sec-label">The arc</div>
+  <h2>Five questions, asked in order</h2>
+  <p class="lede">These projects were not designed as one grand plan from day one. Research rarely works that way. But each project answered a question that made the next one unavoidable, and in hindsight they form a single connected stack.</p>
+
+  <div class="arc threaded">
+    <div class="arc-item"><span class="knot" aria-hidden="true"></span>
+      <div class="arc-q">Why is justice slow?</div>
+      <div class="arc-a">→ STRIDE / DAKSH bottleneck analysis, SSRN paper</div>
+    </div>
+    <div class="arc-item"><span class="knot" aria-hidden="true"></span>
+      <div class="arc-q">What actually happens inside socially important categories of cases?</div>
+      <div class="arc-a">→ IMLJD (matrimonial litigation) and RTI-Bench (information appeals)</div>
+    </div>
+    <div class="arc-item"><span class="knot" aria-hidden="true"></span>
+      <div class="arc-q">How can judicial reasoning be represented computationally?</div>
+      <div class="arc-a">→ inIRAC structured reasoning dataset</div>
+    </div>
+    <div class="arc-item"><span class="knot" aria-hidden="true"></span>
+      <div class="arc-q">How can AI reason over law without inventing authority?</div>
+      <div class="arc-a">→ Falkor-IRAC graph-constrained generation</div>
+    </div>
+    <div class="arc-item"><span class="knot" aria-hidden="true"></span>
+      <div class="arc-q">How does any of this help an ordinary person?</div>
+      <div class="arc-a">→ NyayaSaar-LoRA plain-language legal AI, citizen-facing interfaces</div>
+    </div>
+  </div>
+</section>
+
+<section id="layers">
+  <div class="sec-label">The stack</div>
+  <h2>Four layers, from the courtroom to the citizen</h2>
+
+  <div class="threaded">
+
+  <div class="layer">
+    <span class="knot" aria-hidden="true"></span>
+    <span class="layer-tag">Layer I · Institutional diagnosis</span>
+    <h3>Why are Indian courts slow?</h3>
+    <p class="q">Not "how big is the backlog", but "what kind of congestion mechanism produces it?"</p>
+    <p>Most discussion of judicial pendency treats a court as a queue: cases enter, cases wait, cases leave. Useful, but crude. A court is better modelled as a process network in which a case moves through filing, registration, admission, interlocutory proceedings, hearings, and disposal, and different courts fail at completely different stages while showing similar headline pendency.</p>
+    <div class="cards">
+      <div class="card red">
+        <h4>STRIDE pipeline + DAKSH data</h4>
+        <div class="meta">Graph-theoretic bottleneck analysis · GitHub</div>
+        <span class="stat">~2.45M writ-petition records</span>
+        <p>A graph-theoretic analysis of structural bottlenecks in Indian High Courts, built on the DAKSH High Court Data Portal. Classifies court failure into input bottlenecks (too much incoming litigation), capacity bottlenecks (insufficient judicial resources to process what enters), and output bottlenecks (cases stuck in particular procedural states).</p>
+        <div class="links"><a href="https://github.com/joyboseroy/stride-pipeline">Code</a></div>
+      </div>
+      <div class="card red">
+        <h4>Diagnosing Structural Bottlenecks in Indian High Courts</h4>
+        <div class="meta">SSRN paper · "From Queue to Graph"</div>
+        <p>Shows that Indian High Courts fail in structurally different ways at different stages of the case lifecycle rather than sharing one homogeneous backlog problem. The policy implication is sharp: if the bottleneck is at intake, appointing judges alone will not fix it; if it is downstream, more judges simply feed the same blockage.</p>
+        <div class="links"><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6832359">Paper</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer">
+    <span class="knot" aria-hidden="true"></span>
+    <span class="layer-tag">Layer II · Empirical case-law data</span>
+    <h3>What happens inside the cases themselves?</h3>
+    <p class="q">System-wide statistics say courts are congested. Datasets say what the congestion is made of.</p>
+    <p>Legal AI cannot become reliable by throwing PDFs into a vector database. Someone has to build the intermediate representation: structured, labelled, machine-readable records of what courts and tribunals actually decided. These datasets are that infrastructure.</p>
+    <div class="cards">
+      <div class="card">
+        <h4>IMLJD</h4>
+        <div class="meta">Indian Matrimonial Litigation Judgment Dataset · arXiv:2605.19346</div>
+        <span class="stat">3,613 judgments</span>
+        <span class="stat">SC 2000–2024: 1,474</span>
+        <span class="stat">Karnataka HC 2018–2024: 2,139</span>
+        <p>Structured outcomes, metadata and a knowledge-graph component for litigation around IPC Section 498A, the Domestic Violence Act and CrPC Section 482 quashing petitions. Rather than starting from the politically radioactive question "is 498A misused?", the dataset asks better ones: which cases reach higher courts, which get quashed, at what level, under what procedure.</p>
+        <p>One striking finding: 57.6% of quashing petitions succeeded at the Supreme Court against 39.7% at the Karnataka High Court (59.3% for the matched 2018–2024 window, a gap of roughly 19.6 points). That does not prove misuse; selection effects are huge. It does raise a scientifically serious question about why relief probability shifts so much across judicial levels.</p>
+        <div class="links"><a href="https://arxiv.org/abs/2605.19346">Paper</a><a href="https://github.com/joyboseroy/imljd">Code</a></div>
+      </div>
+      <div class="card">
+        <h4>RTI-Bench</h4>
+        <div class="meta">Right-to-Information decision analysis · arXiv:2605.16843</div>
+        <span class="stat">1,516 CIC decisions</span>
+        <p>Extends the same method beyond courts into administrative justice: Central Information Commission decisions with outcome labels, exemption citations, IRAC-style reasoning components and procedural timelines, combining 1,218 cases from an existing instruction-response corpus with 298 CIC decision PDFs across multiple document-format generations. This is where the work moves closest to the citizen, who mostly wants to know: what happened, why, which exemption, and what might happen in a similar case.</p>
+        <div class="links"><a href="https://arxiv.org/abs/2605.16843">Paper</a><a href="https://github.com/joyboseroy/rti-bench">Code</a></div>
+      </div>
+      <div class="card">
+        <h4>inIRAC</h4>
+        <div class="meta">Structured legal reasoning dataset · Hugging Face</div>
+        <p>The connective tissue of the whole programme. IRAC (Issue, Rule, Analysis, Conclusion) is usually taught as a law-school writing mnemonic. inIRAC reinterprets it as a machine-readable ontology: an Issue is governed by a Rule, a Rule is supported by a Statute and interpreted by Precedent, Analysis applies them, and a Conclusion follows. Once a judgment is represented this way, legal reasoning becomes traversable rather than 30 pages of undifferentiated text.</p>
+        <div class="links"><a href="https://huggingface.co/datasets/joyboseroy/inIRAC">Dataset</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer">
+    <span class="knot" aria-hidden="true"></span>
+    <span class="layer-tag">Layer III · Machine reasoning over law</span>
+    <h3>Falkor-IRAC: don't merely retrieve. Verify the reasoning.</h3>
+    <p class="q">Semantic similarity is not legal authority. A fluent answer is not a legally valid one.</p>
+    <p>Conventional legal RAG embeds a question, finds the top-k similar chunks, and lets an LLM write an answer. The problem is that similarity is not validity: a retrieved judgment may be semantically close yet overturned, procedurally irrelevant, distinguishable, from the wrong court, or simply not supportive of the proposition claimed.</p>
+
+    <div class="pipeline" role="img" aria-label="Falkor-IRAC pipeline: question, issue identification, structured legal graph retrieval, LLM proposes reasoning, verifier agent checks for a valid supporting path, then accept, or revise, reject, abstain">
+      <div class="pl-title">Graph-constrained generation</div>
+<pre>QUESTION
+   ↓
+identify <span class="hl">ISSUE</span>
+   ↓
+retrieve structured legal graph
+   ↓
+LLM proposes reasoning
+   ↓
+<span class="hl">VERIFIER AGENT</span> — does a valid supporting path exist?
+        /            \
+      YES             NO
+       ↓               ↓
+    accept       <span class="dim">revise / reject / abstain</span></pre>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h4>Falkor-IRAC</h4>
+        <div class="meta">Graph-constrained generation for verified legal reasoning · arXiv:2605.14665</div>
+        <p>The system retrieves an IRAC knowledge graph rather than text chunks, lets the model propose reasoning, and then requires a Verifier Agent to find an explicit supporting path in the graph before any answer is accepted. The paper frames the verifier as a falsifiability oracle and evaluates graph-native measures: citation grounding accuracy, path validity, hallucinated precedent rate, and conflict detection. Later citation-hallucination research has already begun citing this work.</p>
+        <p>The durable idea is not the database. It is the separation of generation from verification: an AI system's legal claims should be structurally inspectable, and rejectable when the evidence is absent.</p>
+        <div class="links"><a href="https://arxiv.org/abs/2605.14665">Paper</a><a href="https://github.com/joyboseroy/falkor-irac">Code</a></div>
+      </div>
+      <div class="card">
+        <h4>Why Vector RAG Fails in Law</h4>
+        <div class="meta">Medium · companion article and manifesto</div>
+        <p>The public-facing argument behind the paper, written for a wider audience: semantic similarity is not legal authority, retrieval is not reasoning, a citation is not support, and a fluent answer is not a legally valid one. If the paper is the architecture, this is the philosophy.</p>
+        <div class="links"><a href="https://github.com/joyboseroy">Article via profile</a></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer">
+    <span class="knot" aria-hidden="true"></span>
+    <span class="layer-tag">Layer IV · Access to justice</span>
+    <h3>Making verified reasoning understandable</h3>
+    <p class="q">Falkor-IRAC asks whether we can trust the machine's reasoning. NyayaSaar asks whether a person can understand the result.</p>
+    <div class="cards">
+      <div class="card red">
+        <h4>NyayaSaar-LoRA</h4>
+        <div class="meta">PEFT/QLoRA legal simplification · Hugging Face</div>
+        <p>A parameter-efficient fine-tune that translates dense Indian legal reasoning into plain language while preserving legal meaning, targeting the specific obstacles that keep citizens out: archaic terminology, procedural complexity, dense sentences and formal phrasing. It is not an isolated LoRA experiment; it is the human-interface layer of the whole architecture.</p>
+        <div class="links"><a href="https://huggingface.co/joyboseroy/nyayasaar-lora">Model</a></div>
+      </div>
+      <div class="card red">
+        <h4>Legal chatbot</h4>
+        <div class="meta">Local-first RAG legal Q&amp;A · GitHub</div>
+        <p>The prototype ancestor. A perfectly conventional PDFs-to-embeddings-to-RAG system, kept public because it documents the evolution: generation one retrieved legal text; recognising its limits led to structured datasets, then graph-native reasoning, then verification. The early chatbot is the fossil record of that progression.</p>
+        <div class="links"><a href="https://github.com/joyboseroy/legal_chatbot">Code</a></div>
+      </div>
+    </div>
+    <blockquote>A citizen asks: "Can my 498A case be quashed?" IMLJD finds comparable litigation patterns. Falkor-IRAC constructs verified legal reasoning. NyayaSaar translates it into plain English, along with what the system cannot determine. That is considerably more than a legal chatbot.</blockquote>
+  </div>
+
+  </div>
+</section>
+
+<section id="map">
+  <div class="sec-label">Portfolio map</div>
+  <h2>Every artifact, one table</h2>
+  <div class="tbl-scroll">
+    <table>
+      <thead><tr><th>Work</th><th>Research question</th><th>Level</th></tr></thead>
+      <tbody>
+        <tr><td class="w">STRIDE / DAKSH analysis</td><td>Why are Indian courts slow, and where are the bottlenecks?</td><td class="lv">Judicial system</td></tr>
+        <tr><td class="w">SSRN bottleneck paper</td><td>Can court failure be classified structurally rather than by pendency alone?</td><td class="lv">Empirical legal studies</td></tr>
+        <tr><td class="w">IMLJD</td><td>What patterns exist in matrimonial, 498A, DV and quashing litigation?</td><td class="lv">Case-law analytics</td></tr>
+        <tr><td class="w">498A analysis</td><td>How do outcomes differ across courts and procedural contexts?</td><td class="lv">Domain empirical law</td></tr>
+        <tr><td class="w">RTI-Bench</td><td>Can administrative RTI decisions be structured and analysed computationally?</td><td class="lv">Administrative justice</td></tr>
+        <tr><td class="w">inIRAC</td><td>Can Indian judgments be represented as explicit reasoning structures?</td><td class="lv">Knowledge representation</td></tr>
+        <tr><td class="w">Falkor-IRAC</td><td>Can legal AI be forced to verify its reasoning against a graph?</td><td class="lv">Legal AI</td></tr>
+        <tr><td class="w">Verifier Agent</td><td>Can unsupported legal claims be rejected rather than merely generated?</td><td class="lv">AI reliability</td></tr>
+        <tr><td class="w">NyayaSaar-LoRA</td><td>Can legal reasoning be translated into understandable language efficiently?</td><td class="lv">Access to justice</td></tr>
+        <tr><td class="w">Legal chatbot</td><td>Can citizens interact conversationally with legal information?</td><td class="lv">User interface</td></tr>
+        <tr><td class="w">Medium: Why Vector RAG Fails in Law</td><td>Why is conventional RAG insufficient for legal reasoning?</td><td class="lv">Public framing</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="ideas">
+  <div class="sec-label">Method</div>
+  <h2>Four ideas that keep recurring</h2>
+  <div class="ideas">
+    <div class="idea">
+      <h4>Don't flatten complex systems</h4>
+      <p>Court delay is not one number. A judgment is not one embedding. A dispute is not a similarity score. Every project replaces a flat representation with structured relationships.</p>
+    </div>
+    <div class="idea">
+      <h4>Outcomes need mechanisms</h4>
+      <p>Knowing Court A is slower than Court B is not enough; the question is where in the lifecycle it fails. Knowing an LLM answered correctly is not enough; the question is what chain of authority supports it.</p>
+    </div>
+    <div class="idea">
+      <h4>Legal AI needs falsifiability</h4>
+      <p>Ordinary evaluation asks whether an answer looks right. This work asks whether we can prove where it came from, and reject it when the evidence is absent. Hence verifier agents, citation paths and conflict detection.</p>
+    </div>
+    <div class="idea">
+      <h4>Reduce information asymmetry</h4>
+      <p>Lawyers, courts and repeat institutional litigants know far more than the ordinary litigant. Each project attacks a different form of that gap: why the system is slow, what actually happens in cases, what reasoning is supportable, and whether a person can understand it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ahead">
+  <div class="sec-label">Where this goes</div>
+  <h2>Towards a case digital twin</h2>
+  <p>Most legal AI asks one question: what does the law say? Combining these layers points to a second, simultaneous question: what is actually happening to the case institutionally? A litigant can have excellent substantive law on their side and still spend twelve years trapped in procedure.</p>
+  <p>Joining STRIDE's procedural graph with the doctrinal graphs of inIRAC and Falkor-IRAC would model both at once: where a case is stuck, and what law governs it. A case digital twin, for a justice system that badly needs one.</p>
+</section>
+
+<footer>
+  <p class="fin">The common problem across all of this work is loss of structure. A pendency statistic loses the structure of a court process; a PDF loses the structure of legal reasoning; a vector embedding loses the structure of precedent and authority; dense prose loses the structure a citizen needs. These projects put the structure back.</p>
+  <p>Joy Bose is an independent researcher and senior data scientist based in Bengaluru, with a PhD from the University of Manchester and an LLM in international business law.</p>
+  <div class="foot-links">
+    <a href="https://github.com/joyboseroy">GitHub</a>
+    <a href="https://arxiv.org/abs/2605.14665">Falkor-IRAC</a>
+    <a href="https://arxiv.org/abs/2605.19346">IMLJD</a>
+    <a href="https://arxiv.org/abs/2605.16843">RTI-Bench</a>
+    <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6832359">SSRN</a>
+    <a href="https://huggingface.co/joyboseroy">Hugging Face</a>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
