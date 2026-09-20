@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indus Script: A Falsification-Oriented Analysis</title>
+<meta name="description" content="A computational study of the Indus Valley script that tries to break its own results. A positive statistical signal reverses sign once duplicate inscriptions are kept out of the test folds.">
+<style>
+  :root {
+    --paper: #f4f6f5;
+    --ink: #1b2426;
+    --muted: #55636a;
+    --rule: #d3dbd9;
+    --panel: #ffffff;
+    --pos: #2c5aa6;
+    --neg: #bf432b;
+    --link: #1f4b96;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12181a;
+      --ink: #e6ecea;
+      --muted: #9aa8ab;
+      --rule: #2a3538;
+      --panel: #182124;
+      --pos: #6f9be6;
+      --neg: #f0836b;
+      --link: #8fb4f2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12181a;
+    --ink: #e6ecea;
+    --muted: #9aa8ab;
+    --rule: #2a3538;
+    --panel: #182124;
+    --pos: #6f9be6;
+    --neg: #f0836b;
+    --link: #8fb4f2;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--link); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--pos); outline-offset: 2px; }
+
+  .topnav { font-family: var(--sans); font-size: 0.9rem; padding: 20px 0 0; }
+  .topnav a { color: var(--muted); }
+
+  header.hero { padding: 40px 0 8px; }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 6.4vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+  .lede { font-size: 1.25rem; line-height: 1.55; margin: 0 0 12px; }
+  .byline { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+  /* the one memorable thing: the sign flip */
+  figure.flip {
+    margin: 32px 0 8px;
+    padding: 20px 16px 16px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: var(--sans);
+  }
+  figure.flip h2 { font-family: var(--sans); font-size: 1rem; margin: 0 0 4px; font-weight: 650; }
+  figure.flip p.sub { margin: 0 0 16px; color: var(--muted); font-size: 0.875rem; line-height: 1.45; }
+  .group { margin: 0 0 16px; }
+  .group .label { font-size: 0.875rem; margin: 0 0 6px; font-weight: 600; }
+  .row {
+    display: grid;
+    grid-template-columns: 5.2rem 1fr;
+    align-items: center;
+    gap: 8px;
+    margin: 3px 0;
+    font-size: 0.8125rem;
+  }
+  .row .who { color: var(--muted); }
+  .track {
+    position: relative;
+    height: 22px;
+  }
+  .track::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    bottom: -3px;
+    width: 1px;
+    background: var(--muted);
+  }
+  .bar {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    border-radius: 2px;
+  }
+  .bar.pos { left: 50%; background: var(--pos); }
+  .bar.neg { right: 50%; background: var(--neg); }
+  .val {
+    position: absolute;
+    top: 0;
+    line-height: 22px;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .val.pos { color: var(--pos); }
+  .val.neg { color: var(--neg); }
+  .axis {
+    display: grid;
+    grid-template-columns: 5.2rem 1fr;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .axis .ticks { display: flex; justify-content: space-between; }
+  figure.flip figcaption { font-size: 0.8125rem; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+
+  h2 { font-family: var(--serif); font-size: 1.6rem; line-height: 1.2; margin: 48px 0 12px; }
+  h3 { font-family: var(--serif); font-size: 1.2rem; margin: 28px 0 6px; }
+  p { margin: 0 0 16px; }
+
+  .notbox {
+    border-left: 4px solid var(--neg);
+    background: var(--panel);
+    padding: 12px 16px;
+    margin: 24px 0;
+    font-size: 1.05rem;
+  }
+  .notbox p { margin: 0; }
+
+  ol.levels { padding-left: 0; list-style: none; margin: 16px 0 0; counter-reset: lvl; }
+  ol.levels li {
+    counter-increment: lvl;
+    position: relative;
+    padding: 0 0 20px 3rem;
+    border-left: 2px solid var(--rule);
+    margin-left: 1rem;
+  }
+  ol.levels li::before {
+    content: counter(lvl);
+    position: absolute;
+    left: -1rem;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: grid;
+    place-items: center;
+  }
+  ol.levels li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  ol.levels strong { display: block; font-size: 1.05rem; margin-bottom: 2px; }
+
+  ul.plain { padding-left: 1.25rem; margin: 0 0 16px; }
+  ul.plain li { margin-bottom: 8px; }
+
+  dl.stats { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 16px 0; }
+  dl.stats div { border-top: 1px solid var(--rule); padding-top: 10px; }
+  dl.stats dt { font-family: var(--sans); font-weight: 650; font-size: 0.95rem; margin: 0 0 2px; }
+  dl.stats dd { margin: 0; color: var(--ink); }
+
+  .links { display: grid; gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; font-family: var(--sans); }
+  .links a {
+    display: block;
+    padding: 12px 14px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .links a:hover { border-color: var(--link); }
+  .links .t { display: block; font-weight: 650; }
+  .links .d { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
+  footer { margin: 56px 0 40px; padding-top: 16px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+  footer p { margin: 0 0 6px; }
+
+  @media (min-width: 640px) {
+    .wrap { padding: 0 24px; }
+    figure.flip { padding: 24px 24px 18px; }
+    .row, .axis { grid-template-columns: 6rem 1fr; }
+    dl.stats { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="topnav" aria-label="Site">
+    <a href="https://joyboseroy.github.io/">Back to home page</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Indus Script: A Falsification-Oriented Analysis</h1>
+    <p class="lede">A machine built to distrust its own best result. On two independently digitized versions of the Indus inscriptions, a promising statistical signal reverses sign once duplicate inscriptions are kept out of the test folds.</p>
+    <p class="byline">Joy Bose, September 2026</p>
+  </header>
+
+  <figure class="flip" aria-labelledby="flip-title">
+    <h2 id="flip-title">One result, three ways of scoring it</h2>
+    <p class="sub">Predictive gain, in bits, from knowing the two preceding signs instead of one. Positive means the extra sign helps predict the next one.</p>
+
+    <div class="group">
+      <p class="label">Ordinary cross-validation</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, ordinary cross-validation: plus 0.143 bits"><span class="bar pos" style="width:39.7%"></span><span class="val pos" style="left:calc(50% + 39.7% + 6px)">+0.143</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, ordinary cross-validation: plus 0.158 bits"><span class="bar pos" style="width:43.9%"></span><span class="val pos" style="left:calc(50% + 43.9% + 6px)">+0.158</span></div></div>
+    </div>
+
+    <div class="group">
+      <p class="label">Duplicates grouped, so a sequence never appears in both training and its own test</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, duplicate-grouped cross-validation: minus 0.088 bits"><span class="bar neg" style="width:24.4%"></span><span class="val neg" style="right:calc(50% + 24.4% + 6px)">-0.088</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, duplicate-grouped cross-validation: minus 0.083 bits"><span class="bar neg" style="width:23.1%"></span><span class="val neg" style="right:calc(50% + 23.1% + 6px)">-0.083</span></div></div>
+    </div>
+
+    <div class="group">
+      <p class="label">Duplicates collapsed to unique sequence types</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, unique sequences only: minus 0.023 bits"><span class="bar neg" style="width:6.4%"></span><span class="val neg" style="right:calc(50% + 6.4% + 6px)">-0.023</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, unique sequences only: minus 0.010 bits"><span class="bar neg" style="width:2.8%"></span><span class="val neg" style="right:calc(50% + 2.8% + 6px)">-0.010</span></div></div>
+    </div>
+
+    <div class="axis" aria-hidden="true"><span></span><div class="ticks"><span>-0.18</span><span>0</span><span>+0.18</span></div></div>
+    <figcaption>Values are from the paper's abstract. The two corpora are two independent digitizations of the same underlying corpus tradition, one of them the M77 concordance behind the most cited statistical studies of the script.</figcaption>
+  </figure>
+
+  <div class="notbox">
+    <p>This project does not decipher the script, and it makes no claim to have read a single sign. Its question is narrower: which statistical claims about the script survive being attacked?</p>
+  </div>
+
+  <h2>Why the signal flips</h2>
+  <p>Between 23 and 33 percent of the sequences in both corpora are exact repeats of another sequence, which is what you would expect from seals stamped many times. That repetition is a real property of the ancient material, not a data error. But when repeats sit on both sides of the training and test split, a model can look good by recognizing a sequence it has already seen.</p>
+  <p>A control that grouped sequences with the same size distribution, but without duplicate identity, stayed strongly positive. So the reversal is not simply a smaller effective training set. It tracks duplicate identity specifically. The paper treats resolving this as its central open problem.</p>
+
+  <h2>What else the tests found</h2>
+  <dl class="stats">
+    <div>
+      <dt>The signal does not point to language</dt>
+      <dd>The ordinary-CV gain is not uniquely diagnostic of the linguistic generator tested, even after rebuilding that generator and a non-linguistic alternative to match the real corpus's vocabulary and length statistics. Neither reproduces the real magnitude.</dd>
+    </div>
+    <div>
+      <dt>Small samples are unreliable</dt>
+      <dd>On two calibration languages, the estimator rarely returned a positive result below roughly 3,000 sequences. That is evidence against the ordinary-CV result being generic small-sample behavior.</dd>
+    </div>
+    <div>
+      <dt>Not a serial-number system</dt>
+      <dd>There is evidence against inscriptions being deliberately constructed as globally unique identifiers, though not against more elaborate identifier schemes.</dd>
+    </div>
+    <div>
+      <dt>A bug the tests caught</dt>
+      <dd>One digitization had its sequences reversed. The check that exposed it used a previously reported pattern: the last sign in a line is more predictable than the first.</dd>
+    </div>
+  </dl>
+
+  <h2>How would we know if someone did crack it?</h2>
+  <p>A companion article turns the same attitude on decipherment claims. It proposes three questions, asked in order, and a claim has to clear each before the next is worth asking.</p>
+  <ol class="levels">
+    <li><strong>Is there any language-like signal?</strong>Do the sign sequences show statistical structure that a natural language would? This is necessary and far from sufficient.</li>
+    <li><strong>Does that signal survive proper testing?</strong>Duplicate-aware evaluation, sample-size matching, and robustness to how signs are grouped. This is the level the toolkit builds, and where the sign flip above lives.</li>
+    <li><strong>Does a specific reading survive independent evidence?</strong>Its proposed readings must make risky predictions on evidence that did not shape them, as Ventris's Linear B readings did when the Pylos tripod tablet turned up in 1953.</li>
+  </ol>
+  <p style="margin-top:20px">The article's reading of the record is that none of the published Indus proposals has yet passed the third test, and that this is not the same as the script being unreadable. It ends with a sentence worth keeping: not yet, but here is exactly what would change my mind.</p>
+
+  <h2>The gap: what an actual decipherment would need</h2>
+  <p>Statistics can tell us what kind of structure is in the sign sequences. It cannot, by itself, tell us what the signs say. Three facts about the evidence explain why the gap is so wide.</p>
+  <ul class="plain">
+    <li>There is no bilingual inscription, so no Indus Rosetta Stone.</li>
+    <li>The average inscription is only about four or five signs long, and there are roughly 400 to 600 distinct signs depending on how they are counted, a count that fits neither an alphabet nor a large logographic system.</li>
+    <li>There is no equivalent of the Pylos tablets: no fresh evidence, unseen by the person proposing a reading, against which a reading could fail.</li>
+  </ul>
+  <p>Two next steps follow directly from the work so far. They are proposals, not results.</p>
+  <ul class="plain">
+    <li><strong>A public scoring harness for claimed readings.</strong> Run any proposed reading on held-out inscriptions with duplicates grouped, and run the same procedure on a language, or on random noise, that it should not match. The companion article notes that this second check has generally not been published for approaches that use an expandable word list.</li>
+    <li><strong>Settle the sign flip.</strong> Find out whether the duplicate-driven reversal reflects memorization of repeats or a genuine limit of what these short sequences can show, using additional corpora and better-matched null models.</li>
+  </ul>
+
+  <h2>Read and reuse</h2>
+  <ul class="links">
+    <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7436801"><span class="t">Paper on SSRN</span><span class="d">Sequential Structure Without a Linguistic Diagnosis, 23 pages, DOI 10.2139/ssrn.7436801</span></a></li>
+    <li><a href="https://github.com/joyboseroy/indus_decipher"><span class="t">Code and derived data on GitHub</span><span class="d">The indus_decipher toolkit, MIT license, all experiments included</span></a></li>
+    <li><a href="https://medium.com/@joyboseroy/i-built-a-machine-to-study-the-mysterious-indus-valley-script-a0af1d9f8cc0"><span class="t">Article: I Built a Machine to Study the Mysterious Indus Valley Script. It Kept Trying to Prove Itself Wrong.</span><span class="d">The project story in plain language, 18 minute read</span></a></li>
+    <li><a href="https://medium.com/@joyboseroy/how-would-we-know-if-someone-actually-cracked-the-indus-script-6a0ae288ba7d"><span class="t">Article: How Would We Know If Someone Actually Cracked the Indus Script?</span><span class="d">The three-level test for decipherment claims, 11 minute read</span></a></li>
+  </ul>
+
+  <footer>
+    <p>Joy Bose. The corpora used trace back to Mahadevan's 1977 concordance (M77) and to digitizations of Parpola's Corpus of Indus Seals and Inscriptions. See the repository for full data credits and licensing notes.</p>
+  </footer>
+
+</div>
+</body>
+</html>
