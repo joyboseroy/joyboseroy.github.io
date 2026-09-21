@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indus Script: A Falsification-Oriented Analysis</title>
+<meta name="description" content="A computational study of the Indus Valley script that tries to prove its own best finding wrong, and mostly succeeds.">
+<style>
+  :root {
+    --paper: #f4f6f5;
+    --ink: #1b2426;
+    --muted: #55636a;
+    --rule: #d3dbd9;
+    --panel: #ffffff;
+    --pos: #2c5aa6;
+    --neg: #bf432b;
+    --link: #1f4b96;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12181a;
+      --ink: #e6ecea;
+      --muted: #9aa8ab;
+      --rule: #2a3538;
+      --panel: #182124;
+      --pos: #6f9be6;
+      --neg: #f0836b;
+      --link: #8fb4f2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #12181a;
+    --ink: #e6ecea;
+    --muted: #9aa8ab;
+    --rule: #2a3538;
+    --panel: #182124;
+    --pos: #6f9be6;
+    --neg: #f0836b;
+    --link: #8fb4f2;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 1.125rem;
+    line-height: 1.65;
+  }
+  .wrap { max-width: 42rem; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--link); text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--pos); outline-offset: 2px; }
+
+  .topnav { font-family: var(--sans); font-size: 0.9rem; padding: 20px 0 0; }
+  .topnav a { color: var(--muted); }
+
+  header.hero { padding: 40px 0 8px; }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(2rem, 6.4vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 16px;
+  }
+  .lede { font-size: 1.25rem; line-height: 1.55; margin: 0 0 12px; }
+  .byline { font-family: var(--sans); font-size: 0.9rem; color: var(--muted); margin: 0; }
+
+  /* the one memorable thing: the sign flip */
+  figure.flip {
+    margin: 32px 0 8px;
+    padding: 20px 16px 16px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: var(--sans);
+  }
+  figure.flip h2 { font-family: var(--sans); font-size: 1rem; margin: 0 0 4px; font-weight: 650; }
+  figure.flip p.sub { margin: 0 0 16px; color: var(--muted); font-size: 0.875rem; line-height: 1.45; }
+  .group { margin: 0 0 16px; }
+  .group .label { font-size: 0.875rem; margin: 0 0 6px; font-weight: 600; }
+  .row {
+    display: grid;
+    grid-template-columns: 5.2rem 1fr;
+    align-items: center;
+    gap: 8px;
+    margin: 3px 0;
+    font-size: 0.8125rem;
+  }
+  .row .who { color: var(--muted); }
+  .track {
+    position: relative;
+    height: 22px;
+  }
+  .track::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -3px;
+    bottom: -3px;
+    width: 1px;
+    background: var(--muted);
+  }
+  .bar {
+    position: absolute;
+    top: 2px;
+    bottom: 2px;
+    border-radius: 2px;
+  }
+  .bar.pos { left: 50%; background: var(--pos); }
+  .bar.neg { right: 50%; background: var(--neg); }
+  .val {
+    position: absolute;
+    top: 0;
+    line-height: 22px;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .val.pos { color: var(--pos); }
+  .val.neg { color: var(--neg); }
+  .axis {
+    display: grid;
+    grid-template-columns: 5.2rem 1fr;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .axis .ticks { display: flex; justify-content: space-between; }
+  figure.flip figcaption { font-size: 0.8125rem; color: var(--muted); margin-top: 12px; line-height: 1.5; }
+
+  h2 { font-family: var(--serif); font-size: 1.6rem; line-height: 1.2; margin: 48px 0 12px; }
+  h3 { font-family: var(--serif); font-size: 1.2rem; margin: 28px 0 6px; }
+  p { margin: 0 0 16px; }
+
+  .notbox {
+    border-left: 4px solid var(--neg);
+    background: var(--panel);
+    padding: 12px 16px;
+    margin: 24px 0;
+    font-size: 1.05rem;
+  }
+  .notbox p { margin: 0; }
+
+  ol.levels { padding-left: 0; list-style: none; margin: 16px 0 0; counter-reset: lvl; }
+  ol.levels li {
+    counter-increment: lvl;
+    position: relative;
+    padding: 0 0 20px 3rem;
+    border-left: 2px solid var(--rule);
+    margin-left: 1rem;
+  }
+  ol.levels li::before {
+    content: counter(lvl);
+    position: absolute;
+    left: -1rem;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--sans);
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: grid;
+    place-items: center;
+  }
+  ol.levels li:last-child { border-left-color: transparent; padding-bottom: 0; }
+  ol.levels strong { display: block; font-size: 1.05rem; margin-bottom: 2px; }
+
+  ul.plain { padding-left: 1.25rem; margin: 0 0 16px; }
+  ul.plain li { margin-bottom: 8px; }
+
+  dl.stats { display: grid; grid-template-columns: 1fr; gap: 14px; margin: 16px 0; }
+  dl.stats div { border-top: 1px solid var(--rule); padding-top: 10px; }
+  dl.stats dt { font-family: var(--sans); font-weight: 650; font-size: 0.95rem; margin: 0 0 2px; }
+  dl.stats dd { margin: 0; color: var(--ink); }
+
+  .links { display: grid; gap: 10px; margin: 16px 0 0; padding: 0; list-style: none; font-family: var(--sans); }
+  .links a {
+    display: block;
+    padding: 12px 14px;
+    background: var(--panel);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .links a:hover { border-color: var(--link); }
+  .links .t { display: block; font-weight: 650; }
+  .links .d { display: block; font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+
+  footer { margin: 56px 0 40px; padding-top: 16px; border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 0.85rem; color: var(--muted); }
+  footer p { margin: 0 0 6px; }
+
+  @media (min-width: 640px) {
+    .wrap { padding: 0 24px; }
+    figure.flip { padding: 24px 24px 18px; }
+    .row, .axis { grid-template-columns: 6rem 1fr; }
+    dl.stats { grid-template-columns: 1fr 1fr; gap: 14px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="topnav" aria-label="Site">
+    <a href="https://joyboseroy.github.io/">Back to home page</a>
+  </nav>
+
+  <header class="hero">
+    <h1>Indus Script: A Falsification-Oriented Analysis</h1>
+    <p class="lede">A machine built to doubt its own best result. A promising pattern in the ancient Indus inscriptions looked like real structure, until the test was redone so a repeated inscription couldn't pass just by recognizing a copy of itself. Then the pattern flipped and disappeared.</p>
+    <p class="byline">Joy Bose, September 2026</p>
+  </header>
+
+  <figure class="flip" aria-labelledby="flip-title">
+    <h2 id="flip-title">The same test, scored three ways</h2>
+    <p class="sub">How much it helped to know the two symbols before a gap, instead of just the one right before it, when guessing what comes next. Above zero means it helped. Below zero means it didn't.</p>
+
+    <div class="group">
+      <p class="label">The first, ordinary way of running the test</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, ordinary test: plus 0.143"><span class="bar pos" style="width:39.7%"></span><span class="val pos" style="left:calc(50% + 39.7% + 6px)">+0.143</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, ordinary test: plus 0.158"><span class="bar pos" style="width:43.9%"></span><span class="val pos" style="left:calc(50% + 43.9% + 6px)">+0.158</span></div></div>
+    </div>
+
+    <div class="group">
+      <p class="label">After making sure a repeated inscription can't appear on both sides of the test</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, repeats kept apart: minus 0.088"><span class="bar neg" style="width:24.4%"></span><span class="val neg" style="right:calc(50% + 24.4% + 6px)">-0.088</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, repeats kept apart: minus 0.083"><span class="bar neg" style="width:23.1%"></span><span class="val neg" style="right:calc(50% + 23.1% + 6px)">-0.083</span></div></div>
+    </div>
+
+    <div class="group">
+      <p class="label">After counting each repeated inscription only once</p>
+      <div class="row"><span class="who">Corpus 1</span><div class="track" role="img" aria-label="Corpus 1, repeats counted once: minus 0.023"><span class="bar neg" style="width:6.4%"></span><span class="val neg" style="right:calc(50% + 6.4% + 6px)">-0.023</span></div></div>
+      <div class="row"><span class="who">Corpus 2</span><div class="track" role="img" aria-label="Corpus 2, repeats counted once: minus 0.010"><span class="bar neg" style="width:2.8%"></span><span class="val neg" style="right:calc(50% + 2.8% + 6px)">-0.010</span></div></div>
+    </div>
+
+    <div class="axis" aria-hidden="true"><span></span><div class="ticks"><span>-0.18</span><span>0</span><span>+0.18</span></div></div>
+    <figcaption>Numbers are from the paper. Corpus 1 and Corpus 2 are two separate digital copies of the same ancient inscriptions, typed up independently by different people. Corpus 1 is the classic reference collection used in the most cited earlier studies of the script.</figcaption>
+  </figure>
+
+  <div class="notbox">
+    <p>This project does not decipher the script, and it makes no claim to have read a single sign. Its question is narrower: which statistical claims about the script survive being attacked?</p>
+  </div>
+
+  <h2>Why the result flips</h2>
+  <p>Between 23 and 33 percent of the inscriptions in both collections are exact copies of another one in the same collection, which makes sense since many seals were stamped over and over into wet clay. That repetition is a real feature of the ancient material, not a mistake in the data. But if a copy of the same short phrase ends up both in the part the computer learns from and the part it's quizzed on, the test can look successful just because the computer already saw the answer, not because it learned anything general.</p>
+  <p>A separate check split the inscriptions into same-sized groups without keeping copies together, and that check still came out strongly positive. So the flip isn't simply because there was less material to learn from once repeats were handled properly. It's specifically about the repeated phrases. The paper treats working out exactly why as its main open question.</p>
+
+  <h2>What else the tests found</h2>
+  <dl class="stats">
+    <div>
+      <dt>A positive result doesn't prove it's language</dt>
+      <dd>The same pattern also showed up in a fake, deliberately non-language system built just to test the test, a kind of bureaucratic filing code. So on its own, this kind of result can't tell language apart from a clever non-language system.</dd>
+    </div>
+    <div>
+      <dt>The test gets shaky with this little text</dt>
+      <dd>Run on two real, undisputed ancient languages, Sumerian and Sanskrit, the same test mostly failed to find the pattern once the amount of text was cut down to match how little Indus material survives. That makes the Indus result a bit more notable, but it also means the test itself isn't very trustworthy at this small a scale.</dd>
+    </div>
+    <div>
+      <dt>Probably not a serial-number system</dt>
+      <dd>One popular alternative idea is that the inscriptions are something like one-of-a-kind ID codes. Real Indus inscriptions repeat far too often for that to be likely, though a more complicated numbering scheme can't be ruled out.</dd>
+    </div>
+    <div>
+      <dt>A bug the tests themselves caught</dt>
+      <dd>One of the two digital copies had its symbols recorded back to front. The check that caught this relied on a known pattern: the last symbol in a line is usually easier to guess than the first one.</dd>
+    </div>
+  </dl>
+
+  <h2>How would we know if someone did crack it?</h2>
+  <p>A companion article turns the same attitude on decipherment claims. It proposes three questions, asked in order, and a claim has to clear each before the next is worth asking.</p>
+  <ol class="levels">
+    <li><strong>Is there any sign of language at all?</strong>Do the symbols follow each other the way a real language's letters or words would, rather than the way a simpler system, like a set of family crests or trade marks, would? This is a first hurdle, not proof of anything on its own.</li>
+    <li><strong>Does that pattern survive being tested properly?</strong>Not just glanced at, but checked so repeated phrases can't fake a result, checked against real languages shrunk to the same small size, and checked so it doesn't depend on how symbols happen to be grouped. This is exactly the kind of testing behind the flip above.</li>
+    <li><strong>Does a specific proposed reading survive independent evidence?</strong>A real decipherment makes a specific, risky prediction that could fail, and then gets checked against evidence the person proposing it never saw. That's what happened when Michael Ventris's Linear B readings were confirmed by a tablet dug up in Pylos in 1953, years after he proposed them.</li>
+  </ol>
+  <p style="margin-top:20px">The article's reading of the record is that none of the published Indus proposals has yet passed the third test, and that this is not the same as the script being unreadable. It ends with a sentence worth keeping: not yet, but here is exactly what would change my mind.</p>
+
+  <h2>The gap: what an actual decipherment would need</h2>
+  <p>Statistics can tell us what kind of structure is in the sign sequences. It cannot, by itself, tell us what the signs say. Three facts about the evidence explain why the gap is so wide.</p>
+  <ul class="plain">
+    <li>There is no bilingual inscription, so no Indus Rosetta Stone.</li>
+    <li>The average inscription is only about four or five signs long, and there are roughly 400 to 600 distinct signs depending on how they are counted, a count that fits neither an alphabet nor a large logographic system.</li>
+    <li>There is no equivalent of the Pylos tablets: no fresh evidence, unseen by the person proposing a reading, against which a reading could fail.</li>
+  </ul>
+  <p>Two next steps follow directly from the work so far. They are proposals, not results.</p>
+  <ul class="plain">
+    <li><strong>A public test that any claimed reading has to pass.</strong> Try the proposed reading on inscriptions it wasn't built from, with repeated phrases handled properly so they can't fake a pass, and run the same procedure on a real language or on random noise it should fail to match. The companion article notes that this second check is usually missing from published decipherment attempts.</li>
+    <li><strong>Work out why the result flips.</strong> Figure out whether that happens because the test is essentially recognizing repeated phrases it has already seen, or because these inscriptions are simply too short to show much of anything either way, using more data and better comparison tests.</li>
+  </ul>
+
+  <h2>Read and reuse</h2>
+  <ul class="links">
+    <li><a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=7436801"><span class="t">Paper on SSRN</span><span class="d">Sequential Structure Without a Linguistic Diagnosis, 23 pages, DOI 10.2139/ssrn.7436801</span></a></li>
+    <li><a href="https://github.com/joyboseroy/indus_decipher"><span class="t">Code and derived data on GitHub</span><span class="d">The indus_decipher toolkit, MIT license, all experiments included</span></a></li>
+    <li><a href="https://medium.com/@joyboseroy/i-built-a-machine-to-study-the-mysterious-indus-valley-script-a0af1d9f8cc0"><span class="t">Article: I Built a Machine to Study the Mysterious Indus Valley Script. It Kept Trying to Prove Itself Wrong.</span><span class="d">The project story in plain language, 18 minute read</span></a></li>
+    <li><a href="https://medium.com/@joyboseroy/how-would-we-know-if-someone-actually-cracked-the-indus-script-6a0ae288ba7d"><span class="t">Article: How Would We Know If Someone Actually Cracked the Indus Script?</span><span class="d">The three-level test for decipherment claims, 11 minute read</span></a></li>
+  </ul>
+
+  <footer>
+    <p>Joy Bose. The corpora used trace back to Mahadevan's 1977 concordance (M77) and to digitizations of Parpola's Corpus of Indus Seals and Inscriptions. See the repository for full data credits and licensing notes.</p>
+  </footer>
+
+</div>
+</body>
+</html>
