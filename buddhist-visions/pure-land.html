@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pure Land: Sukhāvatī</title>
+<meta name="description" content="The Contemplation Sūtra as a slider from the setting sun to Amitābha&#x27;s light, and an interactive lotus pond.">
+<style>
+  :root{
+    --bg:#07070d; --card:rgba(18,18,32,.88); --gold:#d4af37; --gold2:#e8d48b;
+    --teal:#4ecdc4; --text:#e8e6e3; --muted:#9a9690; --rose:#f0b6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  header{text-align:center;padding:3.2rem 1.25rem 1.6rem;background:linear-gradient(180deg,rgba(212,175,55,.09),transparent)}
+  header h1{font-weight:300;font-size:clamp(1.5rem,5vw,2.6rem);letter-spacing:.12em;color:var(--gold);margin-bottom:.7rem}
+  header p{color:var(--muted);max-width:760px;margin:0 auto;font-size:1.02rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.4rem}
+  nav a{color:var(--gold2);text-decoration:none;font:.86rem system-ui,sans-serif;padding:.4rem 1rem;border:1px solid rgba(212,175,55,.35);border-radius:2rem;transition:.2s}
+  nav a:hover{background:rgba(212,175,55,.15);border-color:var(--gold)}
+  main{max-width:1080px;margin:0 auto;padding:.5rem 1rem 3rem}
+  section{margin:2.6rem 0;background:var(--card);border:1px solid rgba(212,175,55,.13);border-radius:16px;padding:1.8rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  section>h2{font-weight:400;font-size:1.6rem;color:var(--gold);letter-spacing:.04em}
+  .sk{font-style:italic;color:var(--teal);font-size:.95rem;margin:.2rem 0 1rem}
+  section>p{margin-bottom:.9rem;font-size:1rem}
+  .principle{border-left:3px solid var(--gold);background:rgba(212,175,55,.06);color:var(--gold2);padding:.7rem 1rem;margin:1rem 0;font-style:italic}
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .8rem}
+  button,.tab{font:.85rem system-ui,sans-serif;background:transparent;border:1px solid rgba(212,175,55,.55);color:var(--gold2);padding:.4rem .95rem;border-radius:6px;cursor:pointer;transition:.2s}
+  button:hover{background:rgba(212,175,55,.16)}
+  .tab.active{background:rgba(212,175,55,.26);border-color:var(--gold2)}
+  .card{display:none}
+  .card.on{display:block}
+  .card h3{font-weight:400;font-size:1.2rem;color:var(--gold2);margin-bottom:.2rem}
+  .kind{font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+  .tabgroup{flex-basis:100%;font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .tabgroup:first-child{margin-top:0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.6rem;margin:1rem 0;font-size:.92rem}
+  .legend div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.65rem .9rem}
+  .legend b{color:var(--teal);font-weight:400}
+  .lead{color:var(--muted);font-size:.95rem;margin-bottom:.7rem}
+  .controls{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;align-items:center;margin:.5rem 0}
+  .controls label{display:flex;align-items:center;gap:.6rem;font:.82rem system-ui,sans-serif;color:var(--muted)}
+  .controls input[type=range]{width:min(240px,55vw);accent-color:var(--gold)}
+  .stage{position:relative;width:100%;height:clamp(300px,58vh,440px);border-radius:12px;overflow:hidden;background:#06060c;border:1px solid rgba(255,255,255,.07)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .cap{min-height:3.2em;margin-top:.7rem;color:var(--gold2);font-size:.97rem;font-style:italic}
+  .analogies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1rem 0}
+  .analogies div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1rem;font-size:.93rem}
+  .analogies b{color:var(--teal);font-weight:400}
+  footer{text-align:center;padding:2rem 1rem 3rem;color:var(--muted);font:.88rem system-ui,sans-serif;border-top:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){section{padding:1.3rem .9rem}.stage{height:clamp(280px,52vh,380px)}}
+
+  nav a[aria-current=page]{background:rgba(212,175,55,.22);border-color:var(--gold2)}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.6rem 0 .5rem}
+  .hub a{display:block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:1.3rem 1.2rem;transition:.2s}
+  .hub a:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .hub h2{font-weight:400;font-size:1.25rem;color:var(--gold);margin-bottom:.15rem}
+  .hub .sk{margin:0 0 .7rem}
+  .hub p{font-size:.95rem;color:var(--muted)}
+  .hub .count{display:block;margin-top:.8rem;font:.8rem system-ui,sans-serif;color:var(--gold2)}
+  .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin:2rem 0 0;font:.9rem system-ui,sans-serif}
+  .pager a{color:var(--gold2);text-decoration:none;border:1px solid rgba(212,175,55,.35);border-radius:2rem;padding:.4rem 1rem}
+  .pager a:hover{background:rgba(212,175,55,.15)}
+  a.inline{color:var(--teal)}
+  header h1{font-size:clamp(1.25rem,3.7vw,2.3rem)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <h1>EMPTINESS · INTERPENETRATION · PURE LAND</h1>
+  <p>Interactive contemplations on emptiness, interpenetration and the Pure Land. Each one is drawn live in your browser.</p>
+  <nav><a href="index.html">Home</a><a href="theravada.html">Early Buddhism</a><a href="heart-sutra.html">Emptiness</a><a href="avatamsaka.html">Interpenetration</a><a href="pure-land.html" aria-current="page">Pure Land</a><a href="three-visions.html">One reality</a><a href="combinations.html">Combinations</a></nav>
+</header>
+<main>
+<section id="pureland">
+    <h2>Pure Land: Sukhāvatī</h2>
+    <p class="sk">Amitābha · Amitāyurdhyāna Sūtra · the sixteen contemplations</p>
+    <p>The Contemplation Sūtra trains the mind in stages: the setting sun, still water, ground of crystal and lapis, jeweled trees, ponds, lotus thrones, and finally the Buddha of infinite light. Where the earlier sections are abstract, this one is luminous, ordered and full of texture. Move the slider slowly and let each layer settle before the next one arrives.</p>
+    <div class="tabs" data-group="pl"></div>
+    <div class="cards" data-group="pl"></div>
+  </section>
+<div class="pager"><a href="avatamsaka.html">&larr; Interpenetration</a><a href="three-visions.html">One reality &rarr;</a></div>
+</main>
+<footer>
+  <p>Contemplative visualizations for study and meditation. Everything on this page is drawn procedurally in your browser.</p>
+  <p style="margin-top:.5rem">May all beings realize the luminous openness of mind.</p>
+</footer>
+<script>
+/* ================= utilities ================= */
+const TAU = Math.PI * 2;
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const tri = x => { x = x % 1; if (x < 0) x += 1; return x < .5 ? x * 2 : 2 - x * 2; };
+function txt(c, s, x, y, col, size, align) {
+  c.fillStyle = col; c.font = (size || 13) + 'px system-ui, sans-serif';
+  c.textAlign = align || 'center'; c.textBaseline = 'middle'; c.fillText(s, x, y);
+}
+
+/* ================= starfield ================= */
+(function () {
+  const cv = document.getElementById('stars'), c = cv.getContext('2d');
+  let w, h, st = [];
+  function rs() {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    st = Array.from({ length: 140 }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, a: Math.random() * .5 + .15, p: Math.random() * TAU }));
+  }
+  rs(); addEventListener('resize', rs);
+  (function d(t) {
+    c.clearRect(0, 0, w, h);
+    for (const s of st) { c.beginPath(); c.arc(s.x, s.y, s.r, 0, TAU); c.fillStyle = 'rgba(220,210,180,' + (s.a * (.6 + .4 * Math.sin(t * .001 + s.p))) + ')'; c.fill(); }
+    requestAnimationFrame(d);
+  })(0);
+})();
+
+/* ================= visualization framework ================= */
+const VIZ = [];
+const GROUP_ORDER = { th: ['Breath', 'Body and feeling', 'Mind and self', 'Insight', 'Concentration', 'Death'], mix: ['Heart and net', 'Death and the net', 'Four grammars'], ava: ['Doctrine', "Fazang's demonstrations", 'Scale and time', 'Entering one into all', 'The net', 'Practice'] };
+function addViz(group, spec) {
+  const tabs = document.querySelector('.tabs[data-group=' + group + ']');
+  const cards = document.querySelector('.cards[data-group=' + group + ']');
+  if (!tabs._g) {
+    tabs._g = {};
+    (GROUP_ORDER[group] || []).forEach(n => { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = n; tabs.appendChild(gl); tabs._g[n] = gl; });
+  }
+  const tb = document.createElement('button'); tb.className = 'tab'; tb.textContent = spec.tab;
+  if (spec.group) {
+    if (!tabs._g[spec.group]) { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = spec.group; tabs.appendChild(gl); tabs._g[spec.group] = gl; }
+    const prev = tabs._g[spec.group]; prev.after(tb); tabs._g[spec.group] = tb;
+  } else tabs.appendChild(tb);
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = '<h3></h3><p class="kind"></p><p class="lead"></p><div class="controls"></div><div class="stage"></div><p class="cap"></p>';
+  card.querySelector('h3').textContent = spec.title;
+  const kindEl = card.querySelector('.kind');
+  if (spec.kind) kindEl.textContent = spec.kind; else kindEl.remove();
+  card.querySelector('.lead').textContent = spec.lead;
+  cards.appendChild(card);
+  tb.onclick = () => {
+    tabs.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    [...cards.children].forEach(b => b.classList.remove('on'));
+    tb.classList.add('active'); card.classList.add('on');
+  };
+  if (tabs.querySelector('.tab') === tb) tb.onclick();
+  const stage = card.querySelector('.stage'), ctl = card.querySelector('.controls'), capEl = card.querySelector('.cap');
+  const cv = document.createElement('canvas'); stage.appendChild(cv);
+  const S = { spec, card, cv, ctx: cv.getContext('2d'), w: 0, h: 0, dpr: 1, mx: -999, my: -999, t: 0, st: {}, vis: false, play: null, capText: '' };
+  S.cap = s => { if (s !== S.capText) { S.capText = s; capEl.textContent = s; } };
+  (spec.controls || []).forEach(c => {
+    if (c.btn) {
+      const b = document.createElement('button'); b.textContent = c.btn; b.onclick = () => c.fn(S, b); ctl.appendChild(b);
+    } else {
+      const lab = document.createElement('label'); const sp = document.createElement('span'); sp.textContent = c.label; lab.appendChild(sp);
+      const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step || .01; inp.value = c.val;
+      S.st[c.k] = +c.val; lab.appendChild(inp); ctl.appendChild(lab);
+      inp.oninput = () => { S.st[c.k] = +inp.value; if (S.play && S.play.k === c.k) { S.play.on = false; S.play.btn.textContent = 'Play'; } };
+      if (c.play) {
+        const pb = document.createElement('button'); pb.textContent = 'Play'; ctl.appendChild(pb);
+        S.play = { k: c.k, min: +c.min, max: +c.max, period: c.play, on: false, btn: pb, inp, t0: 0 };
+        pb.onclick = () => {
+          const P = S.play; P.on = !P.on; pb.textContent = P.on ? 'Pause' : 'Play';
+          if (P.on) { const nrm = (S.st[P.k] - P.min) / (P.max - P.min); P.t0 = S.t - (nrm / 2) * P.period; }
+        };
+      }
+    }
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (r.width < 2) return;
+    S.dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * S.dpr); cv.height = Math.round(r.height * S.dpr);
+    S.w = r.width; S.h = r.height;
+    S.ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
+    if (spec.init) spec.init(S);
+  }
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(es => es.forEach(e => S.vis = e.isIntersecting)).observe(stage);
+  cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', () => { S.mx = -999; S.my = -999; });
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top;
+    if (spec.click) spec.click(S, S.mx, S.my);
+  });
+  S.tabBtn = tb;
+  VIZ.push(S);
+  return S;
+}
+function showViz(title) {
+  const S = VIZ.find(v => v.spec.title === title || v.spec.tab === title);
+  if (!S) return;
+  S.tabBtn.click();
+  S.card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function frame(now) {
+  const T = now / 1000;
+  for (const S of VIZ) {
+    if (!S.vis || !S.w || S.card.offsetParent === null) {
+      if (S.wasActive) { S.wasActive = false; if (S.spec.hide) S.spec.hide(S); }
+      continue;
+    }
+    S.wasActive = true;
+    S.t = T;
+    if (S.play && S.play.on) {
+      const P = S.play; const v = P.min + tri((S.t - P.t0) / P.period) * (P.max - P.min);
+      S.st[P.k] = v; P.inp.value = v;
+    }
+    const c = S.ctx; c.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.setLineDash([]);
+    try { S.spec.draw(S); } catch (e) { console.error(e); }
+  }
+  requestAnimationFrame(frame);
+})(0);
+
+/* shared lotus drawing */
+function lotus(c, x, y, s, open, alpha) {
+  c.save(); c.translate(x, y); c.globalAlpha = alpha;
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 5 : 7;
+    for (let k = 0; k < n; k++) {
+      const f = (k / (n - 1)) * 2 - 1, th = f * (.25 + .9 * open) * (layer ? .7 : 1);
+      c.save(); c.rotate(th);
+      const L = (layer ? 20 : 28) * s * (.8 + .2 * open), W = (6 + 4 * open) * s;
+      c.beginPath(); c.ellipse(0, -L * .55, W, L * .55, 0, 0, TAU);
+      const g = c.createLinearGradient(0, 0, 0, -L);
+      g.addColorStop(0, 'rgba(240,170,200,.95)');
+      g.addColorStop(1, layer ? 'rgba(255,225,235,.95)' : 'rgba(215,120,170,.85)');
+      c.fillStyle = g; c.fill(); c.restore();
+    }
+  }
+  if (open > .3) {
+    const r = 10 * s * open, g = c.createRadialGradient(0, -8 * s, 0, 0, -8 * s, r * 2.4);
+    g.addColorStop(0, 'rgba(255,245,200,' + (.9 * open) + ')'); g.addColorStop(1, 'rgba(255,220,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, -8 * s, r * 2.4, 0, TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= PURE LAND 1: contemplations ================= */
+addViz('pl', {
+  tab: 'Contemplations', title: 'The Sixteen Contemplations (six of them)',
+  lead: 'Move the slider slowly. Each layer of Sukhāvatī arrives in the order the sūtra teaches it.',
+  controls: [{ k: 's', label: 'Contemplation', min: 0, max: 6, val: 0, step: .01, play: 60 }],
+  init(S) {
+    S.st.gems = Array.from({ length: 70 }, () => ({ x: Math.random(), y: Math.random(), p: rand(0, TAU), h: rand(30, 60) }));
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, s = S.st.s, hz = h * .58, A = k => sstep(k - 1, k, s);
+    c.fillStyle = '#04050a'; c.fillRect(0, 0, w, h);
+    const sky = c.createLinearGradient(0, 0, 0, hz);
+    sky.addColorStop(0, '#171d42'); sky.addColorStop(.6, '#7a4470'); sky.addColorStop(1, '#f0a866');
+    c.globalAlpha = .12 + .88 * A(1); c.fillStyle = sky; c.fillRect(0, 0, w, hz); c.globalAlpha = 1;
+    const sx = w / 2, sy = hz - h * .05 + (1 - A(1)) * h * .16, sr = h * .1;
+    const sg = c.createRadialGradient(sx, sy, 0, sx, sy, sr * 3.2);
+    sg.addColorStop(0, 'rgba(255,240,190,' + A(1) + ')'); sg.addColorStop(.3, 'rgba(255,170,90,' + (.55 * A(1)) + ')'); sg.addColorStop(1, 'rgba(255,140,80,0)');
+    c.fillStyle = sg; c.beginPath(); c.arc(sx, sy, sr * 3.2, 0, TAU); c.fill();
+    c.save(); c.beginPath(); c.rect(0, 0, w, hz); c.clip();
+    c.beginPath(); c.arc(sx, sy, sr, 0, TAU); c.fillStyle = 'rgba(255,246,210,' + A(1) + ')'; c.fill(); c.restore();
+    const a2 = A(2);
+    if (a2 > .01) {
+      const wg = c.createLinearGradient(0, hz, 0, h); wg.addColorStop(0, 'rgba(70,120,160,' + a2 + ')'); wg.addColorStop(1, 'rgba(14,30,60,' + a2 + ')');
+      c.fillStyle = wg; c.fillRect(0, hz, w, h - hz);
+      for (let i = 0; i < 14; i++) {
+        const y = hz + 6 + i * (h - hz) / 15, hw = 10 + i * 7 * (1 + .3 * Math.sin(t * 2 + i));
+        c.fillStyle = 'rgba(255,225,160,' + (a2 * .35 * (1 - i / 16)) + ')'; c.fillRect(sx - hw / 2 + Math.sin(t * 1.5 + i) * 6, y, hw, 2);
+      }
+    }
+    const a3 = A(3);
+    if (a3 > .01) {
+      const lg = c.createLinearGradient(0, hz, 0, h); lg.addColorStop(0, 'rgba(50,80,190,' + (.45 * a3) + ')'); lg.addColorStop(1, 'rgba(20,25,90,' + (.55 * a3) + ')');
+      c.fillStyle = lg; c.fillRect(0, hz, w, h - hz);
+      c.strokeStyle = 'rgba(232,200,110,' + (.4 * a3) + ')'; c.lineWidth = 1; c.beginPath();
+      for (let i = -12; i <= 12; i++) { c.moveTo(sx, hz); c.lineTo(sx + i * w * .14, h); }
+      for (let k = 1; k <= 7; k++) { const y = hz + Math.pow(k / 7, 2) * (h - hz); c.moveTo(0, y); c.lineTo(w, y); }
+      c.stroke();
+      for (const g of S.st.gems) {
+        const y = hz + 8 + g.y * (h - hz - 8), tw = .5 + .5 * Math.sin(t * 2 + g.p);
+        c.fillStyle = 'hsla(' + g.h + ',80%,70%,' + (a3 * tw * .8) + ')'; c.beginPath(); c.arc(g.x * w, y, 1 + g.y * 2, 0, TAU); c.fill();
+      }
+    }
+    const a4 = A(4);
+    if (a4 > .01) {
+      [[.1, .95], [.24, .8], [.76, .8], [.9, .95]].forEach((q, ti) => {
+        const bx = w * q[0], base = hz + h * .05 * q[1], H = h * .32 * q[1];
+        c.globalAlpha = a4; c.strokeStyle = '#b8964a'; c.lineWidth = 3 * q[1]; c.beginPath(); c.moveTo(bx, base); c.lineTo(bx, base - H); c.stroke();
+        for (let k = 0; k < 8; k++) {
+          const a = k / 8 * TAU + ti, r = H * .3, x = bx + Math.cos(a) * r, y = base - H - Math.sin(a) * r * .6 + Math.sin(t + k) * 2;
+          const gg = c.createRadialGradient(x, y, 0, x, y, 14 * q[1]); const hu = (k * 45 + ti * 30) % 360;
+          gg.addColorStop(0, 'hsla(' + hu + ',85%,72%,.95)'); gg.addColorStop(1, 'hsla(' + hu + ',85%,60%,0)');
+          c.fillStyle = gg; c.beginPath(); c.arc(x, y, 14 * q[1], 0, TAU); c.fill();
+        }
+        c.globalAlpha = 1;
+      });
+    }
+    const a5 = A(5);
+    if (a5 > .01) [[.28, .86], [.4, .93], [.6, .91], [.72, .86], [.5, .82]].forEach((q, i) => {
+      c.fillStyle = 'rgba(20,70,60,' + (.8 * a5) + ')'; c.beginPath(); c.ellipse(w * q[0], h * q[1] + 4, 34, 8, 0, 0, TAU); c.fill();
+      lotus(c, w * q[0], h * q[1], 1.1 + (q[1] - .8) * 3, .9 * a5, a5);
+    });
+    const a6 = A(6);
+    if (a6 > .01) {
+      for (let i = 0; i < 30; i++) {
+        const a = i / 30 * TAU + t * .04; c.strokeStyle = 'rgba(255,230,160,' + (.09 * a6 * (.6 + .4 * Math.sin(t + i))) + ')';
+        c.beginPath(); c.moveTo(sx, sy); c.lineTo(sx + Math.cos(a) * w, sy + Math.sin(a) * w); c.stroke();
+      }
+      for (let k = 1; k <= 4; k++) { c.strokeStyle = 'rgba(255,225,150,' + (.25 * a6 / k) + ')'; c.beginPath(); c.arc(sx, sy, sr * (1 + k * .55) + Math.sin(t * 1.4 + k) * 3, 0, TAU); c.stroke(); }
+      c.globalAlpha = a6; c.fillStyle = 'rgba(70,40,30,.85)';
+      c.beginPath(); c.arc(sx, sy - sr * .35, sr * .26, 0, TAU); c.fill();
+      c.beginPath(); c.moveTo(sx - sr * .7, sy + sr * .75); c.quadraticCurveTo(sx - sr * .45, sy - sr * .1, sx, sy - sr * .12); c.quadraticCurveTo(sx + sr * .45, sy - sr * .1, sx + sr * .7, sy + sr * .75); c.closePath(); c.fill();
+      c.globalAlpha = 1; lotus(c, sx, sy + sr * .9, 2.2, .95, a6);
+    }
+    const idx = clamp(Math.ceil(s - .01), 0, 6);
+    S.cap(['Begin in darkness. Sit still.', 'One. The setting sun, gathered in the mind.', 'Two. Water, clear and still.', 'Three. The ground turns to crystal and lapis, veined with gold.',
+      'Four. Jeweled trees in orderly rows.', 'Five. Ponds and lotus flowers.', 'Six. Light without edge, and the Buddha of infinite light.'][idx]);
+  }
+});
+
+/* ================= PURE LAND 2: lotus pond ================= */
+addViz('pl', {
+  tab: 'Lotus pond', title: 'The Lotus Pond',
+  lead: 'Each lotus is a being. Tap one to open it, and its light passes to the lotuses around it.',
+  controls: [
+    { btn: 'Open all', fn: S => { const cx = S.w / 2, cy = S.h * .7; S.st.ns.forEach(n => { n.tgt = 1; n.wake = S.t + Math.hypot(n.x - cx, n.y - cy) / 220; n.awake = false; }); } },
+    { btn: 'Close all', fn: S => { S.st.ns.forEach(n => { n.tgt = 0; n.wake = 1e12; }); } }
+  ],
+  init(S) {
+    const ns = [];
+    for (let r = 0; r < 5; r++) {
+      const y = S.h * (.5 + r * .1), cols = 5 + r * 2, sc = .55 + r * .22;
+      for (let q = 0; q < cols; q++) ns.push({ x: S.w * (q + .5 + rand(-.15, .15)) / cols, y: y + rand(-6, 6), s: sc, o: 0, tgt: 0, wake: 1e12, awake: true, ph: rand(0, TAU) });
+    }
+    S.st.ns = ns;
+  },
+  click(S, x, y) {
+    let best = null, bd = 42;
+    S.st.ns.forEach(n => { const d = Math.hypot(n.x - x, n.y - n.s * 12 - y); if (d < bd * n.s) { bd = d / n.s; best = n; } });
+    if (best) {
+      best.tgt = best.tgt ? 0 : 1; best.wake = S.t;
+      if (best.tgt) S.st.ns.forEach(n => { const d = Math.hypot(n.x - best.x, n.y - best.y); if (n !== best && d < 130) { n.tgt = 1; n.wake = S.t + d / 90; } });
+    }
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, ns = S.st.ns;
+    let open = 0; ns.forEach(n => { if (n.tgt && t >= n.wake) n.o = lerp(n.o, 1, .05); else if (!n.tgt) n.o = lerp(n.o, 0, .06); open += n.o; });
+    const frac = open / ns.length;
+    const sky = c.createLinearGradient(0, 0, 0, h * .5); sky.addColorStop(0, '#0b1024'); sky.addColorStop(1, 'rgb(' + Math.round(60 + 150 * frac) + ',' + Math.round(40 + 90 * frac) + ',' + Math.round(70 + 20 * frac) + ')');
+    c.fillStyle = sky; c.fillRect(0, 0, w, h * .5);
+    const wg = c.createLinearGradient(0, h * .45, 0, h); wg.addColorStop(0, '#16324a'); wg.addColorStop(1, '#061420'); c.fillStyle = wg; c.fillRect(0, h * .45, w, h * .55);
+    const lg = c.createRadialGradient(w / 2, h * .32, 0, w / 2, h * .32, h * .6);
+    lg.addColorStop(0, 'rgba(255,235,170,' + (.15 + .6 * frac) + ')'); lg.addColorStop(1, 'rgba(255,220,120,0)'); c.fillStyle = lg; c.fillRect(0, 0, w, h);
+    let hov = null, bd = 1e9; ns.forEach(n => { const d = Math.hypot(n.x - S.mx, n.y - n.s * 12 - S.my); if (d < 36 * n.s && d < bd) { bd = d; hov = n; } });
+    ns.forEach(n => {
+      const bob = Math.sin(t * .8 + n.ph) * 1.5 * n.s, oo = clamp(Math.max(n.o, n === hov ? .35 : 0));
+      c.fillStyle = 'rgba(22,80,66,.85)'; c.beginPath(); c.ellipse(n.x, n.y + 4 * n.s + bob, 30 * n.s, 8 * n.s, 0, 0, TAU); c.fill();
+      lotus(c, n.x, n.y + bob, n.s, oo, 1);
+    });
+    const k = ns.filter(n => n.o > .6).length;
+    S.cap(k === 0 ? 'A still pond of closed lotuses. Tap one.' : k + ' of ' + ns.length + ' lotuses open. Light passes from one to its neighbors, and the sky warms as the pond opens.');
+  }
+});
+
+
+</script>
+</body>
+</html>

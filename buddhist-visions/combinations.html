@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Combinations: Heart Sūtra, Avataṃsaka and Death</title>
+<meta name="description" content="Six visualizations that read the Heart Sūtra and the Avataṃsaka together, and look at death through both.">
+<style>
+  :root{
+    --bg:#07070d; --card:rgba(18,18,32,.88); --gold:#d4af37; --gold2:#e8d48b;
+    --teal:#4ecdc4; --text:#e8e6e3; --muted:#9a9690; --rose:#f0b6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  header{text-align:center;padding:3.2rem 1.25rem 1.6rem;background:linear-gradient(180deg,rgba(212,175,55,.09),transparent)}
+  header h1{font-weight:300;font-size:clamp(1.5rem,5vw,2.6rem);letter-spacing:.12em;color:var(--gold);margin-bottom:.7rem}
+  header p{color:var(--muted);max-width:760px;margin:0 auto;font-size:1.02rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.4rem}
+  nav a{color:var(--gold2);text-decoration:none;font:.86rem system-ui,sans-serif;padding:.4rem 1rem;border:1px solid rgba(212,175,55,.35);border-radius:2rem;transition:.2s}
+  nav a:hover{background:rgba(212,175,55,.15);border-color:var(--gold)}
+  main{max-width:1080px;margin:0 auto;padding:.5rem 1rem 3rem}
+  section{margin:2.6rem 0;background:var(--card);border:1px solid rgba(212,175,55,.13);border-radius:16px;padding:1.8rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  section>h2{font-weight:400;font-size:1.6rem;color:var(--gold);letter-spacing:.04em}
+  .sk{font-style:italic;color:var(--teal);font-size:.95rem;margin:.2rem 0 1rem}
+  section>p{margin-bottom:.9rem;font-size:1rem}
+  .principle{border-left:3px solid var(--gold);background:rgba(212,175,55,.06);color:var(--gold2);padding:.7rem 1rem;margin:1rem 0;font-style:italic}
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .8rem}
+  button,.tab{font:.85rem system-ui,sans-serif;background:transparent;border:1px solid rgba(212,175,55,.55);color:var(--gold2);padding:.4rem .95rem;border-radius:6px;cursor:pointer;transition:.2s}
+  button:hover{background:rgba(212,175,55,.16)}
+  .tab.active{background:rgba(212,175,55,.26);border-color:var(--gold2)}
+  .card{display:none}
+  .card.on{display:block}
+  .card h3{font-weight:400;font-size:1.2rem;color:var(--gold2);margin-bottom:.2rem}
+  .kind{font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+  .tabgroup{flex-basis:100%;font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .tabgroup:first-child{margin-top:0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.6rem;margin:1rem 0;font-size:.92rem}
+  .legend div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.65rem .9rem}
+  .legend b{color:var(--teal);font-weight:400}
+  .lead{color:var(--muted);font-size:.95rem;margin-bottom:.7rem}
+  .controls{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;align-items:center;margin:.5rem 0}
+  .controls label{display:flex;align-items:center;gap:.6rem;font:.82rem system-ui,sans-serif;color:var(--muted)}
+  .controls input[type=range]{width:min(240px,55vw);accent-color:var(--gold)}
+  .stage{position:relative;width:100%;height:clamp(300px,58vh,440px);border-radius:12px;overflow:hidden;background:#06060c;border:1px solid rgba(255,255,255,.07)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .cap{min-height:3.2em;margin-top:.7rem;color:var(--gold2);font-size:.97rem;font-style:italic}
+  .analogies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1rem 0}
+  .analogies div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1rem;font-size:.93rem}
+  .analogies b{color:var(--teal);font-weight:400}
+  footer{text-align:center;padding:2rem 1rem 3rem;color:var(--muted);font:.88rem system-ui,sans-serif;border-top:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){section{padding:1.3rem .9rem}.stage{height:clamp(280px,52vh,380px)}}
+
+  nav a[aria-current=page]{background:rgba(212,175,55,.22);border-color:var(--gold2)}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.6rem 0 .5rem}
+  .hub a{display:block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:1.3rem 1.2rem;transition:.2s}
+  .hub a:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .hub h2{font-weight:400;font-size:1.25rem;color:var(--gold);margin-bottom:.15rem}
+  .hub .sk{margin:0 0 .7rem}
+  .hub p{font-size:.95rem;color:var(--muted)}
+  .hub .count{display:block;margin-top:.8rem;font:.8rem system-ui,sans-serif;color:var(--gold2)}
+  .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin:2rem 0 0;font:.9rem system-ui,sans-serif}
+  .pager a{color:var(--gold2);text-decoration:none;border:1px solid rgba(212,175,55,.35);border-radius:2rem;padding:.4rem 1rem}
+  .pager a:hover{background:rgba(212,175,55,.15)}
+  a.inline{color:var(--teal)}
+  header h1{font-size:clamp(1.25rem,3.7vw,2.3rem)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <h1>EMPTINESS · INTERPENETRATION · PURE LAND</h1>
+  <p>Interactive contemplations on emptiness, interpenetration and the Pure Land. Each one is drawn live in your browser.</p>
+  <nav><a href="index.html">Home</a><a href="theravada.html">Early Buddhism</a><a href="heart-sutra.html">Emptiness</a><a href="avatamsaka.html">Interpenetration</a><a href="pure-land.html">Pure Land</a><a href="three-visions.html">One reality</a><a href="combinations.html" aria-current="page">Combinations</a></nav>
+</header>
+<main>
+<section id="combos">
+    <h2>Combinations: Heart Sūtra, Avataṃsaka and Death</h2>
+    <p class="sk">śūnyatā · Indra's net · maraṇa</p>
+    <p>Two traditions read together, and death seen through both. These are modern combinations. Each source text says its own thing, and the pairings here are interpretive, so every card says so.</p>
+    <div class="legend"><div><b>Classical.</b> The image or teaching comes from the early texts or their commentaries.</div><div><b>Classical, modern rendering.</b> The idea is in the sources and the drawing is ours.</div><div><b>Modern analogy.</b> Our own comparison, which the tradition does not teach.</div></div>
+    <div class="tabs" data-group="mix"></div>
+    <div class="cards" data-group="mix"></div>
+  </section>
+<div class="pager"><a href="three-visions.html">&larr; One reality</a><a href="index.html">Home &rarr;</a></div>
+</main>
+<footer>
+  <p>Contemplative visualizations for study and meditation. Everything on this page is drawn procedurally in your browser.</p>
+  <p style="margin-top:.5rem">May all beings realize the luminous openness of mind.</p>
+</footer>
+<script>
+/* ================= utilities ================= */
+const TAU = Math.PI * 2;
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const tri = x => { x = x % 1; if (x < 0) x += 1; return x < .5 ? x * 2 : 2 - x * 2; };
+function txt(c, s, x, y, col, size, align) {
+  c.fillStyle = col; c.font = (size || 13) + 'px system-ui, sans-serif';
+  c.textAlign = align || 'center'; c.textBaseline = 'middle'; c.fillText(s, x, y);
+}
+
+/* ================= starfield ================= */
+(function () {
+  const cv = document.getElementById('stars'), c = cv.getContext('2d');
+  let w, h, st = [];
+  function rs() {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    st = Array.from({ length: 140 }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, a: Math.random() * .5 + .15, p: Math.random() * TAU }));
+  }
+  rs(); addEventListener('resize', rs);
+  (function d(t) {
+    c.clearRect(0, 0, w, h);
+    for (const s of st) { c.beginPath(); c.arc(s.x, s.y, s.r, 0, TAU); c.fillStyle = 'rgba(220,210,180,' + (s.a * (.6 + .4 * Math.sin(t * .001 + s.p))) + ')'; c.fill(); }
+    requestAnimationFrame(d);
+  })(0);
+})();
+
+/* ================= visualization framework ================= */
+const VIZ = [];
+const GROUP_ORDER = { th: ['Breath', 'Body and feeling', 'Mind and self', 'Insight', 'Concentration', 'Death'], mix: ['Heart and net', 'Death and the net', 'Four grammars'], ava: ['Doctrine', "Fazang's demonstrations", 'Scale and time', 'Entering one into all', 'The net', 'Practice'] };
+function addViz(group, spec) {
+  const tabs = document.querySelector('.tabs[data-group=' + group + ']');
+  const cards = document.querySelector('.cards[data-group=' + group + ']');
+  if (!tabs._g) {
+    tabs._g = {};
+    (GROUP_ORDER[group] || []).forEach(n => { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = n; tabs.appendChild(gl); tabs._g[n] = gl; });
+  }
+  const tb = document.createElement('button'); tb.className = 'tab'; tb.textContent = spec.tab;
+  if (spec.group) {
+    if (!tabs._g[spec.group]) { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = spec.group; tabs.appendChild(gl); tabs._g[spec.group] = gl; }
+    const prev = tabs._g[spec.group]; prev.after(tb); tabs._g[spec.group] = tb;
+  } else tabs.appendChild(tb);
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = '<h3></h3><p class="kind"></p><p class="lead"></p><div class="controls"></div><div class="stage"></div><p class="cap"></p>';
+  card.querySelector('h3').textContent = spec.title;
+  const kindEl = card.querySelector('.kind');
+  if (spec.kind) kindEl.textContent = spec.kind; else kindEl.remove();
+  card.querySelector('.lead').textContent = spec.lead;
+  cards.appendChild(card);
+  tb.onclick = () => {
+    tabs.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    [...cards.children].forEach(b => b.classList.remove('on'));
+    tb.classList.add('active'); card.classList.add('on');
+  };
+  if (tabs.querySelector('.tab') === tb) tb.onclick();
+  const stage = card.querySelector('.stage'), ctl = card.querySelector('.controls'), capEl = card.querySelector('.cap');
+  const cv = document.createElement('canvas'); stage.appendChild(cv);
+  const S = { spec, card, cv, ctx: cv.getContext('2d'), w: 0, h: 0, dpr: 1, mx: -999, my: -999, t: 0, st: {}, vis: false, play: null, capText: '' };
+  S.cap = s => { if (s !== S.capText) { S.capText = s; capEl.textContent = s; } };
+  (spec.controls || []).forEach(c => {
+    if (c.btn) {
+      const b = document.createElement('button'); b.textContent = c.btn; b.onclick = () => c.fn(S, b); ctl.appendChild(b);
+    } else {
+      const lab = document.createElement('label'); const sp = document.createElement('span'); sp.textContent = c.label; lab.appendChild(sp);
+      const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step || .01; inp.value = c.val;
+      S.st[c.k] = +c.val; lab.appendChild(inp); ctl.appendChild(lab);
+      inp.oninput = () => { S.st[c.k] = +inp.value; if (S.play && S.play.k === c.k) { S.play.on = false; S.play.btn.textContent = 'Play'; } };
+      if (c.play) {
+        const pb = document.createElement('button'); pb.textContent = 'Play'; ctl.appendChild(pb);
+        S.play = { k: c.k, min: +c.min, max: +c.max, period: c.play, on: false, btn: pb, inp, t0: 0 };
+        pb.onclick = () => {
+          const P = S.play; P.on = !P.on; pb.textContent = P.on ? 'Pause' : 'Play';
+          if (P.on) { const nrm = (S.st[P.k] - P.min) / (P.max - P.min); P.t0 = S.t - (nrm / 2) * P.period; }
+        };
+      }
+    }
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (r.width < 2) return;
+    S.dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * S.dpr); cv.height = Math.round(r.height * S.dpr);
+    S.w = r.width; S.h = r.height;
+    S.ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
+    if (spec.init) spec.init(S);
+  }
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(es => es.forEach(e => S.vis = e.isIntersecting)).observe(stage);
+  cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', () => { S.mx = -999; S.my = -999; });
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top;
+    if (spec.click) spec.click(S, S.mx, S.my);
+  });
+  S.tabBtn = tb;
+  VIZ.push(S);
+  return S;
+}
+function showViz(title) {
+  const S = VIZ.find(v => v.spec.title === title || v.spec.tab === title);
+  if (!S) return;
+  S.tabBtn.click();
+  S.card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function frame(now) {
+  const T = now / 1000;
+  for (const S of VIZ) {
+    if (!S.vis || !S.w || S.card.offsetParent === null) {
+      if (S.wasActive) { S.wasActive = false; if (S.spec.hide) S.spec.hide(S); }
+      continue;
+    }
+    S.wasActive = true;
+    S.t = T;
+    if (S.play && S.play.on) {
+      const P = S.play; const v = P.min + tri((S.t - P.t0) / P.period) * (P.max - P.min);
+      S.st[P.k] = v; P.inp.value = v;
+    }
+    const c = S.ctx; c.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.setLineDash([]);
+    try { S.spec.draw(S); } catch (e) { console.error(e); }
+  }
+  requestAnimationFrame(frame);
+})(0);
+
+/* shared lotus drawing */
+function lotus(c, x, y, s, open, alpha) {
+  c.save(); c.translate(x, y); c.globalAlpha = alpha;
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 5 : 7;
+    for (let k = 0; k < n; k++) {
+      const f = (k / (n - 1)) * 2 - 1, th = f * (.25 + .9 * open) * (layer ? .7 : 1);
+      c.save(); c.rotate(th);
+      const L = (layer ? 20 : 28) * s * (.8 + .2 * open), W = (6 + 4 * open) * s;
+      c.beginPath(); c.ellipse(0, -L * .55, W, L * .55, 0, 0, TAU);
+      const g = c.createLinearGradient(0, 0, 0, -L);
+      g.addColorStop(0, 'rgba(240,170,200,.95)');
+      g.addColorStop(1, layer ? 'rgba(255,225,235,.95)' : 'rgba(215,120,170,.85)');
+      c.fillStyle = g; c.fill(); c.restore();
+    }
+  }
+  if (open > .3) {
+    const r = 10 * s * open, g = c.createRadialGradient(0, -8 * s, 0, 0, -8 * s, r * 2.4);
+    g.addColorStop(0, 'rgba(255,245,200,' + (.9 * open) + ')'); g.addColorStop(1, 'rgba(255,220,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, -8 * s, r * 2.4, 0, TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= THERAVADA helpers ================= */
+const hsh = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+function sitFig(c, cx, by, H) {
+  c.beginPath(); c.arc(cx, by - H * .86, H * .09, 0, TAU);
+  c.moveTo(cx - H * .17, by - H * .66); c.quadraticCurveTo(cx - H * .21, by - H * .4, cx - H * .13, by - H * .16);
+  c.lineTo(cx + H * .13, by - H * .16); c.quadraticCurveTo(cx + H * .21, by - H * .4, cx + H * .17, by - H * .66);
+  c.quadraticCurveTo(cx, by - H * .72, cx - H * .17, by - H * .66); c.closePath();
+  c.moveTo(cx + H * .3, by - H * .08); c.ellipse(cx, by - H * .08, H * .3, H * .09, 0, 0, TAU);
+}
+function standFig(c, cx, by, H, lw) {
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.beginPath(); c.arc(cx, by - H * .9, H * .07, 0, TAU); c.fill();
+  c.lineWidth = lw || H * .09;
+  c.beginPath(); c.moveTo(cx, by - H * .8); c.lineTo(cx, by - H * .45);
+  c.moveTo(cx, by - H * .75); c.lineTo(cx - H * .17, by - H * .5); c.moveTo(cx, by - H * .75); c.lineTo(cx + H * .17, by - H * .5);
+  c.moveTo(cx, by - H * .45); c.lineTo(cx - H * .09, by); c.moveTo(cx, by - H * .45); c.lineTo(cx + H * .09, by);
+  c.stroke();
+}
+function gbar(c, x, y, w, h, v, col, label) {
+  c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(x, y, w, h);
+  c.fillStyle = col; c.fillRect(x, y, w * clamp(v), h);
+  if (label) txt(c, label, x, y - 8, '#c9c4b8', 11, 'left');
+}
+function haloGrad(c, x, y, r, col, a) {
+  const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col.replace('A', a)); g.addColorStop(1, col.replace('A', 0));
+  c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
+}
+
+/* ================= COMBINATIONS 1: empty jewels ================= */
+function jewelPositions(w, h, n) {
+  const cols = 5, rows = Math.ceil(n / cols), pts = [];
+  for (let i = 0; i < n; i++) { const r = Math.floor(i / cols), q = i % cols; pts.push([w * (q + .75 + (r % 2 ? .35 : 0)) / (cols + 1) + (hsh(i) - .5) * 14, h * (r + .8) / (rows + .5) + (hsh(i + 9) - .5) * 14]); }
+  return pts;
+}
+addViz('mix', {
+  tab: 'Empty jewels', title: 'Because Empty, Therefore Interpenetrating', kind: 'Classical relation (Heart Sūtra and Avataṃsaka), modern rendering', group: 'Heart and net',
+  lead: 'Give every jewel an inherent essence and it is sealed in itself: nothing can be reflected in it. Take the essence away and each jewel becomes open, and holds an image of all the others. Slide from "own-nature" to emptiness.',
+  controls: [{ k: 'e', label: 'Inherent essence', min: 0, max: 1, val: 1, play: 28 }],
+  init(S) { S.st.pos = jewelPositions(S.w, S.h, 15); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, e = S.st.e, T = S.t, P = S.st.pos, o = 1 - e; c.clearRect(0, 0, w, h);
+    const R = Math.min(w / 17, h / 10);
+    if (o > .05) for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) { const d = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]); if (d < R * 5) { c.strokeStyle = 'rgba(232,212,139,' + o * .3 * (1 - d / (R * 5)) + ')'; c.beginPath(); c.moveTo(P[i][0], P[i][1]); c.lineTo(P[j][0], P[j][1]); c.stroke(); } }
+    P.forEach((p, i) => {
+      const x = p[0], y = p[1], sol = clamp(e * 1.3 - .15);
+      c.beginPath(); c.arc(x, y, R, 0, TAU); c.fillStyle = 'rgba(' + Math.round(lerp(190, 30, sol)) + ',' + Math.round(lerp(210, 30, sol)) + ',' + Math.round(lerp(255, 40, sol)) + ',' + lerp(.16, .95, sol) + ')'; c.fill();
+      c.lineWidth = 1 + e * 2.4; c.strokeStyle = 'rgba(212,175,55,' + (.4 + .5 * e) + ')'; c.stroke(); c.lineWidth = 1;
+      if (o > .1) { c.save(); c.beginPath(); c.arc(x, y, R, 0, TAU); c.clip(); P.forEach((q, j) => { if (j === i) return; const rx = x + (q[0] - x) * .11, ry = y + (q[1] - y) * .11; c.fillStyle = 'rgba(255,240,190,' + o * .8 + ')'; c.beginPath(); c.arc(rx, ry, 2 + 1.3 * Math.sin(T * 2 + j), 0, TAU); c.fill(); }); c.restore(); }
+      if (e > .7) txt(c, 'own-nature', x, y, 'rgba(232,212,139,' + (e - .7) * 2.4 * .8 + ')', 9);
+    });
+    S.cap(e > .8 ? 'Each jewel is a closed thing. Nothing can enter, so nothing can be reflected.' : e > .3 ? 'As the essence thins, the jewels start to show one another.' : 'With nothing fixed inside, every jewel holds all the rest. Emptiness is what makes the net possible.');
+  }
+});
+
+/* ================= COMBINATIONS 2: Heart lines over the net ================= */
+const HEARTL = [['Form', 'the net as we first see it: solid jewels'], ['Form is emptiness', 'the jewels dissolve into light'], ['Emptiness is form', 'light gathers again into jewels, now joined'],
+  ['No eye, no ear, no nose, no tongue, no body, no mind', 'the categories that sorted the jewels are not found'], ['No attainment, and nothing to attain', 'the special jewel that stood apart fades into the net'], ['Gone, gone, gone beyond', 'a wave crosses the whole net at once']];
+addViz('mix', {
+  tab: 'Heart lines on the net', title: 'The Heart Sūtra Walked Through the Net', kind: 'Modern combination of two classical sources', group: 'Heart and net',
+  lead: 'Six lines from the Heart Sūtra, each shown as something that happens to a net of jewels. This is a reading that joins two traditions. It is not something either text says in this form.',
+  controls: [{ k: 's', label: 'Line', min: 0, max: 5, step: 1, val: 0, play: 50 }],
+  init(S) { S.st.pos = jewelPositions(S.w, S.h * .86, 15); S.st.a = { j: 1, g: 0, l: .2, cat: 1, star: 1 }; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, s = Math.round(S.st.s), T = S.t, P = S.st.pos, A = S.st.a; c.clearRect(0, 0, w, h);
+    const tg = [{ j: 1, g: 0, l: .2, cat: 1, star: 1 }, { j: .05, g: 1, l: .1, cat: 1, star: 1 }, { j: 1, g: .25, l: .9, cat: 1, star: 1 }, { j: 1, g: .25, l: .9, cat: 0, star: 1 }, { j: 1, g: .25, l: .9, cat: 0, star: 0 }, { j: 1, g: .5, l: 1, cat: 0, star: 0 }][s];
+    for (const k in tg) A[k] = lerp(A[k], tg[k], .06);
+    const R = Math.min(w / 17, h / 10), cols = ['#d4af37', '#f0a3c0', '#4ecdc4', '#b7a6f5', '#c69c6d', '#9ecbff'];
+    if (A.l > .05) for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) { const d = Math.hypot(P[i][0] - P[j][0], P[i][1] - P[j][1]); if (d < R * 5) { c.strokeStyle = 'rgba(232,212,139,' + A.l * .32 * (1 - d / (R * 5)) + ')'; c.beginPath(); c.moveTo(P[i][0], P[i][1]); c.lineTo(P[j][0], P[j][1]); c.stroke(); } }
+    P.forEach((p, i) => {
+      const x = p[0], y = p[1], col = A.cat > .05 ? cols[i % 6] : '#e8d48b', wv = s === 5 ? .5 + .5 * Math.sin(T * 3 - x * .02) : 0;
+      if (A.g > .02) haloGrad(c, x, y, R * 2.2, 'rgba(255,240,190,A)', A.g * (.5 + .4 * wv));
+      c.globalAlpha = A.j; c.beginPath(); c.arc(x, y, R * (i === 7 ? 1.2 : 1), 0, TAU); c.fillStyle = 'rgba(30,32,60,.85)'; c.fill(); c.lineWidth = 2; c.strokeStyle = i === 7 ? 'rgba(255,215,90,' + (.3 + .7 * A.star) + ')' : col; c.stroke(); c.lineWidth = 1; c.globalAlpha = 1;
+      if (i === 7 && A.star > .1) { c.fillStyle = 'rgba(255,215,90,' + A.star * .6 + ')'; c.beginPath(); c.arc(x, y, R * .5, 0, TAU); c.fill(); }
+      if (wv > .8) { c.strokeStyle = 'rgba(255,255,255,.6)'; c.beginPath(); c.arc(x, y, R * 1.3, 0, TAU); c.stroke(); }
+    });
+    txt(c, HEARTL[s][0], w / 2, h - 34, '#f2ecd8', w < 520 ? 12 : 15); txt(c, HEARTL[s][1], w / 2, h - 14, '#9a9690', 11);
+    S.cap('Read together: emptiness is not a void behind the net. It is why the net has no fixed jewels, no fixed categories and no fixed attainer.');
+  }
+});
+
+/* ================= COMBINATIONS 3: wave and water ================= */
+addViz('mix', {
+  tab: 'Wave and water', title: 'Neither Born Nor Dying', kind: 'Modern analogy (a familiar image for the Heart Sūtra line "not arising, not ceasing")', group: 'Heart and net',
+  lead: 'A wave is born, travels and dies. Count waves and you count arisings and endings. Count water and nothing was added or lost. Slide between the two ways of counting.',
+  controls: [{ k: 'v', label: 'Count waves / count water', min: 0, max: 1, val: 0, play: 24 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, v = S.st.v, T = S.t; c.clearRect(0, 0, w, h);
+    const N = Math.round(w / 12), per = 11, u = (T % per) / per, base = h * .55, A = h * .28, amp = Math.pow(Math.sin(Math.PI * u), .8), pos = lerp(-.1, 1.1, u);
+    for (let i = 0; i < N; i++) {
+      const x = (i + .5) / N, wv = amp * Math.exp(-Math.pow((x - pos) / .09, 2)), y = base - wv * A + Math.sin(i * .5 + T) * 1.5;
+      c.fillStyle = 'rgba(' + Math.round(lerp(120 + 130 * wv, 90, v)) + ',' + Math.round(lerp(190 + 40 * wv, 170, v)) + ',' + Math.round(lerp(255, 230, v)) + ',' + lerp(.5 + .5 * wv, .75, v) + ')';
+      for (let d = 0; d < 6; d++) { c.beginPath(); c.arc(x * w, y + d * 14, 3.2, 0, TAU); c.fill(); }
+    }
+    const waves = amp > .08 ? 1 : 0;
+    txt(c, v < .5 ? (u < .12 ? 'a wave is born' : u > .88 ? 'the wave dies' : 'a wave travels') : 'nothing born, nothing dies', w / 2, 24, '#f2ecd8', 15);
+    txt(c, 'waves: ' + waves, 20, h - 34, '#e8d48b', 13, 'left'); txt(c, 'water: 100% (unchanged)', 20, h - 14, '#9ecbff', 13, 'left');
+    c.globalAlpha = .55; gbar(c, w - 130, h - 30, 110, 8, 1, '#9ecbff'); c.globalAlpha = 1;
+    S.cap(v < .5 ? 'In the language of waves there is birth, growth and death.' : 'In the language of water nothing increased or decreased. The waves were never a separate thing.');
+  }
+});
+
+/* ================= COMBINATIONS 4: death in the net ================= */
+addViz('mix', {
+  tab: 'Death in the net', title: 'Death in Indra\'s Net', kind: 'Modern analogy (a Huayan-style reading of interdependence)', group: 'Death and the net',
+  lead: 'Each node is made of particles that also belong to its neighbours. Click one to end it. Its parts pass to others and, after a while, a new node arises. Nothing is owned and nothing is lost.',
+  init(S) {
+    const n = 12, pts = jewelPositions(S.w, S.h, n); const nodes = pts.slice(0, n).map((p, i) => ({ x: p[0], y: p[1], alive: 1, a: 1, t: 0 }));
+    const par = []; nodes.forEach((nd, i) => { for (let k = 0; k < 14; k++) par.push({ o: i, x: nd.x, y: nd.y, ph: hsh(i * 20 + k) * TAU, r: 6 + hsh(i * 20 + k + 3) * 26 }); });
+    S.st.nodes = nodes; S.st.par = par; S.st.next = 4; S.st.last = 0;
+  },
+  click(S, x, y) { let b = -1, bd = 40; S.st.nodes.forEach((n, i) => { const d = Math.hypot(n.x - x, n.y - y); if (n.alive && d < bd) { bd = d; b = i; } }); if (b >= 0) killNode(S, b); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, dt = Math.min(.05, T - (st.last || T)); st.last = T; c.clearRect(0, 0, w, h);
+    if (T > st.next) { st.next = T + rand(4, 6); const live = st.nodes.map((n, i) => n.alive ? i : -1).filter(i => i >= 0); if (live.length > 8) killNode(S, live[Math.floor(Math.random() * live.length)]); }
+    st.nodes.forEach((n, i) => { if (!n.alive && T - n.t > 4.5) { n.alive = 1; const cnt = st.par.filter(p => p.o === i).length; const donors = st.par.filter(p => p.o !== i).sort((a, b) => Math.hypot(a.x - n.x, a.y - n.y) - Math.hypot(b.x - n.x, b.y - n.y)).slice(0, 14 - cnt); donors.forEach(p => { p.o = i; }); } });
+    for (let i = 0; i < st.nodes.length; i++) for (let j = i + 1; j < st.nodes.length; j++) { const a = st.nodes[i], b = st.nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y); if (d < Math.min(w, h) * .32 && a.alive && b.alive) { c.strokeStyle = 'rgba(212,175,55,' + .16 * (1 - d / (Math.min(w, h) * .32)) + ')'; c.beginPath(); c.moveTo(a.x, a.y); c.lineTo(b.x, b.y); c.stroke(); } }
+    const cnt = st.nodes.map(() => 0); st.par.forEach(p => cnt[p.o]++);
+    st.nodes.forEach((n, i) => { n.a = lerp(n.a, n.alive ? 1 : 0, .05); c.strokeStyle = 'rgba(212,175,55,' + n.a * .5 + ')'; c.beginPath(); c.arc(n.x, n.y, 12 + cnt[i] * 1.6, 0, TAU); c.stroke(); });
+    st.par.forEach(p => { const n = st.nodes[p.o], tx = n.x + Math.cos(p.ph + T * .7) * (6 + p.r * .5 * (cnt[p.o] / 14)), ty = n.y + Math.sin(p.ph + T * .7) * (6 + p.r * .5 * (cnt[p.o] / 14)); p.x = lerp(p.x, tx, .03); p.y = lerp(p.y, ty, .03); c.fillStyle = 'rgba(255,240,190,.9)'; c.beginPath(); c.arc(p.x, p.y, 2, 0, TAU); c.fill(); });
+    txt(c, 'particles: ' + st.par.length + ' (constant)', 14, 18, '#9a9690', 12, 'left'); txt(c, 'click a node', w - 14, 18, '#9a9690', 12, 'right');
+    S.cap('Its constituents go on into other nodes. Huayan would say each being was always made of the whole. This is an analogy, not a claim about rebirth.');
+  }
+});
+function killNode(S, i) { const st = S.st, n = st.nodes[i]; n.alive = 0; n.t = S.t; const near = st.nodes.map((m, j) => ({ j, d: Math.hypot(m.x - n.x, m.y - n.y) })).filter(o => o.j !== i && st.nodes[o.j].alive).sort((a, b) => a.d - b.d).slice(0, 4); st.par.forEach(p => { if (p.o === i && near.length) p.o = near[Math.floor(Math.random() * near.length)].j; }); }
+
+/* ================= COMBINATIONS 5: analysis then interpenetration ================= */
+addViz('mix', {
+  tab: 'Analysis, then net', title: 'Analysis Finds No Body. The Net Finds the World in Each Part.', kind: 'Modern combination of Theravāda analysis and Huayan interpenetration', group: 'Four grammars',
+  lead: 'First half of the slider: the body is broken into parts and dust, and no body is found. Second half: each speck of dust turns out to hold a whole figure, and each of those holds specks again.',
+  controls: [{ k: 'z', label: 'Analyse, then open', min: 0, max: 1, val: 0, play: 36 }],
+  init(S) {
+    const cv = document.createElement('canvas'); cv.width = 120; cv.height = 180; const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.strokeStyle = '#fff'; standFig(g, 60, 172, 165, 15);
+    const d = g.getImageData(0, 0, 120, 180).data, pts = [];
+    for (let y = 0; y < 180; y += 5) for (let x = 0; x < 120; x += 5) if (d[(y * 120 + x) * 4 + 3] > 128) pts.push({ x: x / 120 - .5, y: y / 180, a: Math.random() * TAU, r: Math.random() });
+    S.st.pts = pts;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, z = S.st.z, T = S.t; c.clearRect(0, 0, w, h);
+    const H = h * .82, cx = w / 2, top = h * .08, dz = sstep(.05, .5, z), mz = sstep(.5, .95, z);
+    S.st.pts.forEach(q => {
+      const bx = cx + q.x * H * .667 * 1.5, by = top + q.y * H, sx = cx + (q.r - .5) * w * .8 + Math.sin(T * .6 + q.a) * 10, sy = h * .5 + (hsh(q.a * 10) - .5) * h * .7;
+      const x = lerp(bx, sx, dz), y = lerp(by, sy, dz);
+      if (mz > .1) {
+        const s = 2 + mz * 14; c.strokeStyle = 'rgba(255,240,190,' + mz * .8 + ')'; c.fillStyle = 'rgba(255,240,190,' + mz * .5 + ')';
+        c.beginPath(); c.arc(x, y - s * .9, s * .22, 0, TAU); c.fill(); c.beginPath(); c.moveTo(x, y - s * .65); c.lineTo(x, y); c.stroke();
+        if (mz > .6) for (let k = 0; k < 3; k++) { c.fillStyle = 'rgba(232,212,139,' + (mz - .6) * 1.6 + ')'; c.fillRect(x + (k - 1) * s * .35, y - s * .25 + Math.sin(T + k) * 1.5, 1.6, 1.6); }
+      } else { c.fillStyle = 'rgba(' + Math.round(lerp(200, 230, dz)) + ',' + Math.round(lerp(210, 200, dz)) + ',' + Math.round(lerp(255, 150, dz)) + ',.85)'; c.fillRect(x, y, 3, 3); }
+    });
+    txt(c, z < .1 ? 'a body' : z < .5 ? 'parts, then dust: no body found' : 'a world in every mote', w / 2, 18, '#e8d48b', 14);
+    S.cap(z < .5 ? 'Analysis: ask what exactly the body is, and it comes apart.' : 'Interpenetration: after analysis, the parts are not less than the whole. Each contains all of it.');
+  }
+});
+
+/* ================= COMBINATIONS 6: four grammars ================= */
+addViz('mix', {
+  tab: 'Four grammars', title: 'One Field, Four Grammars', kind: 'Modern synthesis; an interpretive map, not a claim that the traditions are one', group: 'Four grammars',
+  lead: 'The same set of nodes drawn in four visual languages: time (early Buddhism), analysis (Madhyamaka), space (Huayan) and field (Pure Land).',
+  controls: [['Time', 'ti'], ['Analysis', 'an'], ['Space', 'sp'], ['Field', 'fi']].map(m => ({ btn: m[0], fn: S => { S.st.m = m[1]; } })),
+  init(S) { S.st.m = S.st.m || 'ti'; S.st.wt = S.st.wt || { ti: 1, an: 0, sp: 0, fi: 0 }; S.st.pos = jewelPositions(S.w, S.h, 15); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, P = st.pos; c.clearRect(0, 0, w, h);
+    for (const k in st.wt) st.wt[k] = lerp(st.wt[k], k === st.m ? 1 : 0, .07);
+    const W = st.wt;
+    if (W.ti > .02) P.forEach((p, i) => { const per = 3 + hsh(i) * 3, u = ((T + hsh(i + 4) * 9) % per) / per; c.globalAlpha = W.ti; for (let k = 0; k < 5; k++) { const uu = (u - k * .045 + 1) % 1, a = Math.sin(Math.PI * uu); c.fillStyle = 'rgba(232,212,139,' + a * (1 - k * .18) + ')'; c.beginPath(); c.arc(p[0] - k * 10, p[1], 3 + 6 * a * (1 - k * .15), 0, TAU); c.fill(); } c.globalAlpha = 1; });
+    if (W.an > .02) P.forEach((p, i) => { c.globalAlpha = W.an; c.strokeStyle = 'rgba(78,205,196,.5)'; c.beginPath(); c.arc(p[0], p[1], 9, 0, TAU); c.stroke(); for (let k = 0; k < 3; k++) { const a = k / 3 * TAU + i + T * .1, x = p[0] + Math.cos(a) * 22, y = p[1] + Math.sin(a) * 22; c.strokeStyle = 'rgba(78,205,196,.3)'; c.beginPath(); c.moveTo(p[0], p[1]); c.lineTo(x, y); c.stroke(); c.fillStyle = 'rgba(78,205,196,.6)'; c.beginPath(); c.arc(x, y, 3, 0, TAU); c.fill(); for (let m = 0; m < 3; m++) { const b = m / 3 * TAU + a; c.fillStyle = 'rgba(78,205,196,.25)'; c.fillRect(x + Math.cos(b) * 8, y + Math.sin(b) * 8, 1.6, 1.6); } } txt(c, '?', p[0], p[1], 'rgba(143,214,208,.9)', 12); c.globalAlpha = 1; });
+    if (W.sp > .02) { c.globalAlpha = W.sp; for (let i = 0; i < P.length; i++) for (let j = i + 1; j < P.length; j++) { c.strokeStyle = 'rgba(212,175,55,.14)'; c.beginPath(); c.moveTo(P[i][0], P[i][1]); c.lineTo(P[j][0], P[j][1]); c.stroke(); } P.forEach((p, i) => { c.strokeStyle = 'rgba(232,212,139,.8)'; c.beginPath(); c.arc(p[0], p[1], 14, 0, TAU); c.stroke(); P.forEach((q, j) => { if (j !== i) { c.fillStyle = 'rgba(255,240,190,.7)'; c.fillRect(p[0] + (q[0] - p[0]) * .06, p[1] + (q[1] - p[1]) * .06, 1.6, 1.6); } }); }); c.globalAlpha = 1; }
+    if (W.fi > .02) { c.globalAlpha = W.fi; haloGrad(c, w / 2, 0, h * .9, 'rgba(255,240,190,A)', .35); P.forEach((p, i) => { const g = c.createLinearGradient(w / 2, 0, p[0], p[1]); g.addColorStop(0, 'rgba(255,240,190,.28)'); g.addColorStop(1, 'rgba(255,240,190,0)'); c.strokeStyle = g; c.beginPath(); c.moveTo(w / 2, 0); c.lineTo(p[0], p[1]); c.stroke(); lotus(c, p[0], p[1] + 12, .6, .5 + .5 * Math.sin(T * .8 + i), .9); }); c.globalAlpha = 1; }
+    const cap = { ti: 'Time: everything arises and passes. Watch experience.', an: 'Analysis: each thing breaks into parts, and those into parts, and no core is found.', sp: 'Space: every node opens into every other.', fi: 'Field: a purified world held by vow, with light reaching each lotus.' };
+    S.cap(cap[st.m]);
+  }
+});
+
+</script>
+</body>
+</html>

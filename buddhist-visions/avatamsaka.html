@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfect Interpenetration: Avataṃsaka</title>
+<meta name="description" content="Twenty-one interactive visualizations of Huayan interpenetration: the ten gates, the golden lion, the ten coins, Indra&#x27;s net, dust and worlds, the ocean seal and more.">
+<style>
+  :root{
+    --bg:#07070d; --card:rgba(18,18,32,.88); --gold:#d4af37; --gold2:#e8d48b;
+    --teal:#4ecdc4; --text:#e8e6e3; --muted:#9a9690; --rose:#f0b6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  header{text-align:center;padding:3.2rem 1.25rem 1.6rem;background:linear-gradient(180deg,rgba(212,175,55,.09),transparent)}
+  header h1{font-weight:300;font-size:clamp(1.5rem,5vw,2.6rem);letter-spacing:.12em;color:var(--gold);margin-bottom:.7rem}
+  header p{color:var(--muted);max-width:760px;margin:0 auto;font-size:1.02rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.4rem}
+  nav a{color:var(--gold2);text-decoration:none;font:.86rem system-ui,sans-serif;padding:.4rem 1rem;border:1px solid rgba(212,175,55,.35);border-radius:2rem;transition:.2s}
+  nav a:hover{background:rgba(212,175,55,.15);border-color:var(--gold)}
+  main{max-width:1080px;margin:0 auto;padding:.5rem 1rem 3rem}
+  section{margin:2.6rem 0;background:var(--card);border:1px solid rgba(212,175,55,.13);border-radius:16px;padding:1.8rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  section>h2{font-weight:400;font-size:1.6rem;color:var(--gold);letter-spacing:.04em}
+  .sk{font-style:italic;color:var(--teal);font-size:.95rem;margin:.2rem 0 1rem}
+  section>p{margin-bottom:.9rem;font-size:1rem}
+  .principle{border-left:3px solid var(--gold);background:rgba(212,175,55,.06);color:var(--gold2);padding:.7rem 1rem;margin:1rem 0;font-style:italic}
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .8rem}
+  button,.tab{font:.85rem system-ui,sans-serif;background:transparent;border:1px solid rgba(212,175,55,.55);color:var(--gold2);padding:.4rem .95rem;border-radius:6px;cursor:pointer;transition:.2s}
+  button:hover{background:rgba(212,175,55,.16)}
+  .tab.active{background:rgba(212,175,55,.26);border-color:var(--gold2)}
+  .card{display:none}
+  .card.on{display:block}
+  .card h3{font-weight:400;font-size:1.2rem;color:var(--gold2);margin-bottom:.2rem}
+  .kind{font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+  .tabgroup{flex-basis:100%;font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .tabgroup:first-child{margin-top:0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.6rem;margin:1rem 0;font-size:.92rem}
+  .legend div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.65rem .9rem}
+  .legend b{color:var(--teal);font-weight:400}
+  .lead{color:var(--muted);font-size:.95rem;margin-bottom:.7rem}
+  .controls{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;align-items:center;margin:.5rem 0}
+  .controls label{display:flex;align-items:center;gap:.6rem;font:.82rem system-ui,sans-serif;color:var(--muted)}
+  .controls input[type=range]{width:min(240px,55vw);accent-color:var(--gold)}
+  .stage{position:relative;width:100%;height:clamp(300px,58vh,440px);border-radius:12px;overflow:hidden;background:#06060c;border:1px solid rgba(255,255,255,.07)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .cap{min-height:3.2em;margin-top:.7rem;color:var(--gold2);font-size:.97rem;font-style:italic}
+  .analogies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1rem 0}
+  .analogies div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1rem;font-size:.93rem}
+  .analogies b{color:var(--teal);font-weight:400}
+  footer{text-align:center;padding:2rem 1rem 3rem;color:var(--muted);font:.88rem system-ui,sans-serif;border-top:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){section{padding:1.3rem .9rem}.stage{height:clamp(280px,52vh,380px)}}
+
+  nav a[aria-current=page]{background:rgba(212,175,55,.22);border-color:var(--gold2)}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.6rem 0 .5rem}
+  .hub a{display:block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:1.3rem 1.2rem;transition:.2s}
+  .hub a:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .hub h2{font-weight:400;font-size:1.25rem;color:var(--gold);margin-bottom:.15rem}
+  .hub .sk{margin:0 0 .7rem}
+  .hub p{font-size:.95rem;color:var(--muted)}
+  .hub .count{display:block;margin-top:.8rem;font:.8rem system-ui,sans-serif;color:var(--gold2)}
+  .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin:2rem 0 0;font:.9rem system-ui,sans-serif}
+  .pager a{color:var(--gold2);text-decoration:none;border:1px solid rgba(212,175,55,.35);border-radius:2rem;padding:.4rem 1rem}
+  .pager a:hover{background:rgba(212,175,55,.15)}
+  a.inline{color:var(--teal)}
+  header h1{font-size:clamp(1.25rem,3.7vw,2.3rem)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <h1>EMPTINESS · INTERPENETRATION · PURE LAND</h1>
+  <p>Interactive contemplations on emptiness, interpenetration and the Pure Land. Each one is drawn live in your browser.</p>
+  <nav><a href="index.html">Home</a><a href="theravada.html">Early Buddhism</a><a href="heart-sutra.html">Emptiness</a><a href="avatamsaka.html" aria-current="page">Interpenetration</a><a href="pure-land.html">Pure Land</a><a href="three-visions.html">One reality</a><a href="combinations.html">Combinations</a></nav>
+</header>
+<main>
+<section id="avatamsaka">
+    <h2>Perfect Interpenetration: Avataṃsaka</h2>
+    <p class="sk">Indrajāla · Fazang's hall of mirrors · dharmadhātu</p>
+    <p>Madhyamaka asks whether an independently existing thing can be found. Huayan turns the question around and looks at what the world is like once nothing stands alone: everything contains and reflects everything else, without obstruction. Its master image is 事事無礙, "phenomena do not obstruct phenomena", the fourth of the four dharmadhātus. Fazang is said to have shown this to Empress Wu by surrounding a Buddha image and a lamp with mirrors, and by counting ten coins. Indra's net, a web of jewels that each reflect all the others, is the classic image.</p>
+    <p>Twenty-one visualizations follow, sorted by what they show. Each one is tagged so you can tell where it comes from.</p>
+    <div class="legend">
+      <div><b>Classical.</b> The image or teaching comes from Huayan sources.</div>
+      <div><b>Classical, modern rendering.</b> The idea is in the sources and the drawing is ours.</div>
+      <div><b>Modern analogy.</b> Our own comparison, such as fractals, that the tradition does not teach.</div>
+    </div>
+    <div class="tabs" data-group="ava"></div>
+    <div class="cards" data-group="ava"></div>
+  </section>
+<div class="pager"><a href="heart-sutra.html">&larr; Emptiness</a><a href="pure-land.html">Pure Land &rarr;</a></div>
+</main>
+<footer>
+  <p>Contemplative visualizations for study and meditation. Everything on this page is drawn procedurally in your browser.</p>
+  <p style="margin-top:.5rem">May all beings realize the luminous openness of mind.</p>
+</footer>
+<script>
+/* ================= utilities ================= */
+const TAU = Math.PI * 2;
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const tri = x => { x = x % 1; if (x < 0) x += 1; return x < .5 ? x * 2 : 2 - x * 2; };
+function txt(c, s, x, y, col, size, align) {
+  c.fillStyle = col; c.font = (size || 13) + 'px system-ui, sans-serif';
+  c.textAlign = align || 'center'; c.textBaseline = 'middle'; c.fillText(s, x, y);
+}
+
+/* ================= starfield ================= */
+(function () {
+  const cv = document.getElementById('stars'), c = cv.getContext('2d');
+  let w, h, st = [];
+  function rs() {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    st = Array.from({ length: 140 }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, a: Math.random() * .5 + .15, p: Math.random() * TAU }));
+  }
+  rs(); addEventListener('resize', rs);
+  (function d(t) {
+    c.clearRect(0, 0, w, h);
+    for (const s of st) { c.beginPath(); c.arc(s.x, s.y, s.r, 0, TAU); c.fillStyle = 'rgba(220,210,180,' + (s.a * (.6 + .4 * Math.sin(t * .001 + s.p))) + ')'; c.fill(); }
+    requestAnimationFrame(d);
+  })(0);
+})();
+
+/* ================= visualization framework ================= */
+const VIZ = [];
+const GROUP_ORDER = { th: ['Breath', 'Body and feeling', 'Mind and self', 'Insight', 'Concentration', 'Death'], mix: ['Heart and net', 'Death and the net', 'Four grammars'], ava: ['Doctrine', "Fazang's demonstrations", 'Scale and time', 'Entering one into all', 'The net', 'Practice'] };
+function addViz(group, spec) {
+  const tabs = document.querySelector('.tabs[data-group=' + group + ']');
+  const cards = document.querySelector('.cards[data-group=' + group + ']');
+  if (!tabs._g) {
+    tabs._g = {};
+    (GROUP_ORDER[group] || []).forEach(n => { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = n; tabs.appendChild(gl); tabs._g[n] = gl; });
+  }
+  const tb = document.createElement('button'); tb.className = 'tab'; tb.textContent = spec.tab;
+  if (spec.group) {
+    if (!tabs._g[spec.group]) { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = spec.group; tabs.appendChild(gl); tabs._g[spec.group] = gl; }
+    const prev = tabs._g[spec.group]; prev.after(tb); tabs._g[spec.group] = tb;
+  } else tabs.appendChild(tb);
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = '<h3></h3><p class="kind"></p><p class="lead"></p><div class="controls"></div><div class="stage"></div><p class="cap"></p>';
+  card.querySelector('h3').textContent = spec.title;
+  const kindEl = card.querySelector('.kind');
+  if (spec.kind) kindEl.textContent = spec.kind; else kindEl.remove();
+  card.querySelector('.lead').textContent = spec.lead;
+  cards.appendChild(card);
+  tb.onclick = () => {
+    tabs.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    [...cards.children].forEach(b => b.classList.remove('on'));
+    tb.classList.add('active'); card.classList.add('on');
+  };
+  if (tabs.querySelector('.tab') === tb) tb.onclick();
+  const stage = card.querySelector('.stage'), ctl = card.querySelector('.controls'), capEl = card.querySelector('.cap');
+  const cv = document.createElement('canvas'); stage.appendChild(cv);
+  const S = { spec, card, cv, ctx: cv.getContext('2d'), w: 0, h: 0, dpr: 1, mx: -999, my: -999, t: 0, st: {}, vis: false, play: null, capText: '' };
+  S.cap = s => { if (s !== S.capText) { S.capText = s; capEl.textContent = s; } };
+  (spec.controls || []).forEach(c => {
+    if (c.btn) {
+      const b = document.createElement('button'); b.textContent = c.btn; b.onclick = () => c.fn(S, b); ctl.appendChild(b);
+    } else {
+      const lab = document.createElement('label'); const sp = document.createElement('span'); sp.textContent = c.label; lab.appendChild(sp);
+      const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step || .01; inp.value = c.val;
+      S.st[c.k] = +c.val; lab.appendChild(inp); ctl.appendChild(lab);
+      inp.oninput = () => { S.st[c.k] = +inp.value; if (S.play && S.play.k === c.k) { S.play.on = false; S.play.btn.textContent = 'Play'; } };
+      if (c.play) {
+        const pb = document.createElement('button'); pb.textContent = 'Play'; ctl.appendChild(pb);
+        S.play = { k: c.k, min: +c.min, max: +c.max, period: c.play, on: false, btn: pb, inp, t0: 0 };
+        pb.onclick = () => {
+          const P = S.play; P.on = !P.on; pb.textContent = P.on ? 'Pause' : 'Play';
+          if (P.on) { const nrm = (S.st[P.k] - P.min) / (P.max - P.min); P.t0 = S.t - (nrm / 2) * P.period; }
+        };
+      }
+    }
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (r.width < 2) return;
+    S.dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * S.dpr); cv.height = Math.round(r.height * S.dpr);
+    S.w = r.width; S.h = r.height;
+    S.ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
+    if (spec.init) spec.init(S);
+  }
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(es => es.forEach(e => S.vis = e.isIntersecting)).observe(stage);
+  cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', () => { S.mx = -999; S.my = -999; });
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top;
+    if (spec.click) spec.click(S, S.mx, S.my);
+  });
+  S.tabBtn = tb;
+  VIZ.push(S);
+  return S;
+}
+function showViz(title) {
+  const S = VIZ.find(v => v.spec.title === title || v.spec.tab === title);
+  if (!S) return;
+  S.tabBtn.click();
+  S.card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function frame(now) {
+  const T = now / 1000;
+  for (const S of VIZ) {
+    if (!S.vis || !S.w || S.card.offsetParent === null) {
+      if (S.wasActive) { S.wasActive = false; if (S.spec.hide) S.spec.hide(S); }
+      continue;
+    }
+    S.wasActive = true;
+    S.t = T;
+    if (S.play && S.play.on) {
+      const P = S.play; const v = P.min + tri((S.t - P.t0) / P.period) * (P.max - P.min);
+      S.st[P.k] = v; P.inp.value = v;
+    }
+    const c = S.ctx; c.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.setLineDash([]);
+    try { S.spec.draw(S); } catch (e) { console.error(e); }
+  }
+  requestAnimationFrame(frame);
+})(0);
+
+/* shared lotus drawing */
+function lotus(c, x, y, s, open, alpha) {
+  c.save(); c.translate(x, y); c.globalAlpha = alpha;
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 5 : 7;
+    for (let k = 0; k < n; k++) {
+      const f = (k / (n - 1)) * 2 - 1, th = f * (.25 + .9 * open) * (layer ? .7 : 1);
+      c.save(); c.rotate(th);
+      const L = (layer ? 20 : 28) * s * (.8 + .2 * open), W = (6 + 4 * open) * s;
+      c.beginPath(); c.ellipse(0, -L * .55, W, L * .55, 0, 0, TAU);
+      const g = c.createLinearGradient(0, 0, 0, -L);
+      g.addColorStop(0, 'rgba(240,170,200,.95)');
+      g.addColorStop(1, layer ? 'rgba(255,225,235,.95)' : 'rgba(215,120,170,.85)');
+      c.fillStyle = g; c.fill(); c.restore();
+    }
+  }
+  if (open > .3) {
+    const r = 10 * s * open, g = c.createRadialGradient(0, -8 * s, 0, 0, -8 * s, r * 2.4);
+    g.addColorStop(0, 'rgba(255,245,200,' + (.9 * open) + ')'); g.addColorStop(1, 'rgba(255,220,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, -8 * s, r * 2.4, 0, TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= AVATAMSAKA 1: Indra's net (feedback recursion) ================= */
+addViz('ava', {
+  tab: "Indra's net", title: "Indra's Net", kind: 'Classical', group: 'The net',
+  lead: 'Every jewel contains an image of the whole net, including the jewels inside its own reflections. Hover or tap a jewel and it swells.',
+  controls: [{ k: 'sz', label: 'Jewel size', min: .6, max: 1.4, val: 1 }],
+  init(S) {
+    const b = document.createElement('canvas'); b.width = S.cv.width; b.height = S.cv.height; S.st.buf = b;
+    const cols = Math.max(3, Math.round(S.w / 160)), rows = 3, nodes = [];
+    for (let r = 0; r < rows; r++) for (let q = 0; q < cols; q++) {
+      nodes.push({ bx: S.w * (q + .5 + (r % 2 ? .5 : 0)) / (cols + .5) + S.w * .03, by: S.h * (r + .7) / (rows + .4), ph: rand(0, TAU) });
+    }
+    S.st.nodes = nodes; S.st.base = Math.min(S.w / (cols + .5) * .36, S.h / (rows + .4) * .4); S.st.sp = S.w / (cols + .5);
+  },
+  click(S, x, y) { S.st.pulse = { x, y, t: S.t }; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, bf = S.st.buf, N = S.st.nodes;
+    c.fillStyle = '#04040a'; c.fillRect(0, 0, w, h);
+    N.forEach(n => { n.x = n.bx + Math.sin(t * .5 + n.ph) * 6; n.y = n.by + Math.cos(t * .4 + n.ph) * 5; });
+    c.strokeStyle = 'rgba(212,175,55,.2)'; c.beginPath();
+    for (let i = 0; i < N.length; i++) for (let j = i + 1; j < N.length; j++) if (Math.hypot(N[i].x - N[j].x, N[i].y - N[j].y) < S.st.sp * 1.25) { c.moveTo(N[i].x, N[i].y); c.lineTo(N[j].x, N[j].y); }
+    c.stroke();
+    let hov = -1, best = 1e9;
+    N.forEach((n, i) => { const d = Math.hypot(n.x - S.mx, n.y - S.my); if (d < 60 && d < best) { best = d; hov = i; } });
+    N.forEach((n, i) => {
+      let r = S.st.base * S.st.sz * (i === hov ? 1.35 : 1);
+      c.save(); c.beginPath(); c.arc(n.x, n.y, r, 0, TAU); c.clip();
+      const g = c.createRadialGradient(n.x - r * .3, n.y - r * .3, 0, n.x, n.y, r);
+      g.addColorStop(0, '#2a2438'); g.addColorStop(1, '#0a0812'); c.fillStyle = g; c.fillRect(n.x - r, n.y - r, 2 * r, 2 * r);
+      c.globalAlpha = .94; c.drawImage(bf, n.x - r, n.y - r * h / w, 2 * r, 2 * r * h / w);
+      c.restore();
+      c.beginPath(); c.arc(n.x, n.y, r, 0, TAU); c.strokeStyle = i === hov ? 'rgba(255,240,180,.95)' : 'rgba(232,212,139,.6)'; c.lineWidth = 1.6; c.stroke(); c.lineWidth = 1;
+      c.beginPath(); c.arc(n.x - r * .35, n.y - r * .4, r * .12, 0, TAU); c.fillStyle = 'rgba(255,255,255,.55)'; c.fill();
+    });
+    if (S.st.pulse) {
+      const dt = t - S.st.pulse.t;
+      if (dt < 1.5) { c.strokeStyle = 'rgba(255,240,180,' + (.6 * (1 - dt / 1.5)) + ')'; c.beginPath(); c.arc(S.st.pulse.x, S.st.pulse.y, dt * 260, 0, TAU); c.stroke(); }
+    }
+    const b = bf.getContext('2d'); b.setTransform(1, 0, 0, 1, 0, 0); b.clearRect(0, 0, bf.width, bf.height); b.drawImage(S.cv, 0, 0);
+    S.cap('Each jewel reflects every other jewel, and each reflected jewel reflects them again. There is no privileged original.');
+  }
+});
+
+/* ================= AVATAMSAKA 2: hall of mirrors ================= */
+addViz('ava', {
+  tab: 'Hall of mirrors', title: "Fazang's Hall of Mirrors", kind: 'Classical', group: "Fazang's demonstrations",
+  lead: 'A lamp inside a room of mirrors. Every wall makes another room with another lamp. Move the lamp with your finger or cursor.',
+  controls: [
+    { k: 'n', label: 'Mirrors', min: 4, max: 12, val: 8, step: 1 },
+    { k: 'dep', label: 'Reflections', min: 1, max: 4, val: 3, step: 1 }
+  ],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, n = S.st.n, cx = w / 2, cy = h / 2, R = Math.min(w, h) * .19;
+    c.fillStyle = '#05050b'; c.fillRect(0, 0, w, h);
+    let dep = S.st.dep; const est = d => { let s = 1, m = 1; for (let k = 1; k <= d; k++) { m *= (n - 1); s += m * n / (n - 1); } return s * n; };
+    while (dep > 1 && est(dep) > 9000) dep--;
+    const V = []; for (let i = 0; i < n; i++) { const a = i / n * TAU - Math.PI / 2; V.push([cx + Math.cos(a) * R, cy + Math.sin(a) * R]); }
+    let sx = cx + Math.cos(t * .4) * R * .25, sy = cy + Math.sin(t * .5) * R * .2;
+    if (S.mx > 0) { const dx = S.mx - cx, dy = S.my - cy, d = Math.hypot(dx, dy), m = Math.min(d, R * .72); sx = cx + (d ? dx / d * m : 0); sy = cy + (d ? dy / d * m : 0); }
+    const apply = (T, p) => [T[0] * p[0] + T[2] * p[1] + T[4], T[1] * p[0] + T[3] * p[1] + T[5]];
+    const refl = (P, Q) => {
+      let dx = Q[0] - P[0], dy = Q[1] - P[1]; const l = Math.hypot(dx, dy); dx /= l; dy /= l;
+      const nx = -dy, ny = dx, k = P[0] * nx + P[1] * ny;
+      return [1 - 2 * nx * nx, -2 * nx * ny, -2 * nx * ny, 1 - 2 * ny * ny, 2 * k * nx, 2 * k * ny];
+    };
+    const comp = (M, T) => [M[0] * T[0] + M[2] * T[1], M[1] * T[0] + M[3] * T[1], M[0] * T[2] + M[2] * T[3], M[1] * T[2] + M[3] * T[3],
+      M[0] * T[4] + M[2] * T[5] + M[4], M[1] * T[4] + M[3] * T[5] + M[5]];
+    const polys = [], dots = [];
+    for (let i = 0; i <= dep; i++) { polys.push(new Path2D()); dots.push(new Path2D()); }
+    (function rec(T, d, last) {
+      const vs = V.map(v => apply(T, v)), pp = polys[d];
+      vs.forEach((v, i) => { const u = vs[(i + 1) % n]; pp.moveTo(v[0], v[1]); pp.lineTo(u[0], u[1]); });
+      const s = apply(T, [sx, sy]); dots[d].moveTo(s[0] + 3, s[1]); dots[d].arc(s[0], s[1], d ? 3 : 0, 0, TAU);
+      if (d < dep) for (let j = 0; j < n; j++) { if (j === last) continue; rec(comp(refl(vs[j], vs[(j + 1) % n]), T), d + 1, j); }
+    })([1, 0, 0, 1, 0, 0], 0, -1);
+    for (let d = dep; d >= 0; d--) {
+      c.strokeStyle = 'rgba(190,205,225,' + (d ? .5 / Math.pow(d + 1, 1.15) : .95) + ')'; c.lineWidth = d ? 1 : 2.2; c.stroke(polys[d]);
+      if (d) { c.fillStyle = 'rgba(255,232,160,' + (.95 / Math.pow(d + 1, .8)) + ')'; c.fill(dots[d]); }
+    }
+    c.lineWidth = 1;
+    c.fillStyle = 'rgba(212,175,55,.07)'; c.beginPath(); V.forEach((v, i) => i ? c.lineTo(v[0], v[1]) : c.moveTo(v[0], v[1])); c.closePath(); c.fill();
+    const g = c.createRadialGradient(sx, sy, 0, sx, sy, R * .5);
+    g.addColorStop(0, 'rgba(255,245,200,.95)'); g.addColorStop(.3, 'rgba(255,215,120,.4)'); g.addColorStop(1, 'rgba(255,215,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(sx, sy, R * .5, 0, TAU); c.fill();
+    c.beginPath(); c.arc(sx, sy, 6, 0, TAU); c.fillStyle = '#fff8dc'; c.fill();
+    S.cap('One lamp, endlessly many lamps. Move the lamp and every reflection moves: one in many, many in one.');
+  }
+});
+
+/* ================= AVATAMSAKA 3: fractal dive ================= */
+addViz('ava', {
+  tab: 'Fractal dive', title: 'Zooming Into the Whole', kind: 'Modern analogy', group: 'Scale and time',
+  lead: 'A Mandelbrot dive toward a miniature copy of the entire set. At every depth the part contains the pattern of the whole.',
+  controls: [{ k: 'z', label: 'Depth', min: 0, max: 1, val: 0, step: .001, play: 40 }],
+  init(S) { S.st.off = document.createElement('canvas'); S.st.lastz = -1; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, z = S.st.z, off = S.st.off;
+    const ow = Math.min(240, Math.ceil(w * .42)), oh = Math.ceil(ow * h / w);
+    if (Math.abs(z - S.st.lastz) > .0015 || off.width !== ow) {
+      S.st.lastz = z; off.width = ow; off.height = oh;
+      const wd = 3.4 * Math.pow(10, -4.6 * z), ht = wd * h / w, tx = -1.7489, c0 = -.6;
+      const cx = tx + (c0 - tx) * (wd / 3.4), cy = 0, it = 120 + Math.floor(z * 380);
+      const g = off.getContext('2d'), img = g.createImageData(ow, oh), D = img.data;
+      for (let py = 0; py < oh; py++) {
+        const y0 = cy + (py / oh - .5) * ht;
+        for (let px = 0; px < ow; px++) {
+          const x0 = cx + (px / ow - .5) * wd; let x = 0, y = 0, x2 = 0, y2 = 0, i = 0;
+          while (i < it && x2 + y2 < 256) { y = 2 * x * y + y0; x = x2 - y2 + x0; x2 = x * x; y2 = y * y; i++; }
+          const o = (py * ow + px) * 4;
+          if (i >= it) { D[o] = 5; D[o + 1] = 5; D[o + 2] = 11; }
+          else {
+            const mu = i + 1 - Math.log(Math.log(Math.sqrt(x2 + y2))) / Math.LN2, m = .5 + .5 * Math.sin(mu * .35), br = .3 + .7 * (.5 + .5 * Math.sin(mu * .9));
+            D[o] = (232 * m + 78 * (1 - m)) * br; D[o + 1] = (190 * m + 205 * (1 - m)) * br; D[o + 2] = (90 * m + 196 * (1 - m)) * br;
+          }
+          D[o + 3] = 255;
+        }
+      }
+      g.putImageData(img, 0, 0);
+    }
+    c.imageSmoothingEnabled = true; c.drawImage(off, 0, 0, w, h);
+    txt(c, 'zoom x' + Math.round(Math.pow(10, 4.6 * z)).toLocaleString(), 14, h - 16, 'rgba(232,212,139,.85)', 12, 'left');
+    S.cap(z < .05 ? 'The whole set. Press Play to dive toward the small copy at its edge.' : 'Look for miniature copies of the whole hiding inside the part.');
+  }
+});
+
+
+/* ================= AVATAMSAKA x-helpers ================= */
+const GATES = [
+  { zh: '同時', full: '同時具足相應門', py: 'tóngshí jùzú xiāngyìng mén', gloss: 'simultaneous, complete correspondence', viz: 'One Touch', why: 'Everything arises together, so a change anywhere is a change everywhere.' },
+  { zh: '廣狹', full: '廣狹自在無礙門', py: 'guǎngxiá zìzài wú\'ài mén', gloss: 'broad and narrow, free and unobstructed', viz: 'No Absolute Scale', why: 'Large and small do not block each other, so the vast fits in the tiny.' },
+  { zh: '一多', full: '一多相容不同門', py: 'yī duō xiāngróng bùtóng mén', gloss: 'one and many contain each other yet stay different', viz: 'One and Many', why: 'The one holds the many and the many hold the one, without merging.' },
+  { zh: '相即', full: '諸法相即自在門', py: 'zhūfǎ xiāngjí zìzài mén', gloss: 'all things identical with each other, freely', viz: 'The Golden Lion', why: 'Gold is the lion and the lion is gold, part by part.' },
+  { zh: '隱顯', full: '隱密顯了俱成門', py: 'yǐnmì xiǎnliǎo jùchéng mén', gloss: 'hidden and manifest both accomplished', viz: 'Hidden and Manifest', why: 'What shows and what is concealed depend on where you stand.' },
+  { zh: '微細', full: '微細相容安立門', py: 'wēixì xiāngróng ānlì mén', gloss: 'the subtle and fine contain one another, each established', viz: 'Dust and Worlds', why: 'A single mote can hold worlds, and each world holds motes.' },
+  { zh: '帝網', full: '因陀羅網境界門', py: 'yīntuóluó wǎng jìngjiè mén', gloss: 'the realm of Indra\'s net', viz: "Indra's Net", why: 'Every jewel reflects every other jewel, and the reflections reflect again.' },
+  { zh: '託事', full: '託事顯法生解門', py: 'tuōshì xiǎnfǎ shēngjiě mén', gloss: 'using events to reveal the dharma and give rise to understanding', viz: 'The Rafter and the Building', why: 'Familiar things such as a rafter and a house teach the principle.' },
+  { zh: '十世', full: '十世隔法異成門', py: 'shíshì géfǎ yìchéng mén', gloss: 'the ten times, separate yet each accomplished', viz: 'The Ten Times', why: 'Past, present and future each contain the others.' },
+  { zh: '主伴', full: '主伴圓明具德門', py: 'zhǔbàn yuánmíng jùdé mén', gloss: 'lord and companions, perfectly luminous, complete in virtue', viz: 'The Ten Coins', why: 'Any one thing can be the center while the rest accompany it.' }
+];
+const HUE = (h, s, l, a) => 'hsla(' + h + ',' + s + '%,' + l + '%,' + (a === undefined ? 1 : a) + ')';
+function shapePath(c, k, x, y, s) {
+  c.beginPath();
+  if (k === 0) c.arc(x, y, s, 0, TAU);
+  else if (k === 1) c.rect(x - s * .85, y - s * .85, s * 1.7, s * 1.7);
+  else {
+    const n = [0, 0, 3, 4, 6][k], rot = k === 3 ? Math.PI / 4 : -Math.PI / 2;
+    for (let i = 0; i < n; i++) { const a = rot + i / n * TAU; i ? c.lineTo(x + Math.cos(a) * s * 1.1, y + Math.sin(a) * s * 1.1) : c.moveTo(x + Math.cos(a) * s * 1.1, y + Math.sin(a) * s * 1.1); }
+    c.closePath();
+  }
+}
+
+/* ================= AVATAMSAKA x-gates ================= */
+addViz('ava', {
+  tab: 'Ten gates', title: 'The Ten Mysterious Gates', kind: 'Classical', group: 'Doctrine',
+  lead: 'Huayan lists ten ways that things contain one another. Tap a gate to read its name, then open the visualization paired with it.',
+  controls: [{ btn: 'Open the paired visualization', fn: S => showViz(GATES[S.st.sel].viz) }],
+  init(S) { S.st.sel = S.st.sel === undefined ? 6 : S.st.sel; },
+  click(S, x, y) { (S.st.pos || []).forEach((p, i) => { if (Math.hypot(x - p.x, y - p.y) < 32) S.st.sel = i; }); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, cx = w / 2, cy = h * .5, R = Math.min(w * .36, h * .38), sel = S.st.sel;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    S.st.pos = GATES.map((g, i) => { const a = -Math.PI / 2 + i / 10 * TAU; return { x: cx + Math.cos(a) * R * 1.25, y: cy + Math.sin(a) * R }; });
+    const P = S.st.pos;
+    c.lineWidth = 1;
+    for (let i = 0; i < 10; i++) for (let j = i + 1; j < 10; j++) {
+      const on = i === sel || j === sel;
+      c.strokeStyle = on ? 'rgba(232,212,139,.4)' : 'rgba(212,175,55,.07)';
+      c.beginPath(); c.moveTo(P[i].x, P[i].y); c.lineTo(P[j].x, P[j].y); c.stroke();
+    }
+    const gl = c.createRadialGradient(cx, cy, 0, cx, cy, R * .5);
+    gl.addColorStop(0, 'rgba(255,240,190,' + (.35 + .1 * Math.sin(t * 1.6)) + ')'); gl.addColorStop(1, 'rgba(255,240,190,0)');
+    c.fillStyle = gl; c.beginPath(); c.arc(cx, cy, R * .5, 0, TAU); c.fill();
+    txt(c, '事事無礙', cx, cy - 6, '#e8d48b', 22);
+    txt(c, 'phenomena do not obstruct phenomena', cx, cy + 20, 'rgba(154,150,144,.95)', 11);
+    P.forEach((p, i) => {
+      const on = i === sel;
+      c.beginPath(); c.arc(p.x, p.y, on ? 30 : 26, 0, TAU);
+      c.fillStyle = on ? 'rgba(212,175,55,.35)' : 'rgba(18,18,32,.95)'; c.fill();
+      c.strokeStyle = on ? '#f0dc8c' : 'rgba(212,175,55,.55)'; c.lineWidth = on ? 2 : 1; c.stroke();
+      txt(c, GATES[i].zh, p.x, p.y - 4, on ? '#fff4d0' : '#e8d48b', 14);
+      txt(c, String(i + 1), p.x, p.y + 12, 'rgba(154,150,144,.95)', 10);
+    });
+    const g = GATES[sel];
+    S.cap((sel + 1) + '. ' + g.full + ' (' + g.py + '): ' + g.gloss + '. ' + g.why + ' Paired here with "' + g.viz + '". Translations vary between scholars, and the pairing is our own reading.');
+  }
+});
+
+/* ================= AVATAMSAKA x-dharmadhatus ================= */
+addViz('ava', {
+  tab: 'Four dharmadhātus', title: 'The Four Dharmadhātus', kind: 'Classical', group: 'Doctrine',
+  lead: 'Huayan describes four ways of seeing the same world. Slide through them and watch five things go from separate, to one field, to each holding the field, to each holding every other.',
+  controls: [{ k: 's', label: 'Realm', min: 0, max: 3, val: 0, step: .01, play: 40 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, s = S.st.s, sz = Math.min(w * .065, h * .12);
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const W = k => clamp(1 - Math.abs(s - k)), w0 = W(0), w1 = W(1), w2 = W(2), w3 = W(3);
+    const xs = [0, 1, 2, 3, 4].map(k => ({ x: w * (.14 + .18 * k), y: h * .5 + Math.sin(k * 1.7) * h * .08 }));
+    const field = .95 * (w1 + w2 + .7 * w3);
+    if (field > .01) {
+      const g = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * .6);
+      g.addColorStop(0, 'rgba(255,236,170,' + (field * .55) + ')'); g.addColorStop(1, 'rgba(212,175,55,' + (field * .12) + ')');
+      c.fillStyle = g; c.fillRect(0, 0, w, h);
+      c.strokeStyle = 'rgba(255,240,190,' + (field * .12) + ')';
+      for (let i = 0; i < 9; i++) { c.beginPath(); c.moveTo(0, h * (.1 + i * .1) + Math.sin(t + i) * 5); c.lineTo(w, h * (.1 + i * .1) + Math.cos(t * .8 + i) * 5); c.stroke(); }
+    }
+    if (w3 > .01) {
+      c.strokeStyle = 'rgba(232,212,139,' + (.35 * w3) + ')';
+      for (let i = 0; i < 5; i++) for (let j = i + 1; j < 5; j++) { c.beginPath(); c.moveTo(xs[i].x, xs[i].y); c.lineTo(xs[j].x, xs[j].y); c.stroke(); }
+    }
+    xs.forEach((p, k) => {
+      const hue = 25 + k * 55;
+      if (w0 > .01) { shapePath(c, k, p.x, p.y, sz); c.fillStyle = HUE(hue, 65, 50, w0); c.fill(); }
+      if (w2 + w3 > .01) { shapePath(c, k, p.x, p.y, sz); c.fillStyle = 'rgba(255,240,190,' + ((w2 + w3) * .3) + ')'; c.fill(); }
+      const ol = w0 * .9 + (w2 + w3) * .95;
+      if (ol > .01) { shapePath(c, k, p.x, p.y, sz); c.strokeStyle = w0 > .3 ? 'rgba(255,255,255,' + ol * .7 + ')' : HUE(hue, 70, 72, ol); c.lineWidth = 1.6; c.stroke(); }
+      if (w3 > .01) {
+        xs.forEach((q, j) => {
+          if (j === k) return;
+          const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy) || 1;
+          shapePath(c, j, p.x + dx / d * sz * .42, p.y + dy / d * sz * .42, sz * .17);
+          c.fillStyle = HUE(25 + j * 55, 70, 70, .85 * w3); c.fill();
+        });
+      }
+    });
+    if (w1 > .3) txt(c, 'one field', w / 2, h * .16, 'rgba(255,244,210,' + w1 + ')', 15);
+    if (w0 > .3) txt(c, 'many separate things', w / 2, h * .16, 'rgba(232,212,139,' + w0 + ')', 15);
+    if (w2 > .3) txt(c, 'the field in every thing', w / 2, h * .16, 'rgba(255,244,210,' + w2 + ')', 15);
+    if (w3 > .3) txt(c, 'every thing in every thing', w / 2, h * .16, 'rgba(255,244,210,' + w3 + ')', 15);
+    S.cap(s < .5 ? '事法界 (shì fǎjiè), the realm of phenomena: separate things, each with its own boundary.'
+      : s < 1.5 ? '理法界 (lǐ fǎjiè), the realm of principle: seen through principle, the boundaries give way to one field.'
+      : s < 2.5 ? '理事無礙 (lǐ shì wú’ài), principle and phenomena unobstructed: the whole field is present in each thing, and each thing keeps its shape.'
+      : '事事無礙 (shì shì wú’ài), phenomena unobstructed by phenomena: each thing, being the field, holds and reflects every other.');
+  }
+});
+
+/* ================= AVATAMSAKA x-coins ================= */
+addViz('ava', {
+  tab: 'Ten coins', title: 'The Ten Coins', kind: 'Classical', group: "Fazang's demonstrations",
+  lead: 'Fazang counts ten coins to show that any one can be the center while the other nine accompany it, and that every coin can take either role. Tap a coin.',
+  controls: [{ btn: 'Back to the row', fn: S => { S.st.p = -1; } }],
+  init(S) {
+    if (S.st.p === undefined) S.st.p = -1;
+    S.st.c = Array.from({ length: 10 }, (_, i) => ({ x: S.w * (.15 + .175 * (i % 5)), y: S.h * (i < 5 ? .34 : .66) }));
+  },
+  click(S, x, y) { S.st.c.forEach((c, i) => { if (Math.hypot(x - c.x, y - c.y) < S.st.r + 8) S.st.p = i; }); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, p = S.st.p, r = Math.min(w * .055, h * .1); S.st.r = r * 1.1;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const ring = Math.min(w * .36, h * .36);
+    S.st.c.forEach((k, i) => {
+      let tx, ty;
+      if (p < 0) { tx = w * (.15 + .175 * (i % 5)); ty = h * (i < 5 ? .34 : .66); }
+      else if (i === p) { tx = w / 2; ty = h / 2; }
+      else { const o = (i - p - 1 + 10) % 10, a = -Math.PI / 2 + o / 9 * TAU; tx = w / 2 + Math.cos(a) * ring * 1.45; ty = h / 2 + Math.sin(a) * ring; }
+      k.x = lerp(k.x, tx, .1); k.y = lerp(k.y, ty, .1);
+    });
+    if (p >= 0) {
+      const pc = S.st.c[p];
+      S.st.c.forEach((k, i) => { if (i !== p) { c.strokeStyle = 'rgba(232,212,139,.22)'; c.beginPath(); c.moveTo(pc.x, pc.y); c.lineTo(k.x, k.y); c.stroke(); } });
+      const g = c.createRadialGradient(pc.x, pc.y, 0, pc.x, pc.y, r * 3);
+      g.addColorStop(0, 'rgba(255,240,190,.4)'); g.addColorStop(1, 'rgba(255,240,190,0)'); c.fillStyle = g; c.beginPath(); c.arc(pc.x, pc.y, r * 3, 0, TAU); c.fill();
+    }
+    let hov = -1; S.st.c.forEach((k, i) => { if (Math.hypot(S.mx - k.x, S.my - k.y) < r + 8) hov = i; });
+    S.st.c.forEach((k, i) => {
+      const rr = (i === p ? r * 1.5 : r) * (i === hov ? 1.08 : 1);
+      const g = c.createRadialGradient(k.x - rr * .3, k.y - rr * .3, 0, k.x, k.y, rr);
+      g.addColorStop(0, '#f4dc8e'); g.addColorStop(.7, '#c9a13a'); g.addColorStop(1, '#8b6d1e');
+      c.beginPath(); c.arc(k.x, k.y, rr, 0, TAU); c.fillStyle = g; c.fill();
+      c.strokeStyle = i === p ? '#fff4d0' : 'rgba(80,58,10,.9)'; c.lineWidth = i === p ? 2.5 : 1.5; c.stroke();
+      c.fillStyle = '#1a1206'; c.fillRect(k.x - rr * .22, k.y - rr * .22, rr * .44, rr * .44);
+      txt(c, String(i + 1), k.x, k.y - rr * .62, '#3a2a06', Math.max(10, rr * .42));
+    });
+    if (p >= 0) txt(c, 'the one', S.st.c[p].x, S.st.c[p].y + r * 2.1, '#fff4d0', 12);
+    S.cap(p < 0 ? 'Ten coins in a row. None is central yet. Tap one.'
+      : 'Coin ' + (p + 1) + ' is the one, and the other nine are its companions. Tap another and every relation reorganizes around it. No coin is the center by nature.');
+  }
+});
+
+/* ================= AVATAMSAKA x-lion ================= */
+(function () {
+  const NAMES = { 1: 'mane', 2: 'face', 3: 'eye', 4: 'body', 5: 'front paw', 6: 'hind paw', 7: 'tail', 8: 'tail tuft', 9: 'a single hair' };
+  const FORM = { 1: [190, 112, 40], 2: [226, 172, 92], 3: [250, 250, 245], 4: [170, 120, 58], 5: [146, 88, 46], 6: [126, 78, 44], 7: [204, 146, 66], 8: [238, 200, 110], 9: [255, 214, 130] };
+  const GOLDC = [238, 192, 72];
+  addViz('ava', {
+    tab: 'Golden lion', title: 'The Golden Lion', kind: 'Classical', group: "Fazang's demonstrations",
+    lead: 'Fazang showed the court a golden lion. Touch the eye, a paw or a single hair: the whole lion lights, because each part is entirely gold. Slide between lion-form and gold.',
+    controls: [{ k: 'm', label: 'Lion-form to gold', min: 0, max: 1, val: .35, play: 24 }],
+    init(S) {
+      const W = Math.ceil(S.w), H = Math.ceil(S.h), o = document.createElement('canvas'); o.width = W; o.height = H;
+      const g = o.getContext('2d'), u = Math.min(W * .32, H * .62), cx = W * .43, cy = H * .5;
+      const fill = (id, fn) => { g.fillStyle = 'rgb(' + id + ',0,0)'; g.strokeStyle = 'rgb(' + id + ',0,0)'; g.beginPath(); fn(); };
+      fill(7, () => { g.lineWidth = u * .07; g.lineCap = 'round'; g.moveTo(cx + u * 1.05, cy + u * .05); g.bezierCurveTo(cx + u * 1.5, cy + u * .1, cx + u * 1.6, cy - u * .3, cx + u * 1.35, cy - u * .5); g.stroke(); });
+      fill(4, () => { g.ellipse(cx + u * .38, cy + u * .1, u * .78, u * .42, 0, 0, TAU); g.fill(); });
+      fill(6, () => { g.rect(cx + u * .7, cy + u * .3, u * .2, u * .32); g.ellipse(cx + u * .8, cy + u * .66, u * .19, u * .09, 0, 0, TAU); g.fill(); });
+      fill(5, () => { g.rect(cx - u * .18, cy + u * .3, u * .2, u * .32); g.ellipse(cx - u * .08, cy + u * .66, u * .19, u * .09, 0, 0, TAU); g.fill(); });
+      fill(1, () => { g.arc(cx - u * .52, cy - u * .02, u * .56, 0, TAU); g.fill(); });
+      fill(2, () => { g.arc(cx - u * .6, cy + u * .04, u * .34, 0, TAU); g.fill(); });
+      fill(3, () => { g.arc(cx - u * .7, cy - u * .06, u * .05, 0, TAU); g.fill(); });
+      fill(8, () => { g.arc(cx + u * 1.35, cy - u * .52, u * .11, 0, TAU); g.fill(); });
+      g.lineWidth = 4; g.lineCap = 'round';
+      for (let i = 0; i < 9; i++) { const a = -Math.PI * .9 + i * .27; fill(9, () => { g.moveTo(cx - u * .52 + Math.cos(a) * u * .36, cy - u * .02 + Math.sin(a) * u * .36); g.lineTo(cx - u * .52 + Math.cos(a) * u * .6, cy - u * .02 + Math.sin(a) * u * .6); g.stroke(); }); }
+      const d = g.getImageData(0, 0, W, H).data, ids = new Uint8Array(W * H), pts = [];
+      for (let i = 0; i < W * H; i++) { const j = i * 4; if (d[j + 3] > 250 && d[j + 1] === 0 && d[j + 2] === 0 && d[j] >= 1 && d[j] <= 9) ids[i] = d[j]; }
+      for (let y = 2; y < H; y += 4) for (let x = 2; x < W; x += 4) { const id = ids[y * W + x]; if (id) pts.push({ x, y, id, ph: Math.random() * TAU }); }
+      S.st.W = W; S.st.ids = ids; S.st.pts = pts; S.st.pulse = null; S.st.last = 0;
+    },
+    click(S, x, y) { S.st.pulse = { x, y, t: S.t }; },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, t = S.t, m = S.st.m, W = S.st.W;
+      c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+      let hp = 0;
+      if (S.mx >= 0 && S.my >= 0 && S.mx < w && S.my < h) hp = S.st.ids[Math.floor(S.my) * W + Math.floor(S.mx)] || 0;
+      if (hp && hp !== S.st.last) S.st.pulse = { x: S.mx, y: S.my, t };
+      S.st.last = hp;
+      const pu = S.st.pulse, rad = pu ? (t - pu.t) * 420 : -1;
+      for (const p of S.st.pts) {
+        const f = FORM[p.id];
+        let col = [lerp(f[0], GOLDC[0], m), lerp(f[1], GOLDC[1], m), lerp(f[2], GOLDC[2], m)];
+        let gl = 0;
+        if (pu) { const dd = Math.hypot(p.x - pu.x, p.y - pu.y); gl = clamp(1 - Math.abs(dd - rad) / 60) * clamp(1 - (t - pu.t) / 2.2); }
+        const sh = .5 + .5 * Math.sin(t * 2 + p.ph), lift = gl * .75 + m * .12 * sh + (hp === p.id ? .1 : 0);
+        col = col.map(v => Math.round(v + (255 - v) * clamp(lift)));
+        c.fillStyle = 'rgb(' + col[0] + ',' + col[1] + ',' + col[2] + ')';
+        c.fillRect(p.x - 2, p.y - 2, 4, 4);
+      }
+      const label = hp ? NAMES[hp] : '';
+      if (label) txt(c, label + ': gold throughout, and the whole lion', S.mx, Math.max(14, S.my - 20), '#fff4d0', 12);
+      S.cap(hp ? 'You are touching the ' + NAMES[hp] + '. The gold here is the gold everywhere, so the whole lion answers.'
+        : m < .25 ? 'Lion-form: eight distinct parts, each with its own look.'
+        : m > .75 ? 'Gold: one material with no seams. Every part is only gold.'
+        : 'Lion as gold, gold as lion. Neither is the base and the other the ornament. Move over the lion.');
+    }
+  });
+})();
+
+/* ================= AVATAMSAKA x-oneandmany ================= */
+addViz('ava', {
+  tab: 'One and many', title: 'One and Many', kind: 'Classical, modern rendering', group: "Fazang's demonstrations",
+  lead: 'The one becomes many and the many return to one, but the one that returns carries the many inside it. Slide back and forth.',
+  controls: [{ k: 'u', label: 'One to many', min: 0, max: 1, val: .55, play: 22 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, u = S.st.u, cx = w / 2, cy = h / 2, R = Math.min(w, h) * .085;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const E = l => sstep(l / 3, (l + 1) / 3, u);
+    function tree(x, y, r, l, al, ex, rot) {
+      const e = ex[l];
+      if (l < 2) for (let k = 0; k < 3; k++) {
+        const a = rot + k / 3 * TAU + (l ? .5 : 0), d = r * (l ? 2.5 : 3.6) * e, nx = x + Math.cos(a) * d, ny = y + Math.sin(a) * d;
+        if (e > .01) { c.strokeStyle = 'rgba(232,212,139,' + (.35 * al * e) + ')'; c.beginPath(); c.moveTo(x, y); c.lineTo(nx, ny); c.stroke(); }
+        tree(nx, ny, r * .46, l + 1, al, ex, a);
+      }
+      const g = c.createRadialGradient(x - r * .3, y - r * .3, 0, x, y, r);
+      g.addColorStop(0, HUE(48 - l * 12, 85, 82, al)); g.addColorStop(1, HUE(40 - l * 12, 70, 42, al));
+      c.beginPath(); c.arc(x, y, r, 0, TAU); c.fillStyle = g; c.fill();
+    }
+    const ex = [E(0), E(1), E(2)];
+    tree(cx, cy, R * 1.25, 0, 1, ex, -Math.PI / 2);
+    const inner = 1 - ex[0];
+    if (inner > .02) {
+      c.save(); c.beginPath(); c.arc(cx, cy, R * 1.25, 0, TAU); c.clip();
+      c.fillStyle = 'rgba(8,8,15,' + (.7 * inner) + ')'; c.fillRect(cx - R * 2, cy - R * 2, R * 4, R * 4);
+      tree(cx, cy, R * .26, 0, inner, [1, 1, 1], -Math.PI / 2);
+      c.restore();
+    }
+    S.cap(u < .05 ? 'One. Look inside it: the whole tree of the many is already there.'
+      : u > .95 ? 'Many. The one has not gone anywhere. It is present as each of the nine and twenty-seven, and each of them holds it.'
+      : 'Between one and many. Nothing is added and nothing is lost, and the differences stay.');
+  }
+});
+
+/* ================= AVATAMSAKA x-hidden ================= */
+addViz('ava', {
+  tab: 'Hidden and manifest', title: 'Hidden and Manifest', kind: 'Classical, modern rendering', group: "Fazang's demonstrations",
+  lead: 'Two sets of things share one net. When one set is manifest the other recedes, yet the receding set still pulls on the net. Slide to swap which is in front.',
+  controls: [{ k: 'h', label: 'Gold set hidden to manifest', min: 0, max: 1, val: .8, step: .01, play: 20 }],
+  init(S) {
+    const N = [], cx = S.w / 2, cy = S.h / 2;
+    for (let i = 0; i < 34; i++) { const a = rand(0, TAU), r = Math.sqrt(rand(.05, 1)); N.push({ x: cx + Math.cos(a) * r * S.w * .4, y: cy + Math.sin(a) * r * S.h * .38, g: i % 2, ph: rand(0, TAU) }); }
+    const E = [];
+    N.forEach((n, i) => { N.map((o, j) => ({ j, d: Math.hypot(n.x - o.x, n.y - o.y) })).filter(o => o.j !== i).sort((a, b) => a.d - b.d).slice(0, 3).forEach(o => { if (!E.find(e => (e[0] === i && e[1] === o.j) || (e[0] === o.j && e[1] === i))) E.push([i, o.j]); }); });
+    S.st.N = N; S.st.E = E;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, hh = S.st.h, N = S.st.N, cx = w / 2, cy = h / 2;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const A = n => (n.g === 0 ? hh : 1 - hh);
+    const P = N.map(n => { const a = A(n), k = 1 + .18 * (a - .5); return [cx + (n.x - cx) * k + Math.sin(t * .5 + n.ph) * 3, cy + (n.y - cy) * k + Math.cos(t * .4 + n.ph) * 3]; });
+    S.st.E.forEach(([i, j]) => {
+      const a = Math.min(A(N[i]), A(N[j])), b = Math.max(A(N[i]), A(N[j]));
+      c.strokeStyle = 'rgba(200,215,230,' + (.06 + .28 * a + .06 * b) + ')'; c.beginPath(); c.moveTo(P[i][0], P[i][1]); c.lineTo(P[j][0], P[j][1]); c.stroke();
+      if (Math.abs(A(N[i]) - A(N[j])) > .3) {
+        const f = (t * .4 + i * .13) % 1, from = A(N[i]) < A(N[j]) ? i : j, to = from === i ? j : i;
+        c.fillStyle = 'rgba(255,240,190,' + (.5 * (1 - Math.abs(f - .5) * 2)) + ')';
+        c.beginPath(); c.arc(lerp(P[from][0], P[to][0], f), lerp(P[from][1], P[to][1], f), 2, 0, TAU); c.fill();
+      }
+    });
+    N.forEach((n, i) => {
+      const a = A(n), col = n.g === 0 ? [232, 190, 80] : [78, 205, 196], r = 3 + 7 * a;
+      const g = c.createRadialGradient(P[i][0], P[i][1], 0, P[i][0], P[i][1], r * 3);
+      g.addColorStop(0, 'rgba(' + col + ',' + (.6 * a) + ')'); g.addColorStop(1, 'rgba(' + col + ',0)');
+      c.fillStyle = g; c.beginPath(); c.arc(P[i][0], P[i][1], r * 3, 0, TAU); c.fill();
+      c.beginPath(); c.arc(P[i][0], P[i][1], r, 0, TAU);
+      c.fillStyle = 'rgba(' + col + ',' + (.15 + .85 * a) + ')'; c.fill();
+      c.strokeStyle = 'rgba(' + col + ',' + (.3 + .5 * a) + ')'; c.stroke();
+    });
+    txt(c, 'gold set', 46, h - 16, 'rgba(232,190,80,' + (.4 + .6 * hh) + ')', 12, 'left');
+    txt(c, 'teal set', w - 46, h - 16, 'rgba(78,205,196,' + (.4 + .6 * (1 - hh)) + ')', 12, 'right');
+    S.cap(hh > .85 ? 'The gold set is manifest and the teal set recedes. The teal set is still there: watch the light travel along its threads.'
+      : hh < .15 ? 'Now the teal set is manifest and the gold set is hidden. Nothing changed in the net, only what stands in front.'
+      : 'Both are half seen. Which one is hidden depends on where you stand.');
+  }
+});
+
+/* ================= AVATAMSAKA x-dust ================= */
+(function () {
+  const OFF = [-.3, .05], K = .085;
+  const MOUNT = [[-1, .3], [-.6, -.05], [-.25, .28], [.15, -.15], [.55, .22], [1, .1]];
+  function world(c, lvl, px, motes) {
+    if (px < 1.2) return;
+    const hue = (lvl % 6) * 60 + 20;
+    c.save(); c.beginPath(); c.arc(0, 0, 1, 0, TAU); c.clip();
+    const sky = c.createLinearGradient(0, -1, 0, .5);
+    sky.addColorStop(0, HUE(hue, 55, 14)); sky.addColorStop(1, HUE(hue + 25, 70, 52));
+    c.fillStyle = sky; c.fillRect(-1, -1, 2, 2);
+    c.beginPath(); c.arc(.42, -.42, .13, 0, TAU); c.fillStyle = HUE(hue + 40, 80, 88); c.fill();
+    c.beginPath(); c.moveTo(-1, 1); MOUNT.forEach(m => c.lineTo(m[0], m[1] + .1)); c.lineTo(1, 1); c.fillStyle = HUE(hue + 200, 35, 24); c.fill();
+    c.beginPath(); c.moveTo(-1, 1); MOUNT.forEach(m => c.lineTo(m[0] * 1.1 + .1, m[1] + .3)); c.lineTo(1, 1); c.fillStyle = HUE(hue + 170, 40, 16); c.fill();
+    const lake = c.createLinearGradient(0, .55, 0, 1); lake.addColorStop(0, HUE(hue + 10, 60, 45, .9)); lake.addColorStop(1, HUE(hue + 10, 60, 18, .95));
+    c.fillStyle = lake; c.fillRect(-1, .55, 2, .5);
+    if (px > 30) { c.fillStyle = 'rgba(255,255,255,.55)'; motes.forEach(m => { c.beginPath(); c.arc(m[0], m[1], m[2], 0, TAU); c.fill(); }); }
+    c.save(); c.translate(OFF[0], OFF[1]); c.scale(K, K);
+    const gl = c.createRadialGradient(0, 0, .8, 0, 0, 1.9); gl.addColorStop(0, 'rgba(255,240,190,.9)'); gl.addColorStop(1, 'rgba(255,240,190,0)');
+    c.fillStyle = gl; c.beginPath(); c.arc(0, 0, 1.9, 0, TAU); c.fill();
+    world(c, lvl + 1, px * K, motes);
+    c.beginPath(); c.arc(0, 0, 1, 0, TAU); c.strokeStyle = 'rgba(255,240,190,.95)'; c.lineWidth = .07; c.stroke();
+    c.restore();
+    c.restore();
+  }
+  addViz('ava', {
+    tab: 'Dust and worlds', title: 'Dust and Worlds', kind: 'Classical, modern rendering', group: 'Scale and time',
+    lead: 'The Avataṃsaka speaks of worlds inside a single mote of dust. Enter the glowing mote and find a world. Its own mote holds another, and after six the first world returns.',
+    controls: [{ k: 'z', label: 'Enter the dust', min: 0, max: 6, val: 0, step: .001, play: 70 }],
+    init(S) { S.st.motes = Array.from({ length: 16 }, () => [rand(-.9, .9), rand(-.2, .45), rand(.005, .015)]); },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, z = S.st.z, k = Math.floor(z), f = z - k;
+      c.fillStyle = '#05050a'; c.fillRect(0, 0, w, h);
+      const Z = Math.pow(1 / K, f), Cn = (Z - 1) / (1 / K - 1), R0 = Math.min(w, h) * .44;
+      c.save(); c.translate(w / 2, h / 2); c.scale(Z * R0, Z * R0); c.translate(-OFF[0] * Cn, -OFF[1] * Cn);
+      world(c, k, Z * R0, S.st.motes);
+      c.restore();
+      const depth = Math.floor(z);
+      S.cap(z < .1 ? 'A world in the light of its own sun, and one glowing mote of dust. Enter the mote.'
+        : depth >= 6 ? 'The first world again. There was no bottom and no center.'
+        : 'World ' + (depth + 1) + '. Its mote holds world ' + (depth + 2) + '. Every world is inside a mote of the last.');
+    }
+  });
+})();
+
+/* ================= AVATAMSAKA x-noscale ================= */
+addViz('ava', {
+  tab: 'No absolute scale', title: 'No Absolute Scale', kind: 'Modern analogy', group: 'Scale and time',
+  lead: 'An atom beside a buddha-land. Drag the scale toward the end and the interface stops treating size as a fact: each holds the other.',
+  controls: [{ k: 's', label: 'Scale gap', min: 0, max: 1, val: 0, step: .005, play: 26 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, s = S.st.s, R0 = Math.min(w * .22, h * .36), q = sstep(0, 1, s);
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const ax = w * .27, wx = w * .73, cy = h * .46, ra = lerp(R0 * .05, R0 * .92, q), rw = lerp(R0, R0 * .92, q);
+    function scene(x, y, r, inner) {
+      c.save(); c.translate(x, y); c.scale(r, r);
+      c.beginPath(); c.arc(0, 0, 1, 0, TAU); c.clip();
+      const g = c.createLinearGradient(0, -1, 0, 1); g.addColorStop(0, '#2b2f6b'); g.addColorStop(.6, '#e58f6a'); g.addColorStop(1, '#2f5d50');
+      c.fillStyle = g; c.fillRect(-1, -1, 2, 2);
+      c.beginPath(); c.moveTo(-1, 1); [[-.7, .1], [-.3, .5], [.1, -.05], [.6, .45], [1, .2]].forEach(m => c.lineTo(m[0], m[1] + .2)); c.lineTo(1, 1); c.fillStyle = '#3b3a68'; c.fill();
+      c.beginPath(); c.arc(.35, -.35, .16, 0, TAU); c.fillStyle = '#fff1c2'; c.fill();
+      if (inner) { c.save(); c.translate(.35, -.35); c.scale(.14, .14); atom(0, 0, 1, false); c.restore(); }
+      c.restore();
+      c.beginPath(); c.arc(x, y, r, 0, TAU); c.strokeStyle = 'rgba(232,212,139,.7)'; c.lineWidth = 1.5; c.stroke();
+    }
+    function atom(x, y, r, inner) {
+      c.save(); c.translate(x, y); c.scale(r, r);
+      const gl = c.createRadialGradient(0, 0, 0, 0, 0, 1); gl.addColorStop(0, 'rgba(78,205,196,.35)'); gl.addColorStop(1, 'rgba(78,205,196,0)');
+      c.fillStyle = gl; c.beginPath(); c.arc(0, 0, 1, 0, TAU); c.fill();
+      c.lineWidth = .025; c.strokeStyle = 'rgba(78,205,196,.7)';
+      for (let i = 0; i < 3; i++) { c.save(); c.rotate(i * Math.PI / 3); c.beginPath(); c.ellipse(0, 0, .95, .34, 0, 0, TAU); c.stroke(); c.restore(); }
+      for (let i = 0; i < 3; i++) { const a = t * (1.4 + i * .4) + i * 2; c.save(); c.rotate(i * Math.PI / 3); c.beginPath(); c.arc(Math.cos(a) * .95, Math.sin(a) * .34, .06, 0, TAU); c.fillStyle = '#c8fffa'; c.fill(); c.restore(); }
+      c.beginPath(); c.arc(0, 0, inner ? .3 : .12, 0, TAU); c.fillStyle = inner ? '#101830' : '#f6dc8e'; c.fill();
+      if (inner) { c.save(); c.beginPath(); c.arc(0, 0, .3, 0, TAU); c.clip(); c.translate(0, 0); c.scale(.3, .3); c.restore(); }
+      c.restore();
+    }
+    atom(ax, cy, ra, q > .55);
+    if (q > .55) { c.save(); c.translate(ax, cy); c.beginPath(); c.arc(0, 0, ra * .3, 0, TAU); c.clip(); c.translate(0, 0); c.scale(ra * .3, ra * .3); c.restore(); scene(ax, cy, ra * .27 * sstep(.55, .9, q), false); }
+    scene(wx, cy, rw, q > .55);
+    txt(c, 'an atom', ax, cy + R0 * 1.12, '#e8d48b', 13); txt(c, 'a buddha-land', wx, cy + R0 * 1.12, '#e8d48b', 13);
+    const ratio = Math.round(30 * (1 - q));
+    txt(c, s > .97 ? 'size ratio 1 : 1' : 'size ratio 1 : 10^' + ratio, w / 2, h - 22, 'rgba(154,150,144,' + (1 - q * .7) + ')', 12);
+    c.strokeStyle = 'rgba(154,150,144,' + (.5 * (1 - q)) + ')'; c.beginPath(); c.moveTo(w * .2, h - 40); c.lineTo(w * .8, h - 40); c.stroke();
+    S.cap(s < .1 ? 'A mote-sized atom and a vast world. Size looks like a hard fact.'
+      : s < .9 ? 'The gap closes. Nothing physical shrinks or grows. The picture is dropping size as an absolute property.'
+      : 'Atom and world stand equal, each holding a copy of the other. Large and small no longer block one another.');
+  }
+});
+
+/* ================= AVATAMSAKA x-tentimes ================= */
+addViz('ava', {
+  tab: 'Ten times', title: 'The Ten Times', kind: 'Classical, modern rendering', group: 'Scale and time',
+  lead: 'Past, present and future each contain a past, a present and a future. That gives nine, and the whole they form together makes ten. Open the times, then hover.',
+  controls: [{ k: 'e', label: 'Open the times', min: 0, max: 1, val: .9, step: .01, play: 18 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, e = S.st.e, cy = h * .52, R = Math.min(w * .13, h * .34), NM = ['past', 'present', 'future'], SH = ['P', 'N', 'F'];
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const cxs = [w * .2, w * .5, w * .8];
+    c.strokeStyle = 'rgba(154,150,144,.35)'; c.beginPath(); c.moveTo(w * .06, cy + R * 1.35); c.lineTo(w * .94, cy + R * 1.35); c.stroke();
+    c.beginPath(); c.moveTo(w * .94, cy + R * 1.35); c.lineTo(w * .94 - 8, cy + R * 1.35 - 4); c.lineTo(w * .94 - 8, cy + R * 1.35 + 4); c.closePath(); c.fillStyle = 'rgba(154,150,144,.5)'; c.fill();
+    txt(c, 'time as a line', w * .5, cy + R * 1.35 + 16, 'rgba(154,150,144,.8)', 11);
+    const pos = (i, j) => [cxs[i], cy + (j - 1) * R * .62 * e];
+    let hi = null, bd = 30;
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) { const p = pos(i, j); const d = Math.hypot(S.mx - p[0], S.my - p[1]); if (e > .3 && d < bd) { bd = d; hi = [i, j]; } }
+    if (e > .8) { c.setLineDash([4, 6]); c.strokeStyle = 'rgba(255,240,190,' + (.5 * (e - .8) * 5) + ')'; c.beginPath(); c.ellipse(w / 2, cy, w * .44, R * 1.2, 0, 0, TAU); c.stroke(); c.setLineDash([]); txt(c, 'the whole: the tenth', w / 2, cy - R * 1.2 - 12, 'rgba(255,240,190,' + ((e - .8) * 5) + ')', 12); }
+    for (let i = 0; i < 3; i++) {
+      c.beginPath(); c.arc(cxs[i], cy, R, 0, TAU); c.fillStyle = HUE(30 + i * 90, 40, 14, .8); c.fill();
+      c.strokeStyle = HUE(30 + i * 90, 65, 60, .9); c.lineWidth = 1.5; c.stroke();
+      txt(c, NM[i], cxs[i], cy - R - 14, '#e8d48b', 14);
+    }
+    if (hi && hi[0] !== hi[1]) {
+      const a = pos(hi[0], hi[1]), b = pos(hi[1], hi[0]);
+      c.strokeStyle = 'rgba(255,240,190,.75)'; c.lineWidth = 1.6; c.beginPath(); c.moveTo(a[0], a[1]); c.quadraticCurveTo((a[0] + b[0]) / 2, cy - R * 1.9, b[0], b[1]); c.stroke();
+    }
+    for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) {
+      const p = pos(i, j), on = hi && ((hi[0] === i && hi[1] === j) || (hi[0] === j && hi[1] === i)), r = R * .21 * (.4 + .6 * e);
+      if (e < .05) continue;
+      c.globalAlpha = clamp(e * 1.4); c.beginPath(); c.arc(p[0], p[1], r, 0, TAU);
+      c.fillStyle = on ? 'rgba(255,236,170,.95)' : HUE(30 + j * 90, 60, 45, .9); c.fill(); c.strokeStyle = 'rgba(255,255,255,.4)'; c.lineWidth = 1; c.stroke();
+      txt(c, SH[i] + '·' + SH[j], p[0], p[1], on ? '#1a1206' : '#fff', Math.max(8, r * .7)); c.globalAlpha = 1;
+    }
+    S.cap(!hi ? (e < .3 ? 'Time as a line: past, present, future. Open the times.' : 'Each of the three times holds a past, a present and a future. Hover a small circle.')
+      : hi[0] === hi[1] ? 'The ' + NM[hi[1]] + ' within the ' + NM[hi[0]] + ': each time contains itself as well.'
+      : 'The ' + NM[hi[1]] + ' within the ' + NM[hi[0]] + ' answers to the ' + NM[hi[0]] + ' within the ' + NM[hi[1]] + '. Each time is seen from inside the others.');
+  }
+});
+
+/* ================= AVATAMSAKA x-onethought ================= */
+addViz('ava', {
+  tab: 'One thought', title: 'One Thought, Many Kalpas', kind: 'Classical, modern rendering', group: 'Entering one into all',
+  lead: 'The texts say that countless kalpas can enter a single moment of thought and a moment can enter countless kalpas. Spread the rings out, then draw them back into the point.',
+  controls: [{ k: 'e', label: 'One moment to many kalpas', min: 0, max: 1, val: .8, step: .005, play: 24 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, e = S.st.e, cx = w / 2, cy = h / 2, R = Math.min(w, h) * .44, L = ['a moment of thought', 'a day', 'a year', 'a century', 'an age', 'a kalpa', 'countless kalpas'];
+    c.fillStyle = '#06060c'; c.fillRect(0, 0, w, h);
+    function rings(x, y, r, al, label) {
+      for (let k = L.length - 1; k >= 0; k--) {
+        const rr = lerp(r * (.018 + k * .006), r * (k + 1) / 7, sstep(0, 1, e)) * (k === 0 ? 1 : 1), a = t * (.5 + k * .1) + k;
+        if (k) { c.beginPath(); c.arc(x, y, rr, 0, TAU); c.strokeStyle = HUE(45 + k * 20, 60, 65, .5 * al); c.lineWidth = 1; c.stroke(); c.beginPath(); c.arc(x + Math.cos(a) * rr, y + Math.sin(a) * rr, Math.max(1.2, r * .011), 0, TAU); c.fillStyle = HUE(45 + k * 20, 70, 78, al); c.fill(); }
+        if (label && e > .55 && k) txt(c, L[k], x + rr * .72, y - rr * .72 - 4, 'rgba(232,212,139,' + (al * sstep(.55, .85, e)) + ')', 11);
+      }
+      const g = c.createRadialGradient(x, y, 0, x, y, Math.max(6, r * .05 * (1 + .2 * Math.sin(t * 3))));
+      g.addColorStop(0, 'rgba(255,248,215,' + al + ')'); g.addColorStop(1, 'rgba(255,220,130,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(x, y, Math.max(6, r * .05 * 3), 0, TAU); c.fill();
+    }
+    rings(cx, cy, R, 1, true);
+    if (e > .4) { const sm = R * .1 * sstep(.4, .8, e); c.save(); c.globalAlpha = .9; rings(cx, cy, sm, sstep(.4, .8, e), false); c.restore(); }
+    S.cap(e < .1 ? 'A single moment. Every ring, from a day to countless kalpas, lies inside this point.'
+      : e > .9 ? 'The moment opens out into days, years, ages and kalpas. Look at the center: the moment still holds them all, small.'
+      : 'Between the two. Each ring is a different span, and each fits inside the moment.');
+  }
+});
+
+/* ================= AVATAMSAKA x-voice ================= */
+(function () {
+  const LANG = ['Sanskrit', 'Chinese', 'Tibetan', 'Japanese', 'Korean', 'English', 'Bengali', 'Tamil'], RAT = [1, 9 / 8, 5 / 4, 4 / 3, 3 / 2, 5 / 3, 15 / 8, 2];
+  function stopAudio(S) {
+    try { if (S.st.ctx) S.st.ctx.suspend(); } catch (e) { }
+    S.st.on = false; if (S.st.btn) S.st.btn.textContent = 'Sound on';
+  }
+  addViz('ava', {
+    tab: 'One voice', title: 'One Voice, All Languages', kind: 'Classical, modern rendering', group: 'Entering one into all',
+    lead: 'The texts say one voice can enter all voices and all voices one voice. Add languages, then pull them into unison. Sound is optional and starts only when you press the button.',
+    controls: [
+      { k: 'n', label: 'Voices', min: 1, max: 8, val: 5, step: 1 },
+      { k: 'u', label: 'Many to one voice', min: 0, max: 1, val: 0, step: .01, play: 20 },
+      { btn: 'Sound on', fn: (S, b) => {
+        S.st.btn = b;
+        try {
+          if (!S.st.ctx) {
+            const AC = window.AudioContext || window.webkitAudioContext; if (!AC) { b.textContent = 'Sound not available'; return; }
+            const ctx = new AC(); S.st.ctx = ctx;
+            S.st.osc = LANG.map(() => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = 'sine'; g.gain.value = 0; o.connect(g); g.connect(ctx.destination); o.start(); return { o, g }; });
+          }
+          if (S.st.on) { stopAudio(S); return; }
+          S.st.ctx.resume(); S.st.on = true; b.textContent = 'Sound off';
+        } catch (e) { b.textContent = 'Sound not available'; }
+      } }
+    ],
+    hide(S) { stopAudio(S); },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, t = S.t, n = S.st.n, u = S.st.u;
+      c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+      const top = h * .62, rowH = (top - 10) / n, sumY = h * .81, cols = ['#e8b25a', '#e8845a', '#d1606f', '#a86fd1', '#6f8cd1', '#4ecdc4', '#7fd16f', '#d1d16f'];
+      const freq = i => lerp(RAT[i], 1, u);
+      for (let i = 0; i < n; i++) {
+        const y0 = 10 + rowH * (i + .5), a = Math.min(rowH * .38, 18); c.beginPath();
+        for (let x = 0; x <= w; x += 3) { const y = y0 + Math.sin(x / w * TAU * 3 * freq(i) - t * 2.4 * freq(i)) * a; x ? c.lineTo(x, y) : c.moveTo(x, y); }
+        c.strokeStyle = cols[i]; c.lineWidth = 1.4; c.globalAlpha = .85; c.stroke(); c.globalAlpha = 1;
+        txt(c, LANG[i], 8, y0 - a - 4, cols[i], 10, 'left');
+      }
+      c.beginPath(); const A = h * .13;
+      for (let x = 0; x <= w; x += 2) { let s = 0; for (let i = 0; i < n; i++) s += Math.sin(x / w * TAU * 3 * freq(i) - t * 2.4 * freq(i)); const y = sumY - s / Math.max(1, n) * A * (1 + u * .0); x ? c.lineTo(x, y) : c.moveTo(x, y); }
+      c.strokeStyle = '#fff4d0'; c.lineWidth = 2.4; c.stroke();
+      c.strokeStyle = 'rgba(154,150,144,.3)'; c.lineWidth = 1; c.beginPath(); c.moveTo(0, h * .65); c.lineTo(w, h * .65); c.stroke();
+      txt(c, 'all voices heard together', 8, h * .66 + 8, 'rgba(154,150,144,.9)', 10, 'left');
+      if (S.st.ctx && S.st.osc) {
+        S.st.osc.forEach((v, i) => { v.o.frequency.setTargetAtTime(196 * freq(i), S.st.ctx.currentTime, .05); v.g.gain.setTargetAtTime(S.st.on && i < n ? .05 : 0, S.st.ctx.currentTime, .08); });
+      }
+      S.cap(u < .05 ? (n === 1 ? 'One voice.' : n + ' voices, each in its own language, each its own pitch and shape.')
+        : u > .95 ? 'Every voice sings the same note. The many have become one voice, and each is still distinct on its own line.'
+        : 'Drawing the many toward one. Nothing is silenced, and the combined wave grows simpler.');
+    }
+  });
+})();
+
+/* ================= AVATAMSAKA x-body ================= */
+(function () {
+  function human(c, x, y, s, col) { c.fillStyle = col; c.beginPath(); c.arc(x, y - s * .55, s * .22, 0, TAU); c.fill(); c.beginPath(); c.moveTo(x - s * .32, y + s * .6); c.quadraticCurveTo(x - s * .34, y - s * .2, x, y - s * .25); c.quadraticCurveTo(x + s * .34, y - s * .2, x + s * .32, y + s * .6); c.closePath(); c.fill(); }
+  function animal(c, x, y, s, col) { c.fillStyle = col; c.beginPath(); c.ellipse(x, y + s * .1, s * .5, s * .28, 0, 0, TAU); c.fill(); c.beginPath(); c.arc(x - s * .5, y - s * .1, s * .2, 0, TAU); c.fill(); c.beginPath(); c.moveTo(x - s * .6, y - s * .25); c.lineTo(x - s * .55, y - s * .48); c.lineTo(x - s * .42, y - s * .27); c.fill(); c.fillRect(x - s * .3, y + s * .3, s * .1, s * .3); c.fillRect(x + s * .25, y + s * .3, s * .1, s * .3); }
+  function plant(c, x, y, s, col) { c.strokeStyle = col; c.lineWidth = Math.max(1, s * .1); c.beginPath(); c.moveTo(x, y + s * .6); c.lineTo(x, y - s * .2); c.stroke(); c.fillStyle = col; c.beginPath(); c.ellipse(x - s * .28, y, s * .28, s * .13, -.6, 0, TAU); c.fill(); c.beginPath(); c.ellipse(x + s * .28, y - s * .2, s * .28, s * .13, .6, 0, TAU); c.fill(); c.beginPath(); c.ellipse(x, y - s * .5, s * .13, s * .28, 0, 0, TAU); c.fill(); }
+  function eco(c, x, y, s, col) { c.fillStyle = col; c.beginPath(); c.moveTo(x - s * .7, y + s * .5); c.lineTo(x - s * .2, y - s * .5); c.lineTo(x + s * .15, y + s * .1); c.lineTo(x + s * .4, y - s * .2); c.lineTo(x + s * .7, y + s * .5); c.closePath(); c.fill(); c.strokeStyle = col; c.lineWidth = Math.max(1, s * .08); c.beginPath(); c.moveTo(x - s * .7, y + s * .7); c.quadraticCurveTo(x, y + s * .55, x + s * .7, y + s * .7); c.stroke(); }
+  const RINGS = [{ n: 6, f: human, col: '#e8b25a', nm: 'other people' }, { n: 9, f: animal, col: '#e8845a', nm: 'animals' }, { n: 12, f: plant, col: '#7fd16f', nm: 'plants' }, { n: 8, f: eco, col: '#6f8cd1', nm: 'ecosystems' }];
+  addViz('ava', {
+    tab: 'One body', title: 'One Body, All Beings', kind: 'Classical, modern rendering', group: 'Entering one into all',
+    lead: 'One body enters the bodies of all beings and all beings enter one body. Widen the view from a single person outward, then bring it all back into that one body.',
+    controls: [{ k: 'r', label: 'Widen the view', min: 0, max: 4, val: 2.4, step: .01, play: 34 }],
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, t = S.t, r = S.st.r, cx = w / 2, cy = h / 2, R = Math.min(w * .46, h * .46);
+      c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+      RINGS.forEach((g, k) => {
+        const e = sstep(k, k + 1, r); if (e < .01) return;
+        const rr = R * (k + 1) / 4 * e;
+        c.beginPath(); c.arc(cx, cy, rr, 0, TAU); c.strokeStyle = 'rgba(232,212,139,' + (.12 * e) + ')'; c.stroke();
+        for (let i = 0; i < g.n; i++) {
+          const a = i / g.n * TAU + k * .5 + t * .03 * (k % 2 ? 1 : -1), x = cx + Math.cos(a) * rr, y = cy + Math.sin(a) * rr;
+          c.strokeStyle = 'rgba(232,212,139,' + (.12 * e) + ')'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(x, y); c.stroke();
+          c.globalAlpha = e; g.f(c, x, y, Math.min(20, 9 + k * 1.5), g.col); c.globalAlpha = 1;
+        }
+        if (e > .5) txt(c, g.nm, cx, cy - rr - 8, 'rgba(154,150,144,' + e + ')', 10);
+      });
+      const gl = c.createRadialGradient(cx, cy, 0, cx, cy, 44); gl.addColorStop(0, 'rgba(255,240,190,.4)'); gl.addColorStop(1, 'rgba(255,240,190,0)');
+      c.fillStyle = gl; c.beginPath(); c.arc(cx, cy, 44, 0, TAU); c.fill();
+      human(c, cx, cy, 34, '#fff4d0');
+      const inner = 1 - clamp(r * 1.4);
+      if (inner > .02) { c.save(); c.beginPath(); c.arc(cx, cy + 6, 12, 0, TAU); c.clip(); c.globalAlpha = inner; c.fillStyle = '#08080f'; c.fillRect(cx - 14, cy - 8, 28, 28); RINGS.forEach((g, k) => { c.strokeStyle = g.col; c.lineWidth = 1; c.beginPath(); c.arc(cx, cy + 6, 2.4 + k * 2.6, 0, TAU); c.stroke(); }); c.restore(); c.globalAlpha = 1; }
+      S.cap(r < .2 ? 'One body. Look at the chest: all the rings are folded inside it.'
+        : r < 1.2 ? 'Other people enter the picture, each one holding the same body-in-body.'
+        : r < 3.2 ? 'Animals and plants join. Each link is a life that this body depends on.'
+        : 'Ecosystems, then the whole web. Slide back and the entire network fits within one body.');
+    }
+  });
+})();
+
+/* ================= AVATAMSAKA x-ocean ================= */
+addViz('ava', {
+  tab: 'Ocean seal', title: 'The Ocean Seal', kind: 'Classical, modern rendering', group: 'The net',
+  lead: 'In the Ocean Seal samādhi the mind is like a calm ocean that reflects everything at once. Quiet the waves and watch the scattered reflections come together.',
+  controls: [{ k: 'c', label: 'Calm the waves', min: 0, max: 1, val: .2, step: .005, play: 26 }],
+  init(S) {
+    const W = Math.ceil(S.w), H = Math.ceil(S.h / 2), o = document.createElement('canvas'); o.width = W; o.height = H;
+    const g = o.getContext('2d'), sky = g.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, '#070a1e'); sky.addColorStop(.7, '#2a1f52'); sky.addColorStop(1, '#c47a6a');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    for (let i = 0; i < 260; i++) { const y = Math.pow(Math.random(), 1.4) * H * .92; g.fillStyle = 'rgba(255,250,230,' + rand(.3, 1) + ')'; g.beginPath(); g.arc(Math.random() * W, y, rand(.4, 1.6), 0, TAU); g.fill(); }
+    for (let k = 0; k < 3; k++) { const x = W * (.2 + k * .3), y = H * (.25 + (k % 2) * .2), gg = g.createRadialGradient(x, y, 0, x, y, H * .18); gg.addColorStop(0, 'rgba(180,160,255,.5)'); gg.addColorStop(1, 'rgba(180,160,255,0)'); g.fillStyle = gg; g.beginPath(); g.arc(x, y, H * .18, 0, TAU); g.fill(); }
+    const mg = g.createRadialGradient(W * .66, H * .5, 0, W * .66, H * .5, H * .3); mg.addColorStop(0, 'rgba(255,245,210,1)'); mg.addColorStop(.25, 'rgba(255,220,150,.5)'); mg.addColorStop(1, 'rgba(255,220,150,0)');
+    g.fillStyle = mg; g.beginPath(); g.arc(W * .66, H * .5, H * .3, 0, TAU); g.fill();
+    g.fillStyle = '#fff6da'; g.beginPath(); g.arc(W * .66, H * .5, H * .06, 0, TAU); g.fill();
+    for (let k = 0; k < 5; k++) { const x = W * (.12 + k * .19), y = H * (.72 + (k % 2) * .08); g.save(); g.translate(x, y); g.scale(.8, .8); g.fillStyle = 'rgba(255,190,215,.95)'; for (let p = 0; p < 6; p++) { g.rotate(TAU / 6); g.beginPath(); g.ellipse(0, -9, 4, 10, 0, 0, TAU); g.fill(); } g.restore(); }
+    S.st.sky = o;
+  },
+  click(S, x, y) { S.st.rip = { x, y, t: S.t }; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, cal = S.st.c, tur = (1 - cal) * (1 - cal) * 22, sky = S.st.sky, H = sky.height, hz = Math.floor(h / 2);
+    c.fillStyle = '#04050a'; c.fillRect(0, 0, w, h);
+    c.drawImage(sky, 0, 0, sky.width, H, 0, 0, w, hz);
+    for (let y = 0; y < hz; y += 2) {
+      const sy = Math.max(0, H - 1 - Math.floor(y * H / hz)), dx = tur * (Math.sin(y * .09 + t * 1.6) * (.4 + y / hz) + Math.sin(y * .23 - t * 2.3) * .5), dy = Math.sin(y * .05 + t) * tur * .15;
+      c.drawImage(sky, 0, sy, sky.width, 1, dx, hz + y + dy, w, 2);
+    }
+    c.fillStyle = 'rgba(8,30,60,' + (.35 + .2 * (1 - cal)) + ')'; c.fillRect(0, hz, w, h - hz);
+    const lg = c.createLinearGradient(0, hz - 4, 0, hz + 10); lg.addColorStop(0, 'rgba(255,230,180,.0)'); lg.addColorStop(.5, 'rgba(255,230,180,.55)'); lg.addColorStop(1, 'rgba(255,230,180,0)');
+    c.fillStyle = lg; c.fillRect(0, hz - 4, w, 14);
+    if (S.st.rip) { const dt = t - S.st.rip.t; if (dt < 2.5 && S.st.rip.y > hz) { c.strokeStyle = 'rgba(255,255,255,' + (.6 * (1 - dt / 2.5)) + ')'; c.beginPath(); c.ellipse(S.st.rip.x, S.st.rip.y, dt * 90, dt * 26, 0, 0, TAU); c.stroke(); } }
+    S.cap(cal > .9 ? 'A still ocean is a mirror. Every star, every world is present in it at once, and nothing has been added to the sea.'
+      : cal < .25 ? 'Rough water breaks the reflection into fragments. The sky is still there. It is the waves that scatter it.'
+      : 'The waves are settling and the reflection is gathering itself.');
+  }
+});
+
+/* ================= AVATAMSAKA x-directions ================= */
+addViz('ava', {
+  tab: 'Ten directions', title: "Fazang's Ten Directions", kind: 'Classical, modern rendering', group: "Fazang's demonstrations",
+  lead: 'Traditionally described as ten mirrors around a Buddha image: eight around, one above, one below. Here the reflections are computed in three dimensions. Move across the picture to turn the room.',
+  controls: [{ k: 'dep', label: 'Reflections', min: 1, max: 3, val: 2, step: 1 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, dep = S.st.dep, cx = w / 2, cy = h / 2, U = Math.min(w, h) * .12;
+    c.fillStyle = '#05050b'; c.fillRect(0, 0, w, h);
+    const yaw = t * .22 + (S.mx > 0 ? (S.mx / w - .5) * 3.2 : 0), pitch = .42 + (S.my > 0 ? (S.my / h - .5) * .7 : 0);
+    const cyw = Math.cos(yaw), syw = Math.sin(yaw), cp = Math.cos(pitch), sp = Math.sin(pitch), N = [];
+    for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4 + Math.PI / 8; N.push([Math.cos(a), 0, Math.sin(a)]); }
+    N.push([0, 1, 0]); N.push([0, -1, 0]);
+    const proj = p => { const x = p[0] * cyw - p[2] * syw, z = p[0] * syw + p[2] * cyw, y = p[1], y2 = y * cp - z * sp, z2 = y * sp + z * cp, f = 9 / (9 + z2); return [cx + x * f * U, cy - y2 * f * U, f, z2]; };
+    const refl = (P, n) => { const d = P[0] * n[0] + P[1] * n[1] + P[2] * n[2] - 1; return [P[0] - 2 * d * n[0], P[1] - 2 * d * n[1], P[2] - 2 * d * n[2]]; };
+    const mir = N.map((n, i) => {
+      let t1, t2; if (i < 8) { t1 = [0, 1, 0]; t2 = [-n[2], 0, n[0]]; } else { t1 = [1, 0, 0]; t2 = [0, 0, 1]; }
+      const pts = []; for (let k = 0; k < 24; k++) { const a = k / 24 * TAU, r = .78; pts.push(proj([n[0] + (t1[0] * Math.cos(a) + t2[0] * Math.sin(a)) * r, n[1] + (t1[1] * Math.cos(a) + t2[1] * Math.sin(a)) * r, n[2] + (t1[2] * Math.cos(a) + t2[2] * Math.sin(a)) * r])); }
+      return { pts, z: proj(n)[3] };
+    }).sort((a, b) => b.z - a.z);
+    mir.forEach(m => { c.beginPath(); m.pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); c.fillStyle = 'rgba(170,190,215,.11)'; c.fill(); c.strokeStyle = 'rgba(200,215,235,.6)'; c.lineWidth = 1.2; c.stroke(); });
+    c.globalCompositeOperation = 'lighter';
+    let lvl = [[0, 0, 0, -1]]; const size = [11, 6, 3.4, 2];
+    for (let o = 0; o <= dep; o++) {
+      const next = [];
+      for (const P of lvl) {
+        const q = proj(P), r = size[o] * q[2], al = [1, .8, .5, .3][o];
+        if (o > 0) { const g = c.createRadialGradient(q[0], q[1], 0, q[0], q[1], r * 2.6); g.addColorStop(0, 'rgba(255,236,170,' + al + ')'); g.addColorStop(1, 'rgba(255,220,130,0)'); c.fillStyle = g; c.beginPath(); c.arc(q[0], q[1], r * 2.6, 0, TAU); c.fill(); }
+        if (o < dep) for (let j = 0; j < 10; j++) { if (j === P[3]) continue; const R2 = refl(P, N[j]); next.push([R2[0], R2[1], R2[2], j]); }
+      }
+      lvl = next;
+    }
+    c.globalCompositeOperation = 'source-over';
+    const q0 = proj([0, 0, 0]), g0 = c.createRadialGradient(q0[0], q0[1], 0, q0[0], q0[1], U * .9);
+    g0.addColorStop(0, 'rgba(255,245,205,.95)'); g0.addColorStop(.4, 'rgba(255,215,120,.4)'); g0.addColorStop(1, 'rgba(255,215,120,0)');
+    c.fillStyle = g0; c.beginPath(); c.arc(q0[0], q0[1], U * .9, 0, TAU); c.fill();
+    c.fillStyle = '#fff8dc'; c.beginPath(); c.arc(q0[0], q0[1], U * .13, 0, TAU); c.fill();
+    S.cap('The Buddha image at the center appears in every mirror, then in the reflections of the mirrors, in every direction. Turning the room removes none of them.');
+  }
+});
+
+/* ================= AVATAMSAKA x-touch ================= */
+addViz('ava', {
+  tab: 'One touch', title: 'One Touch', kind: 'Modern analogy', group: 'The net',
+  lead: 'Touch one jewel of the net. The whole net answers, and every jewel keeps a little of what passed through it. Tap anywhere.',
+  controls: [{ btn: 'Reset the net', fn: S => { S.st.reset = true; } }],
+  init(S) {
+    const cols = Math.max(8, Math.round(S.w / 34)), rows = Math.max(6, Math.round(S.h / 34));
+    S.st.cols = cols; S.st.rows = rows; S.st.u = new Float32Array(cols * rows); S.st.v = new Float32Array(cols * rows); S.st.m = new Float32Array(cols * rows);
+    S.st.u[Math.floor(rows / 2) * cols + Math.floor(cols / 2)] = 2.2;
+  },
+  click(S, x, y) {
+    const { cols, rows } = S.st, gx = S.w / (cols + 1), gy = S.h / (rows + 1), i = clamp(Math.round(x / gx) - 1, 0, cols - 1), j = clamp(Math.round(y / gy) - 1, 0, rows - 1);
+    S.st.u[j * cols + i] = 2.2;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, { cols, rows, u, v, m } = S.st, gx = w / (cols + 1), gy = h / (rows + 1);
+    if (S.st.reset) { u.fill(0); v.fill(0); m.fill(0); S.st.reset = false; }
+    for (let step = 0; step < 2; step++) {
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+        const k = j * cols + i; let lap = -4 * u[k];
+        lap += i > 0 ? u[k - 1] : u[k]; lap += i < cols - 1 ? u[k + 1] : u[k]; lap += j > 0 ? u[k - cols] : u[k]; lap += j < rows - 1 ? u[k + cols] : u[k];
+        v[k] += .2 * lap; v[k] *= .988;
+      }
+      for (let k = 0; k < u.length; k++) { u[k] += v[k]; m[k] = Math.min(1, m[k] * .9996 + Math.abs(u[k]) * .004); }
+    }
+    c.fillStyle = '#06060c'; c.fillRect(0, 0, w, h);
+    c.lineWidth = 1;
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const k = j * cols + i, x = (i + 1) * gx, y = (j + 1) * gy;
+      if (i < cols - 1) { const a = (Math.abs(u[k]) + Math.abs(u[k + 1])) * .5; c.strokeStyle = 'rgba(212,190,120,' + clamp(.08 + a * .35) + ')'; c.beginPath(); c.moveTo(x, y); c.lineTo(x + gx, y); c.stroke(); }
+      if (j < rows - 1) { const a = (Math.abs(u[k]) + Math.abs(u[k + cols])) * .5; c.strokeStyle = 'rgba(212,190,120,' + clamp(.08 + a * .35) + ')'; c.beginPath(); c.moveTo(x, y); c.lineTo(x, y + gy); c.stroke(); }
+    }
+    for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+      const k = j * cols + i, x = (i + 1) * gx, y = (j + 1) * gy, a = Math.min(1.6, Math.abs(u[k])), r = 3 + a * 4, hue = 45 + m[k] * 135;
+      const g = c.createRadialGradient(x, y, 0, x, y, r * 3); g.addColorStop(0, HUE(hue, 80, 70, .35 + a * .4)); g.addColorStop(1, HUE(hue, 80, 70, 0));
+      c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 3, 0, TAU); c.fill();
+      c.beginPath(); c.arc(x, y, r, 0, TAU); c.fillStyle = HUE(hue, 70, 60 + a * 20, .55 + .4 * clamp(a)); c.fill();
+    }
+    let tot = 0; for (let k = 0; k < m.length; k++) tot += m[k];
+    S.cap(tot < 1.5 ? 'A still net. Tap a jewel.' : 'A ripple crosses the net and each jewel is changed by it: the tint shifts from gold toward teal wherever the wave has passed. Nothing is left untouched.');
+  }
+});
+
+/* ================= AVATAMSAKA x-pilgrimage ================= */
+addViz('ava', {
+  tab: 'Pilgrimage network', title: 'The Pilgrimage Network', kind: 'Classical, modern rendering', group: 'The net',
+  lead: 'Sudhana meets fifty-three teachers in order. Here they sit in one web. Hover or tap a teacher: the gold line is his route, and the other lines show how the teachings could answer one another.',
+  init(S) {
+    const c0 = Math.min(S.w, S.h) * .046, P = [];
+    for (let i = 0; i < 53; i++) { const r = c0 * Math.sqrt(i + 1.5), a = i * 2.39996; P.push([S.w / 2 + Math.cos(a) * r * 1.5, S.h / 2 + Math.sin(a) * r]); }
+    const E = []; for (let i = 0; i < 53; i++) [(i * 5 + 7) % 53, (i * 11 + 3) % 53, (i * 17 + 13) % 53].forEach(j => { if (j !== i) E.push([i, j]); });
+    S.st.P = P; S.st.E = E; if (S.st.sel === undefined) S.st.sel = -1;
+  },
+  click(S, x, y) { let b = -1, bd = 20; S.st.P.forEach((p, i) => { const d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; b = i; } }); S.st.sel = b; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, P = S.st.P;
+    c.fillStyle = '#06060c'; c.fillRect(0, 0, w, h);
+    let hv = -1, bd = 18; P.forEach((p, i) => { const d = Math.hypot(p[0] - S.mx, p[1] - S.my); if (d < bd) { bd = d; hv = i; } });
+    const sel = hv >= 0 ? hv : S.st.sel, rel = new Set();
+    S.st.E.forEach(([a, b]) => { if (a === sel) rel.add(b); if (b === sel) rel.add(a); });
+    S.st.E.forEach(([a, b]) => { const on = a === sel || b === sel; c.strokeStyle = on ? 'rgba(78,205,196,.8)' : 'rgba(78,205,196,.05)'; c.lineWidth = on ? 1.4 : .8; c.beginPath(); c.moveTo(P[a][0], P[a][1]); c.lineTo(P[b][0], P[b][1]); c.stroke(); });
+    c.strokeStyle = 'rgba(232,190,80,.55)'; c.lineWidth = 1.6; c.beginPath(); P.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.stroke();
+    P.forEach((p, i) => {
+      const on = i === sel, r = rel.has(i), R = on ? 8 : r ? 6 : 4.2;
+      const g = c.createRadialGradient(p[0], p[1], 0, p[0], p[1], R * 3); g.addColorStop(0, on ? 'rgba(255,240,190,.8)' : r ? 'rgba(78,205,196,.5)' : 'rgba(232,190,80,.25)'); g.addColorStop(1, 'rgba(232,190,80,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(p[0], p[1], R * 3, 0, TAU); c.fill();
+      c.beginPath(); c.arc(p[0], p[1], R, 0, TAU); c.fillStyle = on ? '#fff4d0' : r ? '#8ff0e8' : '#e8be50'; c.fill();
+    });
+    if (sel >= 0) { const p = P[sel]; txt(c, sel === 0 ? 'Mañjuśrī, the first teacher' : sel === 52 ? 'the path ends with Samantabhadra' : 'teacher ' + (sel + 1), p[0], p[1] - 18, '#fff4d0', 12); }
+    S.cap(sel < 0 ? 'Fifty-three dots in the order Sudhana meets them. Follow the gold route, then touch a teacher.'
+      : 'Teacher ' + (sel + 1) + ' of 53. The teal lines are illustrative resonances that show how the pilgrimage can be read as a web. They are not claims about the text.');
+  }
+});
+
+/* ================= AVATAMSAKA x-virtues ================= */
+addViz('ava', {
+  tab: 'Perfected virtues', title: 'The Perfected Virtues', kind: 'Modern analogy', group: 'Practice',
+  lead: 'Work on one pāramitā and see how the other five respond. In this model, each virtue is held up by the others. The dashed shape is what growth would look like if they were separate.',
+  controls: [{ k: 'e', label: 'Effort on the chosen virtue', min: 0, max: 1, val: .6, step: .01 }, { btn: 'Reset', fn: S => { S.st.v = [.2, .2, .2, .2, .2, .2]; S.st.iso = [.2, .2, .2, .2, .2, .2]; } }],
+  init(S) { if (!S.st.v) { S.st.v = [.2, .2, .2, .2, .2, .2]; S.st.iso = [.2, .2, .2, .2, .2, .2]; S.st.sel = 0; } },
+  click(S, x, y) { (S.st.pos || []).forEach((p, i) => { if (Math.hypot(x - p[0], y - p[1]) < 36) S.st.sel = i; }); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, cx = w / 2, cy = h * .52, R = Math.min(w * .3, h * .36), v = S.st.v, iso = S.st.iso, sel = S.st.sel, e = S.st.e;
+    const NM = ['generosity', 'ethics', 'patience', 'diligence', 'meditation', 'wisdom'];
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const dt = 1 / 60;
+    v[sel] += dt * .22 * e * (1 - v[sel]); iso[sel] += dt * .22 * e * (1 - iso[sel]);
+    for (let i = 0; i < 6; i++) { if (i === sel) continue; let s = 0; for (let j = 0; j < 6; j++) if (j !== i) s += v[j]; v[i] += dt * .5 * (Math.max(v[i], .9 * s / 5) - v[i]) * (s / 5 > v[i] ? 1 : 0); v[i] = Math.min(1, v[i]); }
+    S.st.pos = NM.map((n, i) => { const a = -Math.PI / 2 + i / 6 * TAU; return [cx + Math.cos(a) * R * 1.3, cy + Math.sin(a) * R * 1.05]; });
+    const P = (i, val) => { const a = -Math.PI / 2 + i / 6 * TAU; return [cx + Math.cos(a) * R * val * 1.15, cy + Math.sin(a) * R * val * .95]; };
+    for (let k = 1; k <= 4; k++) { c.beginPath(); for (let i = 0; i < 6; i++) { const q = P(i, k / 4); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); } c.closePath(); c.strokeStyle = 'rgba(154,150,144,.18)'; c.stroke(); }
+    for (let i = 0; i < 6; i++) { const q = P(i, 1); c.strokeStyle = 'rgba(154,150,144,.2)'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(q[0], q[1]); c.stroke(); }
+    c.setLineDash([5, 5]); c.beginPath(); iso.forEach((val, i) => { const q = P(i, val); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath(); c.strokeStyle = 'rgba(200,200,220,.6)'; c.lineWidth = 1.3; c.stroke(); c.setLineDash([]);
+    c.beginPath(); v.forEach((val, i) => { const q = P(i, val); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); }); c.closePath();
+    const g = c.createRadialGradient(cx, cy, 0, cx, cy, R * 1.2); g.addColorStop(0, 'rgba(255,236,170,.55)'); g.addColorStop(1, 'rgba(212,175,55,.22)'); c.fillStyle = g; c.fill(); c.strokeStyle = '#e8d48b'; c.lineWidth = 2; c.stroke();
+    S.st.pos.forEach((p, i) => {
+      const on = i === sel; c.beginPath(); c.arc(p[0], p[1], on ? 7 : 5, 0, TAU); c.fillStyle = on ? '#fff4d0' : '#e8be50'; c.fill();
+      txt(c, NM[i], p[0], p[1] + (p[1] < cy ? -16 : 18), on ? '#fff4d0' : '#e8d48b', 12);
+      txt(c, Math.round(v[i] * 100) + '%', p[0], p[1] + (p[1] < cy ? -30 : 32), 'rgba(154,150,144,.95)', 10);
+    });
+    txt(c, 'solid: virtues held up by each other', 12, h - 30, '#e8d48b', 11, 'left'); txt(c, 'dashed: virtues as separate skills', 12, h - 14, 'rgba(200,200,220,.85)', 11, 'left');
+    S.cap('Tap a virtue to choose it, then set the effort. Working on ' + NM[sel] + ' lifts the other five, because in this model none of them can be complete alone. This is our illustration of the idea and not a measured result.');
+  }
+});
+
+/* ================= AVATAMSAKA x-rafter ================= */
+(function () {
+  const MODES = [
+    { k: 'whole', label: 'Whole', cap: 'Whole: the building is one thing, and it exists only as all of its parts together.' },
+    { k: 'part', label: 'Particular', cap: 'Particular: each part is itself, a pillar, a beam or a rafter, with a job no other part does.' },
+    { k: 'same', label: 'Identity', cap: 'Identity: every part works toward the same result, a building, so in that respect they are one.' },
+    { k: 'diff', label: 'Difference', cap: 'Difference: the parts stay different in kind and shape. Being one does not blur them.' },
+    { k: 'int', label: 'Integration', cap: 'Integration: the parts mutually support one another at their joints, and that is how a building arises.' },
+    { k: 'dis', label: 'Disintegration', cap: 'Disintegration: each part keeps its own nature and place. They do not dissolve into the whole.' }
+  ];
+  addViz('ava', {
+    tab: 'Rafter and building', title: 'The Rafter and the Building', kind: 'Classical', group: "Fazang's demonstrations",
+    lead: 'Fazang uses a house and its rafter to explain six characteristics: whole and part, same and different, joined and separate. Pick a characteristic, tap a piece, then remove the building.',
+    controls: MODES.map((m, i) => ({ btn: m.label, fn: S => { S.st.mode = i; } })).concat([{ k: 'rem', label: 'Remove the building', min: 0, max: 1, val: 0 }]),
+    init(S) { if (S.st.sel === undefined) { S.st.sel = 4; S.st.mode = 0; } S.st.k = S.st.k || { dis: 0, sep: 0, hue: 0, join: 0, glow: 0 }; S.st.rnd = Array.from({ length: 14 }, () => [rand(-1, 1), rand(-1, 1)]); },
+    click(S, x, y) {
+      let best = -1, bd = 22;
+      (S.st.parts || []).forEach((p, i) => {
+        const dx = p.b[0] - p.a[0], dy = p.b[1] - p.a[1], l2 = dx * dx + dy * dy, u = clamp(((x - p.a[0]) * dx + (y - p.a[1]) * dy) / l2), d = Math.hypot(x - (p.a[0] + u * dx), y - (p.a[1] + u * dy));
+        if (d < bd) { bd = d; best = i; }
+      });
+      if (best >= 0) S.st.sel = best;
+    },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, t = S.t, rem = S.st.rem, gy = h * .86, by = h * .55, md = MODES[S.st.mode].k, K = S.st.k;
+      const T = { dis: md === 'dis' ? 1 : md === 'part' ? .25 : 0, hue: md === 'diff' || md === 'part' ? 1 : 0, join: md === 'int' ? 1 : 0, glow: md === 'whole' || md === 'same' ? 1 : 0 };
+      for (const q in T) K[q] = lerp(K[q] || 0, T[q], .08);
+      c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+      const parts = [];
+      [.2, .4, .6, .8].forEach(f => parts.push({ name: 'pillar', a: [w * f, gy], b: [w * f, by] }));
+      parts.push({ name: 'beam', a: [w * .14, by], b: [w * .86, by] });
+      for (let i = 0; i < 9; i++) parts.push({ name: 'rafter', a: [w / 2, h * .16], b: [w * (.14 + .72 * i / 8), by] });
+      S.st.parts = parts;
+      const sel = S.st.sel, HU = { pillar: 25, beam: 200, rafter: 45 };
+      c.fillStyle = 'rgba(212,175,55,' + ((.07 + .16 * K.glow) * (1 - rem) * (1 - K.dis)) + ')';
+      c.beginPath(); c.moveTo(w / 2, h * .1); c.lineTo(w * .1, by - 6); c.lineTo(w * .9, by - 6); c.closePath(); c.fill();
+      c.strokeStyle = 'rgba(150,150,150,.3)'; c.lineWidth = 1; c.beginPath(); c.moveTo(20, gy + 10); c.lineTo(w - 20, gy + 10); c.stroke();
+      const draw = (p, i) => {
+        const isSel = i === sel, r = S.st.rnd[i];
+        let a = [p.a[0] + r[0] * 40 * K.dis, p.a[1] + r[1] * 26 * K.dis], b = [p.b[0] + r[0] * 40 * K.dis, p.b[1] + r[1] * 26 * K.dis], al = isSel ? 1 : 1 - .93 * rem;
+        if (isSel && rem > 0) { const la = [w / 2 - 55, gy + 6], lb = [w / 2 + 55, gy + 6]; a = [lerp(a[0], la[0], rem), lerp(a[1], la[1], rem)]; b = [lerp(b[0], lb[0], rem), lerp(b[1], lb[1], rem)]; }
+        const base = 'rgba(190,150,100,' + al + ')', col = isSel ? 'rgba(255,225,140,' + al + ')' : K.hue > .5 ? HUE(HU[p.name] + (i % 3) * 18, 65, 62, al) : K.glow > .5 ? 'rgba(255,225,150,' + (al * (.7 + .3 * Math.sin(t * 3))) + ')' : base;
+        c.strokeStyle = col; c.lineWidth = (p.name === 'beam' ? 8 : p.name === 'pillar' ? 9 : 5) * (K.hue > .5 && p.name === 'rafter' ? .8 : 1) + (isSel ? 2 : 0); c.lineCap = 'round';
+        c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke();
+        if (K.join > .3 && !isSel) { c.fillStyle = 'rgba(255,240,190,' + (.8 * K.join * (1 - rem)) + ')'; [a, b].forEach(q => { c.beginPath(); c.arc(q[0], q[1], 4, 0, TAU); c.fill(); }); }
+      };
+      parts.forEach((p, i) => { if (i !== sel) draw(p, i); }); draw(parts[sel], sel);
+      const nm = parts[sel].name;
+      txt(c, rem > .6 ? 'a piece of wood' : nm, w / 2, h * .06, 'rgba(255,225,140,.95)', 15);
+      S.cap(rem > .7 ? 'Remove the building and it is only a stick. Its role as a ' + nm + ' was on loan from the whole. Rafter and building make each other.'
+        : rem > .3 ? 'As the house goes, so does the rafter.' : MODES[S.st.mode].cap + ' The highlighted piece is a ' + nm + '.');
+    }
+  });
+})();
+
+
+</script>
+</body>
+</html>

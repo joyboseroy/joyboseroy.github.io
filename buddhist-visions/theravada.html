@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watching Experience: Early Buddhism and Theravāda</title>
+<meta name="description" content="Twenty-five interactive visualizations of Ānāpānasati, the four foundations, vipassanā, jhāna, the kasiṇas and death contemplation.">
+<style>
+  :root{
+    --bg:#07070d; --card:rgba(18,18,32,.88); --gold:#d4af37; --gold2:#e8d48b;
+    --teal:#4ecdc4; --text:#e8e6e3; --muted:#9a9690; --rose:#f0b6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  header{text-align:center;padding:3.2rem 1.25rem 1.6rem;background:linear-gradient(180deg,rgba(212,175,55,.09),transparent)}
+  header h1{font-weight:300;font-size:clamp(1.5rem,5vw,2.6rem);letter-spacing:.12em;color:var(--gold);margin-bottom:.7rem}
+  header p{color:var(--muted);max-width:760px;margin:0 auto;font-size:1.02rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.4rem}
+  nav a{color:var(--gold2);text-decoration:none;font:.86rem system-ui,sans-serif;padding:.4rem 1rem;border:1px solid rgba(212,175,55,.35);border-radius:2rem;transition:.2s}
+  nav a:hover{background:rgba(212,175,55,.15);border-color:var(--gold)}
+  main{max-width:1080px;margin:0 auto;padding:.5rem 1rem 3rem}
+  section{margin:2.6rem 0;background:var(--card);border:1px solid rgba(212,175,55,.13);border-radius:16px;padding:1.8rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  section>h2{font-weight:400;font-size:1.6rem;color:var(--gold);letter-spacing:.04em}
+  .sk{font-style:italic;color:var(--teal);font-size:.95rem;margin:.2rem 0 1rem}
+  section>p{margin-bottom:.9rem;font-size:1rem}
+  .principle{border-left:3px solid var(--gold);background:rgba(212,175,55,.06);color:var(--gold2);padding:.7rem 1rem;margin:1rem 0;font-style:italic}
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .8rem}
+  button,.tab{font:.85rem system-ui,sans-serif;background:transparent;border:1px solid rgba(212,175,55,.55);color:var(--gold2);padding:.4rem .95rem;border-radius:6px;cursor:pointer;transition:.2s}
+  button:hover{background:rgba(212,175,55,.16)}
+  .tab.active{background:rgba(212,175,55,.26);border-color:var(--gold2)}
+  .card{display:none}
+  .card.on{display:block}
+  .card h3{font-weight:400;font-size:1.2rem;color:var(--gold2);margin-bottom:.2rem}
+  .kind{font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+  .tabgroup{flex-basis:100%;font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .tabgroup:first-child{margin-top:0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.6rem;margin:1rem 0;font-size:.92rem}
+  .legend div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.65rem .9rem}
+  .legend b{color:var(--teal);font-weight:400}
+  .lead{color:var(--muted);font-size:.95rem;margin-bottom:.7rem}
+  .controls{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;align-items:center;margin:.5rem 0}
+  .controls label{display:flex;align-items:center;gap:.6rem;font:.82rem system-ui,sans-serif;color:var(--muted)}
+  .controls input[type=range]{width:min(240px,55vw);accent-color:var(--gold)}
+  .stage{position:relative;width:100%;height:clamp(300px,58vh,440px);border-radius:12px;overflow:hidden;background:#06060c;border:1px solid rgba(255,255,255,.07)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .cap{min-height:3.2em;margin-top:.7rem;color:var(--gold2);font-size:.97rem;font-style:italic}
+  .analogies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1rem 0}
+  .analogies div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1rem;font-size:.93rem}
+  .analogies b{color:var(--teal);font-weight:400}
+  footer{text-align:center;padding:2rem 1rem 3rem;color:var(--muted);font:.88rem system-ui,sans-serif;border-top:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){section{padding:1.3rem .9rem}.stage{height:clamp(280px,52vh,380px)}}
+
+  nav a[aria-current=page]{background:rgba(212,175,55,.22);border-color:var(--gold2)}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.6rem 0 .5rem}
+  .hub a{display:block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:1.3rem 1.2rem;transition:.2s}
+  .hub a:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .hub h2{font-weight:400;font-size:1.25rem;color:var(--gold);margin-bottom:.15rem}
+  .hub .sk{margin:0 0 .7rem}
+  .hub p{font-size:.95rem;color:var(--muted)}
+  .hub .count{display:block;margin-top:.8rem;font:.8rem system-ui,sans-serif;color:var(--gold2)}
+  .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin:2rem 0 0;font:.9rem system-ui,sans-serif}
+  .pager a{color:var(--gold2);text-decoration:none;border:1px solid rgba(212,175,55,.35);border-radius:2rem;padding:.4rem 1rem}
+  .pager a:hover{background:rgba(212,175,55,.15)}
+  a.inline{color:var(--teal)}
+  header h1{font-size:clamp(1.25rem,3.7vw,2.3rem)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <h1>EMPTINESS · INTERPENETRATION · PURE LAND</h1>
+  <p>Interactive contemplations on emptiness, interpenetration and the Pure Land. Each one is drawn live in your browser.</p>
+  <nav><a href="index.html">Home</a><a href="theravada.html" aria-current="page">Early Buddhism</a><a href="heart-sutra.html">Emptiness</a><a href="avatamsaka.html">Interpenetration</a><a href="pure-land.html">Pure Land</a><a href="three-visions.html">One reality</a><a href="combinations.html">Combinations</a></nav>
+</header>
+<main>
+<section id="theravada">
+    <h2>Watching Experience: Early Buddhism and Theravāda</h2>
+    <p class="sk">Ānāpānasati · Satipaṭṭhāna · vipassanā · jhāna · maraṇasati</p>
+    <p>Huayan wants infinite recursion, mirrors and mutual containment. The early texts and Theravāda meditation run nearly the other way: take an apparently continuous experience and resolve it, step by step, into breath, sensation, feeling, mind-states, conditions, arising and ceasing. Twenty-five visualizations follow, grouped by practice, from the sixteen steps of breathing to the ten kasiṇas and the contemplation of death. Several are deliberately abstract, and the ones about jhāna, nimitta and moments of insight are marked as illustrations, since accounts of those vary between teachers.</p>
+    <div class="legend"><div><b>Classical.</b> The image or teaching comes from the early texts or their commentaries.</div><div><b>Classical, modern rendering.</b> The idea is in the sources and the drawing is ours.</div><div><b>Modern analogy.</b> Our own comparison, which the tradition does not teach.</div></div>
+    <div class="tabs" data-group="th"></div>
+    <div class="cards" data-group="th"></div>
+  </section>
+<div class="pager"><a href="index.html">&larr; Home</a><a href="heart-sutra.html">Emptiness &rarr;</a></div>
+</main>
+<footer>
+  <p>Contemplative visualizations for study and meditation. Everything on this page is drawn procedurally in your browser.</p>
+  <p style="margin-top:.5rem">May all beings realize the luminous openness of mind.</p>
+</footer>
+<script>
+/* ================= utilities ================= */
+const TAU = Math.PI * 2;
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const tri = x => { x = x % 1; if (x < 0) x += 1; return x < .5 ? x * 2 : 2 - x * 2; };
+function txt(c, s, x, y, col, size, align) {
+  c.fillStyle = col; c.font = (size || 13) + 'px system-ui, sans-serif';
+  c.textAlign = align || 'center'; c.textBaseline = 'middle'; c.fillText(s, x, y);
+}
+
+/* ================= starfield ================= */
+(function () {
+  const cv = document.getElementById('stars'), c = cv.getContext('2d');
+  let w, h, st = [];
+  function rs() {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    st = Array.from({ length: 140 }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, a: Math.random() * .5 + .15, p: Math.random() * TAU }));
+  }
+  rs(); addEventListener('resize', rs);
+  (function d(t) {
+    c.clearRect(0, 0, w, h);
+    for (const s of st) { c.beginPath(); c.arc(s.x, s.y, s.r, 0, TAU); c.fillStyle = 'rgba(220,210,180,' + (s.a * (.6 + .4 * Math.sin(t * .001 + s.p))) + ')'; c.fill(); }
+    requestAnimationFrame(d);
+  })(0);
+})();
+
+/* ================= visualization framework ================= */
+const VIZ = [];
+const GROUP_ORDER = { th: ['Breath', 'Body and feeling', 'Mind and self', 'Insight', 'Concentration', 'Death'], mix: ['Heart and net', 'Death and the net', 'Four grammars'], ava: ['Doctrine', "Fazang's demonstrations", 'Scale and time', 'Entering one into all', 'The net', 'Practice'] };
+function addViz(group, spec) {
+  const tabs = document.querySelector('.tabs[data-group=' + group + ']');
+  const cards = document.querySelector('.cards[data-group=' + group + ']');
+  if (!tabs._g) {
+    tabs._g = {};
+    (GROUP_ORDER[group] || []).forEach(n => { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = n; tabs.appendChild(gl); tabs._g[n] = gl; });
+  }
+  const tb = document.createElement('button'); tb.className = 'tab'; tb.textContent = spec.tab;
+  if (spec.group) {
+    if (!tabs._g[spec.group]) { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = spec.group; tabs.appendChild(gl); tabs._g[spec.group] = gl; }
+    const prev = tabs._g[spec.group]; prev.after(tb); tabs._g[spec.group] = tb;
+  } else tabs.appendChild(tb);
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = '<h3></h3><p class="kind"></p><p class="lead"></p><div class="controls"></div><div class="stage"></div><p class="cap"></p>';
+  card.querySelector('h3').textContent = spec.title;
+  const kindEl = card.querySelector('.kind');
+  if (spec.kind) kindEl.textContent = spec.kind; else kindEl.remove();
+  card.querySelector('.lead').textContent = spec.lead;
+  cards.appendChild(card);
+  tb.onclick = () => {
+    tabs.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    [...cards.children].forEach(b => b.classList.remove('on'));
+    tb.classList.add('active'); card.classList.add('on');
+  };
+  if (tabs.querySelector('.tab') === tb) tb.onclick();
+  const stage = card.querySelector('.stage'), ctl = card.querySelector('.controls'), capEl = card.querySelector('.cap');
+  const cv = document.createElement('canvas'); stage.appendChild(cv);
+  const S = { spec, card, cv, ctx: cv.getContext('2d'), w: 0, h: 0, dpr: 1, mx: -999, my: -999, t: 0, st: {}, vis: false, play: null, capText: '' };
+  S.cap = s => { if (s !== S.capText) { S.capText = s; capEl.textContent = s; } };
+  (spec.controls || []).forEach(c => {
+    if (c.btn) {
+      const b = document.createElement('button'); b.textContent = c.btn; b.onclick = () => c.fn(S, b); ctl.appendChild(b);
+    } else {
+      const lab = document.createElement('label'); const sp = document.createElement('span'); sp.textContent = c.label; lab.appendChild(sp);
+      const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step || .01; inp.value = c.val;
+      S.st[c.k] = +c.val; lab.appendChild(inp); ctl.appendChild(lab);
+      inp.oninput = () => { S.st[c.k] = +inp.value; if (S.play && S.play.k === c.k) { S.play.on = false; S.play.btn.textContent = 'Play'; } };
+      if (c.play) {
+        const pb = document.createElement('button'); pb.textContent = 'Play'; ctl.appendChild(pb);
+        S.play = { k: c.k, min: +c.min, max: +c.max, period: c.play, on: false, btn: pb, inp, t0: 0 };
+        pb.onclick = () => {
+          const P = S.play; P.on = !P.on; pb.textContent = P.on ? 'Pause' : 'Play';
+          if (P.on) { const nrm = (S.st[P.k] - P.min) / (P.max - P.min); P.t0 = S.t - (nrm / 2) * P.period; }
+        };
+      }
+    }
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (r.width < 2) return;
+    S.dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * S.dpr); cv.height = Math.round(r.height * S.dpr);
+    S.w = r.width; S.h = r.height;
+    S.ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
+    if (spec.init) spec.init(S);
+  }
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(es => es.forEach(e => S.vis = e.isIntersecting)).observe(stage);
+  cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', () => { S.mx = -999; S.my = -999; });
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top;
+    if (spec.click) spec.click(S, S.mx, S.my);
+  });
+  S.tabBtn = tb;
+  VIZ.push(S);
+  return S;
+}
+function showViz(title) {
+  const S = VIZ.find(v => v.spec.title === title || v.spec.tab === title);
+  if (!S) return;
+  S.tabBtn.click();
+  S.card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function frame(now) {
+  const T = now / 1000;
+  for (const S of VIZ) {
+    if (!S.vis || !S.w || S.card.offsetParent === null) {
+      if (S.wasActive) { S.wasActive = false; if (S.spec.hide) S.spec.hide(S); }
+      continue;
+    }
+    S.wasActive = true;
+    S.t = T;
+    if (S.play && S.play.on) {
+      const P = S.play; const v = P.min + tri((S.t - P.t0) / P.period) * (P.max - P.min);
+      S.st[P.k] = v; P.inp.value = v;
+    }
+    const c = S.ctx; c.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.setLineDash([]);
+    try { S.spec.draw(S); } catch (e) { console.error(e); }
+  }
+  requestAnimationFrame(frame);
+})(0);
+
+/* shared lotus drawing */
+function lotus(c, x, y, s, open, alpha) {
+  c.save(); c.translate(x, y); c.globalAlpha = alpha;
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 5 : 7;
+    for (let k = 0; k < n; k++) {
+      const f = (k / (n - 1)) * 2 - 1, th = f * (.25 + .9 * open) * (layer ? .7 : 1);
+      c.save(); c.rotate(th);
+      const L = (layer ? 20 : 28) * s * (.8 + .2 * open), W = (6 + 4 * open) * s;
+      c.beginPath(); c.ellipse(0, -L * .55, W, L * .55, 0, 0, TAU);
+      const g = c.createLinearGradient(0, 0, 0, -L);
+      g.addColorStop(0, 'rgba(240,170,200,.95)');
+      g.addColorStop(1, layer ? 'rgba(255,225,235,.95)' : 'rgba(215,120,170,.85)');
+      c.fillStyle = g; c.fill(); c.restore();
+    }
+  }
+  if (open > .3) {
+    const r = 10 * s * open, g = c.createRadialGradient(0, -8 * s, 0, 0, -8 * s, r * 2.4);
+    g.addColorStop(0, 'rgba(255,245,200,' + (.9 * open) + ')'); g.addColorStop(1, 'rgba(255,220,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, -8 * s, r * 2.4, 0, TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= THERAVADA helpers ================= */
+const hsh = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+function sitFig(c, cx, by, H) {
+  c.beginPath(); c.arc(cx, by - H * .86, H * .09, 0, TAU);
+  c.moveTo(cx - H * .17, by - H * .66); c.quadraticCurveTo(cx - H * .21, by - H * .4, cx - H * .13, by - H * .16);
+  c.lineTo(cx + H * .13, by - H * .16); c.quadraticCurveTo(cx + H * .21, by - H * .4, cx + H * .17, by - H * .66);
+  c.quadraticCurveTo(cx, by - H * .72, cx - H * .17, by - H * .66); c.closePath();
+  c.moveTo(cx + H * .3, by - H * .08); c.ellipse(cx, by - H * .08, H * .3, H * .09, 0, 0, TAU);
+}
+function standFig(c, cx, by, H, lw) {
+  c.lineCap = 'round'; c.lineJoin = 'round';
+  c.beginPath(); c.arc(cx, by - H * .9, H * .07, 0, TAU); c.fill();
+  c.lineWidth = lw || H * .09;
+  c.beginPath(); c.moveTo(cx, by - H * .8); c.lineTo(cx, by - H * .45);
+  c.moveTo(cx, by - H * .75); c.lineTo(cx - H * .17, by - H * .5); c.moveTo(cx, by - H * .75); c.lineTo(cx + H * .17, by - H * .5);
+  c.moveTo(cx, by - H * .45); c.lineTo(cx - H * .09, by); c.moveTo(cx, by - H * .45); c.lineTo(cx + H * .09, by);
+  c.stroke();
+}
+function gbar(c, x, y, w, h, v, col, label) {
+  c.fillStyle = 'rgba(255,255,255,.08)'; c.fillRect(x, y, w, h);
+  c.fillStyle = col; c.fillRect(x, y, w * clamp(v), h);
+  if (label) txt(c, label, x, y - 8, '#c9c4b8', 11, 'left');
+}
+function haloGrad(c, x, y, r, col, a) {
+  const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, col.replace('A', a)); g.addColorStop(1, col.replace('A', 0));
+  c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, TAU); c.fill();
+}
+
+/* ================= THERAVADA 1: sixteen steps ================= */
+const STEPS16 = [
+  ['Body', 'Knowing a long breath as long'], ['Body', 'Knowing a short breath as short'],
+  ['Body', 'Experiencing the whole body of the breath'], ['Body', 'Calming the bodily process of breathing'],
+  ['Feeling', 'Experiencing rapture'], ['Feeling', 'Experiencing pleasure'],
+  ['Feeling', 'Experiencing the mental process'], ['Feeling', 'Calming the mental process'],
+  ['Mind', 'Experiencing the mind'], ['Mind', 'Gladdening the mind'],
+  ['Mind', 'Concentrating the mind'], ['Mind', 'Freeing the mind'],
+  ['Dhammas', 'Contemplating impermanence'], ['Dhammas', 'Contemplating fading away'],
+  ['Dhammas', 'Contemplating cessation'], ['Dhammas', 'Contemplating relinquishment']
+];
+addViz('th', {
+  tab: 'Sixteen steps', title: 'The Sixteen Steps of Breathing', kind: 'Classical (Ānāpānasati Sutta), modern rendering', group: 'Breath',
+  lead: 'Four tetrads: body, feeling, mind, dhammas. Move through the steps and the wave of the breath is drawn differently at each. The drawing is an illustration, not a claim about how any step must feel.',
+  controls: [{ k: 'p', label: 'Step', min: 1, max: 16, step: 1, val: 1, play: 70 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h; c.clearRect(0, 0, w, h);
+    const s = clamp(Math.round(S.st.p), 1, 16), tet = Math.floor((s - 1) / 4), T = S.t;
+    const cols = ['#d4af37', '#f0a3c0', '#4ecdc4', '#b7a6f5'], names = ['BODY', 'FEELING', 'MIND', 'DHAMMAS'];
+    const x0 = w * .07, dx = w * .86 / 15;
+    for (let i = 0; i < 16; i++) {
+      const x = x0 + i * dx, on = i + 1 === s;
+      c.beginPath(); c.arc(x, 44, on ? 8 : 4.5, 0, TAU); c.fillStyle = cols[Math.floor(i / 4)]; c.globalAlpha = on ? 1 : .4; c.fill();
+    }
+    c.globalAlpha = 1;
+    for (let k = 0; k < 4; k++) txt(c, names[k], x0 + (k * 4 + 1.5) * dx, 18, cols[k], 11);
+    const mid = h * .52, A = h * .22, col = cols[tet];
+    const P = { amp: 1, per: 6, wide: 0, spark: 0, glow: 0, fade: 0, ghost: 0, rel: 0, band: 0 };
+    if (s === 2) { P.per = 2.6; P.amp = .55; }
+    if (s === 3) P.wide = 1;
+    if (s === 4) P.amp = .3;
+    if (s === 5) P.spark = 1;
+    if (s === 6) { P.spark = .5; P.glow = .5; }
+    if (s === 7) { P.glow = .6; P.amp = .6; }
+    if (s === 8) { P.glow = .3; P.amp = .3; }
+    if (s >= 9 && s <= 12) { P.band = s - 8; P.amp = s === 11 ? .5 : .7; }
+    if (s === 13) P.ghost = 1;
+    if (s === 14) P.fade = 1;
+    if (s === 15) P.fade = 2;
+    if (s === 16) { P.rel = 1; P.fade = 1; P.amp = .5; }
+    if (P.glow) haloGrad(c, w / 2, mid, h * .35, 'rgba(255,225,150,A)', P.glow * .5);
+    const nl = P.wide ? 5 : 1, nGhost = P.ghost ? 3 : 1;
+    for (let g = 0; g < nGhost; g++) for (let l = 0; l < nl; l++) {
+      c.beginPath();
+      for (let x = 0; x <= w; x += 3) {
+        let env = 1; const u = x / w;
+        if (P.fade === 1) env = 1 - u * .95; if (P.fade === 2) env = 1 - sstep(.3, .55, u);
+        const ph = x / w * (w / 130) - (T - g * .9) / P.per * 3;
+        const y = mid + Math.sin(ph * TAU / 2) * A * P.amp * env * (P.wide ? 1 + l * .35 : 1) + (l - (nl - 1) / 2) * (P.wide ? 9 : 0);
+        x ? c.lineTo(x, y) : c.moveTo(x, y);
+      }
+      c.strokeStyle = col; c.globalAlpha = (P.wide ? .55 - l * .06 : .95) * (1 - g * .3); c.lineWidth = 2; c.stroke();
+    }
+    c.globalAlpha = 1;
+    if (P.spark) for (let i = 0; i < 28 * P.spark + 8; i++) {
+      const a = (hsh(i) + T * .05 * (1 + hsh(i + 9))) % 1, x = hsh(i + 3) * w, y = mid + (hsh(i + 5) - .5) * A * 2.4;
+      c.fillStyle = 'rgba(255,240,180,' + (.5 * Math.abs(Math.sin(T * 2 + i))) + ')'; c.fillRect(x, y, 2.2, 2.2);
+    }
+    if (P.rel) for (let i = 0; i < 26; i++) {
+      const u = (T * .12 + hsh(i)) % 1, x = w * .1 + hsh(i + 2) * w * .5 + u * w * .35, y = mid - u * h * .3 + Math.sin(u * 9 + i) * 8;
+      c.fillStyle = 'rgba(183,166,245,' + (1 - u) * .7 + ')'; c.beginPath(); c.arc(x, y, 2.2 * (1 - u * .6), 0, TAU); c.fill();
+    }
+    if (P.band) {
+      const by = h * .8, bh = 22;
+      c.globalAlpha = .9;
+      for (let x = w * .1; x < w * .9; x += 3) {
+        let a = .35 + .25 * Math.sin(x * .07 + T * (P.band === 1 ? 2.4 : 1));
+        if (P.band === 2) a = .55 + .3 * Math.sin(x * .04 + T * 1.4);
+        if (P.band === 3) a = .7;
+        c.fillStyle = 'rgba(78,205,196,' + a + ')'; const hh = P.band === 3 ? bh * .55 : bh; c.fillRect(x, by - hh / 2, 2, hh);
+      }
+      if (P.band === 4) { c.strokeStyle = 'rgba(78,205,196,.7)'; c.setLineDash([4, 4]); c.strokeRect(w * .1, by - bh, w * .8, bh * 2); c.setLineDash([]); }
+      c.globalAlpha = 1;
+      txt(c, 'the mind, watched as it is', w / 2, by + 28, '#8fd6d0', 11);
+    }
+    txt(c, s + '.  ' + STEPS16[s - 1][1], w / 2, h - 26, '#f2ecd8', 15);
+    S.cap(s <= 4 ? 'Body tetrad: attention starts with the breath itself and widens to the whole body of breathing.'
+      : s <= 8 ? 'Feeling tetrad: rapture and pleasure are experienced, and then the process that produces them is calmed.'
+      : s <= 12 ? 'Mind tetrad: the mind is known, gladdened, gathered and freed, one condition at a time.'
+      : 'Dhammas tetrad: the breath is seen as impermanent, fading, ceasing, and finally let go.');
+  }
+});
+
+/* ================= THERAVADA 2: breath at every scale ================= */
+addViz('th', {
+  tab: 'One breath to thousands', title: 'One Breath, Then a Thousand', kind: 'Modern analogy', group: 'Breath',
+  lead: 'A single breath has a beginning, rise, peak, fall and end. Zoom out and no two are alike. What looked like one continuous "breath" is a long run of separate events.',
+  controls: [{ k: 'z', label: 'Breaths shown', min: 0, max: 1, val: 0, play: 40 }],
+  init(S) {
+    const N = 2200, len = [], amp = [], cum = [0];
+    for (let i = 0; i < N; i++) { len.push(3.4 + 1.6 * Math.sin(i * .37) + hsh(i) * 2.2 + Math.sin(i * .011) * 1.2); amp.push(.55 + .4 * hsh(i + 50) + .15 * Math.sin(i * .09)); cum.push(cum[i] + len[i]); }
+    Object.assign(S.st, { len, amp, cum, N });
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st; c.clearRect(0, 0, w, h);
+    const n = Math.max(1, Math.round(Math.exp(st.z * Math.log(2000)))), Tt = st.cum[n];
+    const mid = h * .68, A = h * .42, x0 = 12, ww = w - 24;
+    const yAt = t => { let lo = 0, hi = n - 1; while (lo < hi) { const m = (lo + hi + 1) >> 1; if (st.cum[m] <= t) lo = m; else hi = m - 1; } const u = (t - st.cum[lo]) / st.len[lo]; return st.amp[lo] * Math.pow(Math.sin(Math.PI * clamp(u)), 1.3); };
+    c.strokeStyle = 'rgba(255,255,255,.12)'; c.beginPath(); c.moveTo(x0, mid); c.lineTo(x0 + ww, mid); c.stroke();
+    if (n <= 14) {
+      c.beginPath(); for (let x = 0; x <= ww; x += 2) { const y = mid - yAt(x / ww * Tt * .9999) * A; x ? c.lineTo(x0 + x, y) : c.moveTo(x0 + x, y); }
+      c.strokeStyle = '#d4af37'; c.lineWidth = 2; c.stroke();
+    } else {
+      c.fillStyle = 'rgba(212,175,55,.6)';
+      for (let x = 0; x < ww; x++) {
+        let mn = 9, mx = 0; for (let k = 0; k < 4; k++) { const v = yAt((x + k / 4) / ww * Tt * .9999); mn = Math.min(mn, v); mx = Math.max(mx, v); }
+        c.fillRect(x0 + x, mid - mx * A, 1, Math.max(1, mx * A));
+      }
+    }
+    if (n === 1) {
+      const ph = ['inception', 'rise', 'peak', 'fall', 'cessation'], xs = [0, .25, .5, .75, 1];
+      ph.forEach((p, i) => { const x = x0 + xs[i] * ww * .98, y = mid - yAt(xs[i] * Tt * .9999) * A; c.fillStyle = '#fff4d0'; c.beginPath(); c.arc(x, y, 4, 0, TAU); c.fill(); txt(c, p, clamp(x, 46, w - 46), y - 16 - (i === 2 ? 4 : 0), '#e8d48b', 12); });
+    }
+    txt(c, n + (n === 1 ? ' breath' : ' breaths') + ' · about ' + (Tt < 90 ? Math.round(Tt) + ' seconds' : Tt < 5400 ? Math.round(Tt / 60) + ' minutes' : (Tt / 3600).toFixed(1) + ' hours'), w / 2, 24, '#c9c4b8', 13);
+    S.cap(n === 1 ? 'One breath: it starts, grows, peaks, falls and ends.' : n < 15 ? 'A few breaths. Each one differs a little in length and depth.' : n < 200 ? 'The individual breaths crowd together. There is no single "the breath" here, only a run of them.' : 'Thousands of events. The continuity is something we assemble from many arisings and endings.');
+  }
+});
+
+/* ================= THERAVADA 3: vanishing breath ================= */
+addViz('th', {
+  tab: 'Vanishing breath', title: 'The Vanishing Breath', kind: 'Modern analogy', group: 'Breath',
+  lead: 'A field of light breathes in and out. With each cycle a little of it is simply no longer there. No explosion, only cessation.',
+  controls: [{ k: 'p', label: 'Cycles', min: 0, max: 1, val: 0, play: 50 }],
+  init(S) { S.st.pts = Array.from({ length: 300 }, (_, i) => ({ a: hsh(i) * TAU, r: Math.sqrt(hsh(i + 7)), th: hsh(i + 13), ph: hsh(i + 21) * TAU })); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * .5, R = Math.min(w, h) * .38, T = S.t, p = S.st.p, br = .5 - .5 * Math.cos(T * 1.05);
+    const sc = .55 + .45 * br; let vis = 0;
+    for (const q of S.st.pts) {
+      const a = clamp((q.th - p) * 7); if (a <= 0) continue; vis++;
+      const wob = 1 + .06 * Math.sin(T * 1.7 + q.ph), x = cx + Math.cos(q.a + T * .05) * q.r * R * sc * wob, y = cy + Math.sin(q.a + T * .05) * q.r * R * sc * wob;
+      c.fillStyle = 'rgba(255,232,160,' + (a * (.35 + .5 * br)) + ')'; c.beginPath(); c.arc(x, y, 2.4, 0, TAU); c.fill();
+    }
+    txt(c, br > .5 ? 'in' : 'out', cx, h - 26, 'rgba(232,212,139,.5)', 13);
+    txt(c, vis + ' of 300 points remain', w - 12, 18, '#9a9690', 11, 'right');
+    S.cap(vis > 200 ? 'The breath fills and empties the field.' : vis > 40 ? 'Each cycle leaves a little less. Nothing is removed by force.' : vis > 0 ? 'Almost nothing left to hold.' : 'Breath, sensation, disappearance.');
+  }
+});
+
+/* ================= THERAVADA 4: breath to whole body ================= */
+addViz('th', {
+  tab: 'Breath to whole body', title: 'From the Nostrils to the Whole Body', kind: 'Classical, modern rendering', group: 'Breath',
+  lead: 'Attention starts at one point and widens: nostrils, chest, abdomen, posture, the whole body, and finally the space the body sits in. Nothing mystical is added. Only the field of awareness grows.',
+  controls: [{ k: 'p', label: 'Widen', min: 0, max: 5, val: 0, play: 40 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h; c.clearRect(0, 0, w, h);
+    const H = h * .82, cx = w / 2, by = h * .9, p = S.st.p, T = S.t, br = .5 - .5 * Math.cos(T * 1.1);
+    const pts = [[cx, by - H * .8], [cx, by - H * .55], [cx, by - H * .3]];
+    c.fillStyle = 'rgba(120,120,150,.28)'; sitFig(c, cx, by, H); c.fill();
+    if (p > 3.5) { c.fillStyle = 'rgba(212,175,55,' + .35 * sstep(3.5, 4.2, p) + ')'; sitFig(c, cx, by, H); c.fill(); }
+    if (p > 2.6 && p < 4.2) { c.strokeStyle = 'rgba(232,212,139,' + sstep(2.6, 3.2, p) + ')'; c.lineWidth = 2; sitFig(c, cx, by, H); c.stroke(); }
+    const names = ['nostrils', 'chest', 'abdomen', 'posture', 'whole body', 'the space around the body'];
+    for (let k = 0; k < 3; k++) { const a = sstep(k - .3, k + .3, p) * (1 - sstep(k + 1, k + 2, p) * .6); if (a > 0) haloGrad(c, pts[k][0], pts[k][1], H * (.09 + .05 * br) * (1 + (p - k > 1 ? .5 : 0)), 'rgba(255,225,150,A)', a); }
+    if (p > 4.2) { const a = sstep(4.2, 5, p); haloGrad(c, cx, by - H * .45, H * .8, 'rgba(120,200,255,A)', a * .32); }
+    txt(c, names[clamp(Math.round(p), 0, 5)], cx, 20, '#f2ecd8', 15);
+    S.cap('Whole body here means the body of the breath and the body it moves through, felt as it is. It is a widening of attention.');
+  }
+});
+
+/* ================= THERAVADA 5: four elements ================= */
+addViz('th', {
+  tab: 'Four elements', title: 'The Body as Four Properties', kind: 'Classical, modern rendering', group: 'Body and feeling',
+  lead: 'Earth is solidity, water is cohesion, fire is temperature, air is motion. Move the pointer over the figure: each region is a different mixture of the same four properties. "Body" is a convenient name laid over them.',
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h; c.clearRect(0, 0, w, h);
+    const H = h * .84, cx = w * .3, by = h * .93;
+    c.fillStyle = 'rgba(160,160,190,.3)'; c.strokeStyle = 'rgba(160,160,190,.3)'; standFig(c, cx, by, H, H * .1);
+    const regions = [[.62, 1, 'head and neck', [.7, .55, .55, .3]], [.4, .62, 'trunk', [.45, .8, .85, .55]], [.15, .4, 'hips and thighs', [.65, .6, .6, .4]], [0, .15, 'feet', [.85, .35, .4, .3]]];
+    const fy = (by - S.my) / H; let R = null;
+    if (Math.abs(S.mx - cx) < H * .3 && fy > 0 && fy < 1) R = regions.find(r => fy >= r[0] && fy <= r[1]);
+    const v = R ? R[3] : [.6, .6, .6, .4], T = S.t;
+    if (R) { c.fillStyle = 'rgba(232,212,139,.25)'; c.fillRect(cx - H * .22, by - R[1] * H, H * .44, (R[1] - R[0]) * H); }
+    const lab = [['earth · solidity', '#c69c6d'], ['water · cohesion', '#5fa8d3'], ['fire · temperature', '#e8743b'], ['air · motion', '#b9e3d6']];
+    const bx = w * .55, bw = w * .38;
+    lab.forEach((l, i) => { const y = h * .28 + i * h * .14; gbar(c, bx, y, bw, 12, v[i] + .04 * Math.sin(T * (1 + i) + i), l[1], l[0]); });
+    txt(c, R ? R[2] : 'hover over the figure', bx, h * .13, '#f2ecd8', 15, 'left');
+    S.cap(R ? 'No region is pure earth or pure fire. Each is a pattern of properties, and each property is always shifting.' : 'These four are properties, not substances or spirits: hardness, stickiness, warmth, movement.');
+  }
+});
+
+/* ================= THERAVADA 6: thirty-two parts ================= */
+const PARTS32 = ['head hair', 'body hair', 'nails', 'teeth', 'skin', 'flesh', 'sinews', 'bones', 'bone marrow', 'kidneys', 'heart', 'liver', 'diaphragm', 'spleen', 'lungs', 'large intestine', 'small intestine', 'stomach contents', 'feces', 'brain', 'bile', 'phlegm', 'pus', 'blood', 'sweat', 'fat', 'tears', 'grease', 'saliva', 'snot', 'joint fluid', 'urine'];
+addViz('th', {
+  tab: 'Thirty-two parts', title: 'The Thirty-Two Parts', kind: 'Classical (Satipaṭṭhāna, Khuddakapāṭha), modern rendering', group: 'Body and feeling',
+  lead: 'The classical list of parts of the body, then a zoom past them. The question is not whether the body lacks essence but a plainer one: what exactly are you calling "body"?',
+  controls: [{ k: 'z', label: 'Look closer', min: 0, max: 1, val: 0, play: 40 }],
+  init(S) { S.st.dust = Array.from({ length: 260 }, (_, i) => ({ x: hsh(i) * 2 - 1, y: hsh(i + 5) * 2 - 1, v: hsh(i + 9) })); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, z = S.st.z, T = S.t; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * .5, H = h * .8, by = cy + H / 2;
+    const bodyA = 1 - sstep(.3, .5, z), partsA = sstep(.05, .3, z) * (1 - sstep(.62, .78, z)), spread = sstep(.3, .65, z);
+    if (bodyA > 0) { c.globalAlpha = bodyA * .55; c.fillStyle = '#8a8fb8'; c.strokeStyle = '#8a8fb8'; standFig(c, cx, by, H, H * .1); c.globalAlpha = 1; }
+    const R = Math.min(w * .42, h * .44);
+    PARTS32.forEach((nm, i) => {
+      const a = i / 32 * TAU - Math.PI / 2, r0 = R * .12, r1 = R * (.62 + .3 * spread + .04 * Math.sin(T + i));
+      const x = cx + Math.cos(a) * lerp(r0, r1, sstep(.05, .5, z)) * 1.45, y = cy + Math.sin(a) * lerp(r0, r1, sstep(.05, .5, z)) * .95;
+      c.globalAlpha = partsA; txt(c, nm, x, y, '#f0d9a0', w < 520 ? 9 : 11); c.globalAlpha = 1;
+    });
+    const dz = sstep(.55, .95, z);
+    if (dz > 0) {
+      const stage = z < .7 ? 'cells' : z < .85 ? 'molecules' : 'processes';
+      S.st.dust.forEach(q => {
+        const f = z > .85 ? 1 : 0, x = cx + (q.x * R * 1.15) + Math.sin(T * .8 + q.v * 9) * 5 + f * Math.sin(q.y * 4 + T) * 24 * (z - .85) * 6, y = cy + q.y * R * .9 + Math.cos(T * .7 + q.v * 7) * 5;
+        c.fillStyle = 'rgba(200,190,150,' + dz * .55 + ')'; c.beginPath(); c.arc(x, y, z > .85 ? 1.3 : 2.2, 0, TAU); c.fill();
+      });
+      txt(c, stage, cx, h - 18, '#e8d48b', 14);
+    }
+    S.cap(z < .3 ? 'One body, apparently.' : z < .6 ? 'A heap of parts, each with its own name, none of which is "me".' : z < .85 ? 'Parts give way to cells and molecules.' : 'Past the parts there are only processes. The word "body" was a designation.');
+  }
+});
+
+/* ================= THERAVADA 7: feeling and craving ================= */
+addViz('th', {
+  tab: 'Feeling and craving', title: 'Feeling Is Not Craving', kind: 'Classical (vedanā and taṇhā), modern rendering', group: 'Body and feeling',
+  lead: 'Points of pleasant, painful and neutral feeling drift through. Touch one. With craving, it swells and holds on, and stress accumulates. Without craving, the same feeling simply passes.',
+  controls: [{ btn: 'With craving', fn: (S, b) => { S.st.crave = 1; } }, { btn: 'Without craving', fn: (S, b) => { S.st.crave = 0; } }],
+  init(S) { S.st.pts = []; S.st.crave = 1; S.st.stress = 0; S.st.next = 0; S.st.last = 0; },
+  click(S, x, y) {
+    let best = null, bd = 1e9; for (const p of S.st.pts) { const d = Math.hypot(p.x - x, p.y - y); if (d < bd) { bd = d; best = p; } }
+    if (best && bd < 40 + best.s) { best.touched = true; best.t0 = S.t; }
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, dt = Math.min(.05, T - (st.last || T)); st.last = T; c.clearRect(0, 0, w, h);
+    if (T > st.next && st.pts.length < 26) { st.next = T + .45; const k = Math.floor(Math.random() * 3); st.pts.push({ k, x: rand(30, w - 30), y: rand(50, h - 40), vx: rand(-12, 12), vy: rand(-8, 8), s: 6, born: T, life: rand(5, 8), touched: false, t0: 0 }); }
+    const col = ['#f0c24b', '#e05a5a', '#8fa6c9'], nm = ['pleasant', 'painful', 'neutral'];
+    let grip = 0;
+    st.pts = st.pts.filter(p => {
+      p.x += p.vx * dt; p.y += p.vy * dt;
+      let age = T - p.born, a = 1;
+      if (p.touched && st.crave) { p.s = Math.min(46, p.s + dt * 16); grip += p.s; p.life = 1e9; a = 1; }
+      else if (p.touched) { const u = (T - p.t0) / 1.6; a = 1 - u; p.s += dt * 4; if (u >= 1) return false; }
+      else { a = clamp(age / .6) * clamp((p.life - age) / 1.2); if (age > p.life) return false; }
+      p.a = a; return true;
+    });
+    for (const p of st.pts) {
+      c.globalAlpha = p.a * .9; c.fillStyle = col[p.k]; c.beginPath(); c.arc(p.x, p.y, p.s, 0, TAU); c.fill();
+      if (p.touched && st.crave) { c.strokeStyle = 'rgba(255,255,255,.4)'; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU + T; c.beginPath(); c.moveTo(p.x + Math.cos(a) * p.s, p.y + Math.sin(a) * p.s); c.lineTo(p.x + Math.cos(a) * (p.s + 10 + 4 * Math.sin(T * 4 + i)), p.y + Math.sin(a) * (p.s + 10)); c.stroke(); } }
+    }
+    c.globalAlpha = 1;
+    st.stress = clamp(st.stress + grip * dt * .0009 - dt * .08);
+    gbar(c, w - 150, 26, 130, 10, st.stress, '#e05a5a', 'stress');
+    [0, 1, 2].forEach(i => { c.fillStyle = col[i]; c.beginPath(); c.arc(20, 24 + i * 18, 5, 0, TAU); c.fill(); txt(c, nm[i], 32, 24 + i * 18, '#c9c4b8', 11, 'left'); });
+    txt(c, st.crave ? 'mode: with craving' : 'mode: without craving', w / 2, h - 16, '#e8d48b', 12);
+    S.cap(st.crave ? 'Touch a point. Wanting more of a pleasant one, or less of a painful one, is what grows and hurts.' : 'The feeling arises, is known, and fades. It was never the problem. The reaching was.');
+  }
+});
+
+/* ================= THERAVADA 8: pain as a wave ================= */
+addViz('th', {
+  tab: 'Pain as a wave', title: 'Pain Is a Wave, Not a Flame', kind: 'Modern analogy', group: 'Body and feeling',
+  lead: 'A painful sensation rises and falls. Look closer and it is made of many small changing events. Add resistance and a second, longer layer of suffering appears on top.',
+  controls: [{ k: 'z', label: 'Look closer', min: 0, max: 1, val: 0, play: 40 }, { btn: 'Resist / let be', fn: (S, b) => { S.st.res = !S.st.res; } }],
+  init(S) { S.st.res = false; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, z = S.st.z, T = S.t; c.clearRect(0, 0, w, h);
+    const x0 = 34, ww = w - 60, base = h - 40, top = 40, cur = ((T * .06) % 1);
+    c.strokeStyle = 'rgba(255,255,255,.2)'; c.beginPath(); c.moveTo(x0, top - 10); c.lineTo(x0, base); c.lineTo(x0 + ww, base); c.stroke();
+    txt(c, 'intensity', x0 + 4, top - 18, '#9a9690', 11, 'left'); txt(c, 'time', x0 + ww, base + 18, '#9a9690', 11, 'right');
+    const W = 1 - .9 * z, ctr = .45;
+    const f = (u, res) => { const g = Math.exp(-Math.pow((u - .45) / (res ? .22 : .12), 2)) * (res ? 1.25 : 1); return g; };
+    const micro = u => { const s1 = Math.sin(u * 330 + 1) * .5 + Math.sin(u * 731 + 2) * .3 + Math.sin(u * 1290 + 5) * .2; return s1; };
+    const curve = (res) => { c.beginPath(); for (let x = 0; x <= ww; x += 2) {
+      const u = ctr - W / 2 + (x / ww) * W, y = f(u, res) * (1 + z * z * .55 * micro(u) * (1 / (.4 + f(u, res))) * .5) + z * .12 * micro(u * 1.7) * Math.exp(-Math.pow((u - .45) / .3, 2));
+      const Y = base - clamp(y, 0, 1.4) * (base - top) * .7; x ? c.lineTo(x0 + x, Y) : c.moveTo(x0 + x, Y); } };
+    if (S.st.res) { curve(true); c.setLineDash([6, 4]); c.strokeStyle = '#e05a5a'; c.lineWidth = 2; c.stroke(); c.setLineDash([]); }
+    curve(false); c.strokeStyle = '#f0c24b'; c.lineWidth = 2.4; c.stroke();
+    const mx = x0 + ((cur - (ctr - W / 2)) / W) * ww;
+    if (cur > ctr - W / 2 && cur < ctr + W / 2) { c.strokeStyle = 'rgba(255,255,255,.4)'; c.beginPath(); c.moveTo(mx, top); c.lineTo(mx, base); c.stroke(); }
+    if (S.st.res) txt(c, 'pain + resisting the pain', x0 + ww * .78, top + 10, '#e05a5a', 12); txt(c, 'the sensation itself', x0 + ww * .5, top + 10 + (S.st.res ? 18 : 0), '#f0c24b', 12);
+    S.cap(z < .3 ? 'A hump of intensity: it arises, peaks, subsides.' : z < .8 ? 'Closer in, the smooth hump is a ragged run of changes.' : 'At this scale nothing stays the same for two moments.');
+  }
+});
+/* ================= THERAVADA 9: mind weather ================= */
+const WEATHER = {
+  calm: { name: 'calm', bg: ['#243b55', '#6f8fa8'], n: 3, sp: 4, dark: .1, sun: .5 },
+  agitated: { name: 'agitated', bg: ['#3b3f58', '#7c7f99'], n: 10, sp: 60, dark: .3, streak: 1 },
+  greed: { name: 'wanting', bg: ['#5a2d1c', '#e08a3c'], n: 6, sp: 10, dark: .1, haze: 1 },
+  anger: { name: 'anger', bg: ['#1c1218', '#5c1d24'], n: 9, sp: 25, dark: .7, bolt: 1 },
+  dull: { name: 'dullness', bg: ['#4b4f57', '#7b7f87'], n: 9, sp: 3, dark: .6, rain: .4, mist: 1 },
+  scattered: { name: 'scatter', bg: ['#33405a', '#8aa0c0'], n: 16, sp: 30, dark: .2, multi: 1 },
+  focused: { name: 'focused', bg: ['#0c1a2a', '#1e3a5a'], n: 0, sp: 0, dark: 0, beam: 1 },
+  joyful: { name: 'joy', bg: ['#3a5a8a', '#f2c96b'], n: 4, sp: 8, dark: 0, sun: 1 }
+};
+addViz('th', {
+  tab: 'Mind weather', title: 'The Mind as Weather', kind: 'Modern analogy (citta-anupassanā)', group: 'Mind and self',
+  lead: 'Choose a state of mind. At first it is the whole sky: "I am angry". Slide toward observing and the same weather appears in a window, with room around it: "anger is present".',
+  controls: Object.keys(WEATHER).map(k => ({ btn: WEATHER[k].name, fn: S => { S.st.w = k; } })).concat([{ k: 'o', label: 'Observing', min: 0, max: 1, val: 0, play: 30 }]),
+  init(S) { S.st.w = S.st.w || 'calm'; S.st.cl = Array.from({ length: 18 }, (_, i) => ({ x: hsh(i) , y: hsh(i + 4), s: .6 + hsh(i + 8), v: hsh(i + 12) - .5 })); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, o = S.st.o, T = S.t, W = WEATHER[S.st.w]; c.clearRect(0, 0, w, h);
+    const fw = lerp(w, w * .46, o), fh = lerp(h, h * .58, o), fx = (w - fw) / 2, fy = lerp(0, h * .12, o);
+    if (o > 0) { c.fillStyle = '#0a0b14'; c.fillRect(0, 0, w, h); c.fillStyle = 'rgba(255,255,255,.06)'; c.fillRect(0, h * .78, w, h * .22); }
+    c.save(); c.beginPath(); c.rect(fx, fy, fw, fh); c.clip();
+    const g = c.createLinearGradient(0, fy, 0, fy + fh); g.addColorStop(0, W.bg[0]); g.addColorStop(1, W.bg[1]); c.fillStyle = g; c.fillRect(fx, fy, fw, fh);
+    if (W.sun) haloGrad(c, fx + fw * .75, fy + fh * .3, fh * .5, 'rgba(255,230,150,A)', W.sun);
+    if (W.beam) { const gg = c.createLinearGradient(fx + fw * .5, fy, fx + fw * .5, fy + fh); gg.addColorStop(0, 'rgba(180,220,255,.5)'); gg.addColorStop(1, 'rgba(180,220,255,0)'); c.fillStyle = gg; c.fillRect(fx + fw * .47, fy, fw * .06, fh); }
+    if (W.haze) for (let i = 0; i < 6; i++) haloGrad(c, fx + fw * (.15 + i * .14), fy + fh * (.7 + .05 * Math.sin(T + i)), fh * .3, 'rgba(255,170,80,A)', .25);
+    S.st.cl.forEach((q, i) => {
+      if (i >= W.n) return; const dir = W.multi ? (i % 2 ? 1 : -1) * (1 + i % 3) : 1;
+      const x = fx + ((q.x + T * W.sp * dir * .0007 * (1 + q.s) + 10) % 1) * (fw + 160) - 80, y = fy + q.y * fh * .7 + Math.sin(T + i) * 4 * (W.streak ? 4 : 1), r = fh * .12 * q.s;
+      c.globalAlpha = .75; haloGrad(c, x, y, r * 1.8, 'rgba(' + (W.dark > .4 ? '40,40,52' : '230,235,245') + ',A)', .85);
+      if (W.streak) { c.strokeStyle = 'rgba(255,255,255,.25)'; c.beginPath(); c.moveTo(x - r, y + 6); c.lineTo(x - r * 3, y + 6); c.stroke(); }
+      c.globalAlpha = 1;
+    });
+    if (W.rain || W.mist) for (let i = 0; i < 50; i++) { const x = fx + hsh(i) * fw, y = fy + ((hsh(i + 3) + T * .5 * (.6 + hsh(i))) % 1) * fh; c.strokeStyle = 'rgba(200,210,225,.35)'; c.beginPath(); c.moveTo(x, y); c.lineTo(x - 2, y + 9); c.stroke(); }
+    if (W.bolt && Math.sin(T * 3.3) > .93) { c.strokeStyle = 'rgba(255,240,200,.95)'; c.lineWidth = 2; c.beginPath(); let x = fx + fw * (.3 + hsh(Math.floor(T * 3.3)) * .4), y = fy; c.moveTo(x, y); for (let i = 0; i < 6; i++) { x += (hsh(i + Math.floor(T)) - .5) * 30; y += fh / 6; c.lineTo(x, y); } c.stroke(); c.lineWidth = 1; }
+    c.restore();
+    c.strokeStyle = 'rgba(232,212,139,' + o * .7 + ')'; c.strokeRect(fx, fy, fw, fh);
+    if (o > .05) { c.globalAlpha = o; c.fillStyle = 'rgba(200,205,225,.7)'; c.beginPath(); c.arc(w / 2, h * .84, 8, 0, TAU); c.fill(); c.fillRect(w / 2 - 12, h * .84 + 8, 24, 22); c.globalAlpha = 1; }
+    const label = o < .5 ? 'I am ' + (S.st.w === 'greed' ? 'wanting' : W.name) : W.name + ' is present';
+    txt(c, label, w / 2, h - 12, '#f2ecd8', 15);
+    S.cap(o < .5 ? 'No gap between you and the state. The state is the whole sky.' : 'Same weather, but now it is something occurring in the mind. You do not control it, you watch it.');
+  }
+});
+
+/* ================= THERAVADA 10: five hindrances ================= */
+const HIND = [['sensual desire', '#f0a35b'], ['ill will', '#d64545'], ['sloth and torpor', '#7a7f96'], ['restlessness and remorse', '#c9a4f0'], ['doubt', '#6fb5a8']];
+addViz('th', {
+  tab: 'Five hindrances', title: 'The Five Hindrances', kind: 'Classical (Nīvaraṇa), modern rendering as a dynamic system', group: 'Mind and self',
+  lead: 'Five disturbances crowd around a steady light. They grow when fed and shrink when known. Click one to give it a jolt, then try the sliders: feeding it and seeing it are different things.',
+  controls: [{ k: 'feed', label: 'Feeding', min: 0, max: 1, val: .55 }, { k: 'aware', label: 'Mindfulness', min: 0, max: 1, val: .2 }, { k: 'inv', label: 'Investigation', min: 0, max: 1, val: 0 }],
+  init(S) { S.st.h = HIND.map(() => .35); S.st.last = 0; },
+  click(S, x, y) { const cx = S.w / 2, cy = S.h / 2, R = Math.min(S.w, S.h) * .34; HIND.forEach((hn, i) => { const a = i / 5 * TAU - Math.PI / 2, px = cx + Math.cos(a) * R, py = cy + Math.sin(a) * R; if (Math.hypot(px - x, py - y) < 55) S.st.h[i] = Math.min(1, S.st.h[i] + .4); }); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, dt = Math.min(.05, T - (st.last || T)); st.last = T; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * .34; let tot = 0;
+    st.h = st.h.map((v, i) => { const grow = st.feed * .5 * (1 - v), decay = (.06 + st.aware * .35 + st.inv * .4) * v * (1 - st.feed * .6); v = clamp(v + (grow - decay) * dt * .6); tot += v; return v; });
+    const coh = clamp(1 - tot / 3.2);
+    haloGrad(c, cx, cy, R * .8, 'rgba(255,240,190,A)', .25 + .6 * coh);
+    c.beginPath(); c.arc(cx, cy, 16 + 10 * coh, 0, TAU); c.fillStyle = 'rgba(255,248,215,' + (.4 + .6 * coh) + ')'; c.fill();
+    HIND.forEach((hn, i) => {
+      const a = i / 5 * TAU - Math.PI / 2 + Math.sin(T * (.4 + i * .1)) * .1 * st.h[i], v = st.h[i], d = R * (1.05 - v * .45), x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d;
+      if (st.aware > .3) { c.strokeStyle = 'rgba(255,255,255,' + (st.aware * .35) + ')'; c.beginPath(); c.arc(x, y, 10 + v * 32 + 6, 0, TAU); c.stroke(); }
+      c.fillStyle = hn[1]; c.globalAlpha = .35 + .5 * v; c.beginPath(); c.arc(x, y, 8 + v * 30 + 2 * Math.sin(T * 3 + i), 0, TAU); c.fill(); c.globalAlpha = 1;
+      if (st.inv > .3) { c.strokeStyle = 'rgba(255,255,255,.25)'; c.setLineDash([3, 4]); c.beginPath(); c.moveTo(x, y); c.lineTo(cx + Math.cos(a) * d * .3, cy + Math.sin(a) * d * .3); c.stroke(); c.setLineDash([]); }
+      txt(c, hn[0], cx + Math.cos(a) * (R * 1.32), cy + Math.sin(a) * (R * 1.2), hn[1], 11);
+    });
+    txt(c, 'steadiness ' + Math.round(coh * 100) + '%', cx, h - 14, '#c9c4b8', 12);
+    S.cap(st.feed > .6 && st.aware < .3 ? 'Fed and unwatched, they close in.' : st.inv > .4 ? 'Looking into what conditions each one weakens the conditions. A hindrance known clearly is already a little smaller.' : 'A hindrance that is seen and not fed loses its fuel and decays.');
+  }
+});
+
+/* ================= THERAVADA 11: mental process graph ================= */
+const CHAIN = ['contact', 'feeling', 'perception', 'intention', 'action', 'habit'];
+addViz('th', {
+  tab: 'Mental process graph', title: 'The Reactive Loop as a Graph', kind: 'Modern analogy (inspired by dependent origination, not a neural model)', group: 'Mind and self',
+  lead: 'Contact gives rise to feeling, then perception, intention, action, and a strengthened habit that shapes the next contact. Raise attention and the chain stops at feeling: the feeling is known, and the habit is not fed.',
+  controls: [{ k: 'a', label: 'Attention', min: 0, max: 1, val: 0, play: 40 }],
+  init(S) { S.st.pulses = []; S.st.next = 0; S.st.hab = .4; S.st.last = 0; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, dt = Math.min(.05, T - (st.last || T)); st.last = T; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * .5, R = Math.min(w * .36, h * .36);
+    const pos = CHAIN.map((_, i) => { const a = i / 6 * TAU - Math.PI / 2; return [cx + Math.cos(a) * R * 1.25, cy + Math.sin(a) * R]; });
+    if (T > st.next) { st.next = T + 2.4; st.pulses.push({ i: 0, u: 0, held: false, ring: 0 }); }
+    for (let i = 0; i < 6; i++) { const a = pos[i], b = pos[(i + 1) % 6]; const cut = i === 1 && st.a > .55; c.strokeStyle = cut ? 'rgba(255,255,255,.12)' : 'rgba(212,175,55,.4)'; c.setLineDash(cut ? [4, 5] : []); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.setLineDash([]); }
+    st.pulses = st.pulses.filter(p => {
+      if (p.held) { p.ring += dt; return p.ring < 2.2; }
+      p.u += dt * .9; if (p.u >= 1) { p.u = 0; p.i++; if (p.i === 2 && st.a > .55) { p.held = true; p.ring = 0; p.at = 1; return true; } if (p.i >= 6) { st.hab = clamp(st.hab + .07); return false; } }
+      return true;
+    });
+    for (const p of st.pulses) {
+      if (p.held) { const q = pos[1], r = 12 + p.ring * 30; c.strokeStyle = 'rgba(78,205,196,' + (1 - p.ring / 2.2) + ')'; c.beginPath(); c.arc(q[0], q[1], r, 0, TAU); c.stroke(); continue; }
+      const a = pos[p.i], b = pos[(p.i + 1) % 6]; c.fillStyle = '#fff4d0'; c.beginPath(); c.arc(lerp(a[0], b[0], p.u), lerp(a[1], b[1], p.u), 5, 0, TAU); c.fill();
+    }
+    st.hab = clamp(st.hab - dt * (st.a > .55 ? .035 : .005));
+    CHAIN.forEach((nm, i) => {
+      const q = pos[i], r = 18 + (i === 5 ? st.hab * 18 : 0); c.fillStyle = i === 1 && st.a > .55 ? 'rgba(78,205,196,.35)' : 'rgba(212,175,55,.22)'; c.strokeStyle = i === 1 && st.a > .55 ? '#4ecdc4' : '#d4af37';
+      c.beginPath(); c.arc(q[0], q[1], r, 0, TAU); c.fill(); c.stroke(); txt(c, nm, q[0], q[1] + (i >= 2 && i <= 4 ? 0 : 0), '#f2ecd8', 11);
+    });
+    txt(c, 'habit strength', cx, cy - 8, '#9a9690', 11); gbar(c, cx - 50, cy + 2, 100, 8, st.hab, '#d4af37');
+    S.cap(st.a > .55 ? 'With attention the loop stops at feeling. The feeling is noted, and the habit slowly weakens.' : 'Without attention each contact runs straight through to action, and the habit grows.');
+  }
+});
+
+/* ================= THERAVADA 12: five aggregates ================= */
+addViz('th', {
+  tab: 'Five aggregates', title: 'The Five Aggregates', kind: 'Classical (khandhas), modern rendering', group: 'Mind and self',
+  lead: 'Five transparent layers: form, feeling, perception, fabrications, consciousness. Where they overlap, a person appears. Pull them apart and look for a sixth thing called self.',
+  controls: [{ k: 's', label: 'Pull apart', min: 0, max: 1, val: 0, play: 30 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, s = S.st.s, T = S.t; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * .48, pw = Math.min(w * .17, 130), ph = Math.min(h * .62, 220);
+    const names = ['form', 'feeling', 'perception', 'fabrications', 'consciousness'], cols = ['#c69c6d', '#f0a3c0', '#4ecdc4', '#b7a6f5', '#f2e6b0'];
+    for (let i = 0; i < 5; i++) {
+      const x = lerp(cx + (i - 2) * 7, cx + (i - 2) * (w * .18), sstep(0, 1, s)), y = cy + lerp((i - 2) * 5, 0, s);
+      c.save(); c.translate(x, y); c.fillStyle = cols[i]; c.globalAlpha = .2; c.fillRect(-pw / 2, -ph / 2, pw, ph); c.globalAlpha = .7; c.strokeStyle = cols[i]; c.strokeRect(-pw / 2, -ph / 2, pw, ph); c.globalAlpha = .55; c.beginPath(); c.rect(-pw / 2, -ph / 2, pw, ph); c.clip();
+      if (i === 0) for (let gx = -pw / 2 + 8; gx < pw / 2; gx += 12) for (let gy = -ph / 2 + 8; gy < ph / 2; gy += 12) c.fillRect(gx, gy, 2, 2);
+      if (i === 1) { c.beginPath(); for (let u = -pw / 2; u < pw / 2; u += 3) { const yy = Math.sin(u * .2 + T * 2) * 14; u === -pw / 2 ? c.moveTo(u, yy) : c.lineTo(u, yy); } c.stroke(); }
+      if (i === 2) { [[-14, -28, 0], [12, 4, 1], [-8, 34, 2]].forEach(q => { c.beginPath(); if (q[2] === 0) c.arc(q[0], q[1], 8, 0, TAU); else if (q[2] === 1) c.rect(q[0] - 8, q[1] - 8, 16, 16); else { c.moveTo(q[0], q[1] - 9); c.lineTo(q[0] + 9, q[1] + 8); c.lineTo(q[0] - 9, q[1] + 8); c.closePath(); } c.stroke(); }); }
+      if (i === 3) { for (let k = 0; k < 4; k++) { const yy = -ph / 2 + 24 + k * 26 * (ph / 200); c.beginPath(); c.moveTo(-pw / 3, yy); c.lineTo(pw / 3, yy + 10); c.stroke(); c.beginPath(); c.moveTo(pw / 3, yy + 10); c.lineTo(pw / 3 - 7, yy + 3); c.moveTo(pw / 3, yy + 10); c.lineTo(pw / 3 - 8, yy + 13); c.stroke(); } }
+      if (i === 4) { haloGrad(c, 0, 0, pw * .6, 'rgba(255,245,200,A)', .7 + .2 * Math.sin(T * 2)); }
+      c.restore(); c.globalAlpha = 1; txt(c, names[i], x, cy + ph / 2 + 16, cols[i], 11);
+    }
+    const pa = 1 - sstep(0, .35, s); if (pa > 0) { c.fillStyle = 'rgba(255,240,200,' + pa * .85 + ')'; c.strokeStyle = 'rgba(255,240,200,' + pa * .85 + ')'; standFig(c, cx, cy + ph * .38, ph * .78, ph * .07); }
+    if (s > .75) txt(c, 'no sixth thing called "self"', cx, cy, 'rgba(232,212,139,' + sstep(.75, .95, s) + ')', 14);
+    S.cap(s < .25 ? 'Overlapped, the layers look like one person.' : s < .75 ? 'The person gets less solid as the layers separate.' : 'Each layer is there. Nothing behind them is the owner.');
+  }
+});
+
+/* ================= THERAVADA 13: chariot ================= */
+addViz('th', {
+  tab: 'The chariot', title: 'Where Is the Chariot?', kind: 'Classical (Milindapañha), modern rendering', group: 'Mind and self',
+  lead: 'Take the chariot apart: wheels, axle, frame, pole, seat, reins. Where is "the chariot"? Put it back together and it carries a king again. The name works conventionally. It is a designation over parts.',
+  controls: [{ k: 'd', label: 'Take apart', min: 0, max: 1, val: 0, play: 24 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, d = S.st.d, T = S.t; c.clearRect(0, 0, w, h);
+    const cx = w / 2, gy = h * .68, u = Math.min(w, h * 1.4) / 640;
+    const roll = d < .03 ? T : 0, sh = d < .03 ? 1 : 0;
+    c.strokeStyle = 'rgba(255,255,255,.15)'; c.beginPath(); c.moveTo(0, gy); c.lineTo(w, gy); c.stroke();
+    if (d < .03) for (let i = 0; i < 12; i++) { const x = ((i * 90 - T * 70) % (w + 90) + w + 90) % (w + 90) - 45; c.fillStyle = 'rgba(255,255,255,.1)'; c.fillRect(x, gy + 6, 18, 2); }
+    const P = (ox, oy) => [cx + ox * u, gy - 60 * u + oy * u];
+    const parts = [
+      ['frame', -90, -20, 180, 12, '#c9a05a'], ['seat', -40, -70, 70, 50, '#8a5a2b'], ['pole', 80, -8, 120, 6, '#b8863b'], ['axle', -120, 40, 240, 5, '#888'],
+    ];
+    const gold = '#e8d48b';
+    const dx = { frame: [0, -70], seat: [0, -80], pole: [110, -30], axle: [0, 80], wl: [-110, 20], wr: [110, 20], reins: [60, -60] };
+    const off = k => [dx[k][0] * d * u * .9, dx[k][1] * d * u * .9];
+    const wheel = (x, y, r, k) => { const o = off(k), p = P(x, y); c.save(); c.translate(p[0] + o[0], p[1] + o[1]); c.rotate(roll * 3); c.strokeStyle = '#c9a05a'; c.lineWidth = 4; c.beginPath(); c.arc(0, 0, r * u, 0, TAU); c.stroke(); c.lineWidth = 2; for (let i = 0; i < 8; i++) { c.beginPath(); c.moveTo(0, 0); c.lineTo(Math.cos(i / 8 * TAU) * r * u, Math.sin(i / 8 * TAU) * r * u); c.stroke(); } c.restore(); };
+    wheel(-100, 40, 50, 'wl'); wheel(100, 40, 50, 'wr');
+    parts.forEach(pt => { const o = off(pt[0]), p = P(pt[1], pt[2]); c.fillStyle = pt[5]; c.fillRect(p[0] + o[0], p[1] + o[1], pt[3] * u, pt[4] * u); });
+    { const o = off('reins'), a = P(-10, -50), b = P(150, -20); c.strokeStyle = '#d9c9a0'; c.lineWidth = 2; c.beginPath(); c.moveTo(a[0] + o[0], a[1] + o[1]); c.quadraticCurveTo((a[0] + b[0]) / 2 + o[0], a[1] + 20 + o[1], b[0] + o[0], b[1] + o[1]); c.stroke(); }
+    if (d < .03) { c.fillStyle = gold; const p = P(-5, -80); c.beginPath(); c.arc(p[0], p[1], 11 * u, 0, TAU); c.fill(); }
+    txt(c, d < .2 ? 'the chariot' : d < .55 ? 'the chariot ?' : 'where is the chariot?', cx, 26, 'rgba(242,236,216,' + (1 - d * .25) + ')', 17);
+    S.cap(d < .03 ? 'Assembled, it carries a king. That is what "chariot" means in use.' : d < .6 ? 'Pulled apart, each part is only a part.' : 'No single part is the chariot, and nothing else is left over. Reassemble it and it works again.');
+  }
+});
+
+/* ================= THERAVADA 14: three characteristics ================= */
+addViz('th', {
+  tab: 'Three characteristics', title: 'Three Views of One Stream', kind: 'Classical (tilakkhaṇa), modern rendering', group: 'Mind and self',
+  lead: 'One changing stream of events, seen three ways. Anicca: everything moves. Dukkha: gripping the unstable as if stable makes friction. Anattā: search for a permanent controller and none turns up. Toggle the overlays.',
+  controls: [{ btn: 'Anicca', fn: (S, b) => { S.st.an = !S.st.an; b.style.opacity = S.st.an ? 1 : .45; } }, { btn: 'Dukkha', fn: (S, b) => { S.st.du = !S.st.du; b.style.opacity = S.st.du ? 1 : .45; } }, { btn: 'Anattā', fn: (S, b) => { S.st.at = !S.st.at; b.style.opacity = S.st.at ? 1 : .45; } }],
+  init(S) { S.st.an = true; S.st.du = false; S.st.at = false; S.st.p = Array.from({ length: 26 }, (_, i) => ({ x: hsh(i) * S.w, y: hsh(i + 3) * S.h, hist: [], k: i })); S.st.grasp = [S.w / 2, S.h / 2]; S.st.fric = 0; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    st.p.forEach(p => {
+      const a = Math.sin(p.x * .01 + T * .3) * 2 + Math.cos(p.y * .012 - T * .2) * 2; p.x += Math.cos(a) * .9; p.y += Math.sin(a) * .9;
+      if (p.x < -10 || p.x > w + 10 || p.y < -10 || p.y > h + 10) { p.x = (p.x + w + 20) % (w + 20) - 10; p.y = (p.y + h + 20) % (h + 20) - 10; p.hist = []; }
+      p.hist.push([p.x, p.y]); if (p.hist.length > 26) p.hist.shift();
+      if (st.an && p.hist.length > 2) { c.strokeStyle = 'rgba(232,212,139,.3)'; c.beginPath(); c.moveTo(p.hist[0][0], p.hist[0][1]); p.hist.forEach(q => c.lineTo(q[0], q[1])); c.stroke(); }
+      c.fillStyle = '#f0d9a0'; c.beginPath(); c.arc(p.x, p.y, 3.5, 0, TAU); c.fill();
+    });
+    if (st.du) {
+      const t = st.p[3]; st.grasp[0] = lerp(st.grasp[0], t.x, .05); st.grasp[1] = lerp(st.grasp[1], t.y, .05);
+      const dd = Math.hypot(t.x - st.grasp[0], t.y - st.grasp[1]); st.fric = lerp(st.fric, clamp(dd / 60), .05);
+      c.strokeStyle = 'rgba(224,90,90,.9)'; c.lineWidth = 2; c.beginPath(); c.arc(st.grasp[0], st.grasp[1], 14, 0, TAU); c.stroke(); c.lineWidth = 1;
+      for (let i = 0; i < 6 * st.fric + 1; i++) { c.fillStyle = 'rgba(255,150,90,.8)'; c.fillRect(st.grasp[0] + (hsh(i + Math.floor(T * 12)) - .5) * 26, st.grasp[1] + (hsh(i + 9 + Math.floor(T * 12)) - .5) * 26, 2, 2); }
+      gbar(c, w - 130, 24, 110, 8, st.fric, '#e05a5a', 'friction');
+    }
+    if (st.at) {
+      const k = Math.floor(T * 1.2) % st.p.length, q = st.p[k];
+      c.strokeStyle = 'rgba(78,205,196,.8)'; c.setLineDash([3, 3]); c.beginPath(); c.arc(q.x, q.y, 16, 0, TAU); c.stroke(); c.setLineDash([]);
+      txt(c, 'controller? not found here', q.x, q.y - 26, '#8fd6d0', 11);
+    }
+    S.cap(!st.an && !st.du && !st.at ? 'Switch the overlays on. They are the same stream, not three separate doctrines.' : 'Change, friction from gripping the changing, and no owner to be found: one event stream, three descriptions.');
+  }
+});
+
+/* ================= THERAVADA 15: zoom into a moment ================= */
+addViz('th', {
+  tab: 'Zoom into a moment', title: 'Zooming Into Experience', kind: 'Modern analogy, an experiential metaphor and not a stopwatch on consciousness', group: 'Insight',
+  lead: 'Start with one second of experience, which looks continuous. Zoom in and it breaks into pulses that arise, stand briefly and pass. Go too far and there is nothing to see. Classical texts and modern teachers differ on how literally to count such "moments".',
+  controls: [{ k: 'z', label: 'Time window', min: 0, max: 1, val: 0, play: 40 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, z = S.st.z; c.clearRect(0, 0, w, h);
+    const win = Math.pow(10, -3 * z), x0 = 20, ww = w - 40, base = h * .72, A = h * .45, t0 = 5.3;
+    const wd = .06; let prev = null;
+    const y = t => { let s = 0; for (let k = Math.floor((t - wd) / .028) - 1; k <= Math.ceil(t / .028) + 1; k++) { const c0 = k * .028 + (hsh(k) - .5) * .02, u = (t - c0) / wd; if (u > 0 && u < 1) s = Math.max(s, .75 * Math.pow(Math.sin(Math.PI * u), 1.5) * (.85 + .3 * hsh(k + 40))); } return s; };
+    c.beginPath(); c.moveTo(x0, base);
+    for (let x = 0; x <= ww; x += 2) c.lineTo(x0 + x, base - y(t0 + x / ww * win) * A);
+    c.lineTo(x0 + ww, base); c.closePath(); const g = c.createLinearGradient(0, base - A, 0, base); g.addColorStop(0, 'rgba(240,200,90,.85)'); g.addColorStop(1, 'rgba(240,200,90,.1)'); c.fillStyle = g; c.fill();
+    c.strokeStyle = '#f0d9a0'; c.stroke();
+    const label = win >= .9 ? '1 second' : win > .09 ? Math.round(win * 1000) + ' milliseconds' : win > .009 ? (win * 1000).toFixed(0) + ' ms' : (win * 1000).toFixed(1) + ' ms';
+    txt(c, 'window: ' + label, w / 2, 22, '#c9c4b8', 13);
+    if (win < .2 && win > .05) { [['arising', .15], ['standing', .5], ['passing', .85]].forEach(a => txt(c, a[0], x0 + a[1] * ww * .45 + ww * .1, h * .88, '#8fd6d0', 12)); }
+    if (win < .006) txt(c, '???', w / 2, h * .4, 'rgba(255,255,255,.6)', 26);
+    S.cap(win > .5 ? 'It looks smooth and continuous.' : win > .05 ? 'Look closer: it is a run of separate pulses, each arising and passing.' : 'Past a certain grain there is nothing more to resolve. The picture is a metaphor, not a measurement.');
+  }
+});
+
+/* ================= THERAVADA 16: rise and fall universe ================= */
+const RF = [['sound', '#4ecdc4'], ['thought', '#b7a6f5'], ['sensation', '#f0a3c0'], ['breath', '#e8d48b'], ['sight', '#9ecbff']];
+addViz('th', {
+  tab: 'Rise and fall', title: 'The Rise-and-Fall Universe', kind: 'Classical (udayabbaya-ñāṇa), modern rendering', group: 'Insight',
+  lead: 'Click anywhere to let a sound, thought, sensation, breath or sight arise. Each one is born, holds for a moment, decays and ceases. Then press "Observe all".',
+  controls: [{ btn: 'Observe all', fn: S => { for (let i = 0; i < 70; i++) setTimeout(() => { if (S.w) rfAdd(S, rand(20, S.w - 20), rand(30, S.h - 30)); }, i * 60); } }],
+  init(S) { S.st.ev = S.st.ev || []; S.st.n = 0; },
+  click(S, x, y) { rfAdd(S, x, y); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, T = S.t; c.clearRect(0, 0, w, h);
+    S.st.ev = S.st.ev.filter(e => T - e.t0 < e.life);
+    for (const e of S.st.ev) {
+      const u = (T - e.t0) / e.life, col = RF[e.k][1]; let r, a, stage;
+      if (u < .2) { r = e.s * u / .2; a = u / .2; stage = 'birth'; }
+      else if (u < .5) { r = e.s; a = 1; stage = 'becoming'; }
+      else if (u < .85) { r = e.s * (1 - (u - .5) * .3); a = 1 - (u - .5) / .35 * .8; stage = 'decay'; }
+      else { r = e.s * .7 * (1 - (u - .85) / .15); a = .2 * (1 - (u - .85) / .15); stage = 'cessation'; }
+      c.globalAlpha = a; c.fillStyle = col; c.beginPath(); c.arc(e.x, e.y, r, 0, TAU); c.fill();
+      c.globalAlpha = a * .8; c.strokeStyle = col; c.beginPath(); c.arc(e.x, e.y, r + 5 + u * 6, 0, TAU); c.stroke(); c.globalAlpha = 1;
+      if (Math.hypot(S.mx - e.x, S.my - e.y) < e.s + 10) { txt(c, RF[e.k][0] + ': ' + stage, e.x, e.y - e.s - 12, '#fff4d0', 11); }
+    }
+    txt(c, S.st.ev.length ? S.st.ev.length + ' phenomena present' : 'click to let something arise', w / 2, h - 16, '#9a9690', 12);
+    S.cap(S.st.ev.length > 25 ? 'Everything is arising and ceasing at once. Nothing holds still to be grasped.' : 'Each has its own short life: birth, becoming, decay, cessation.');
+  }
+});
+function rfAdd(S, x, y) { S.st.ev.push({ x, y, k: S.st.n++ % 5, t0: S.t || 0, life: rand(2.6, 5.5), s: rand(10, 22) }); if (S.st.ev.length > 120) S.st.ev.shift(); }
+
+/* ================= THERAVADA 17: dependent origination ================= */
+const NID = ['ignorance', 'formations', 'consciousness', 'name and form', 'six sense bases', 'contact', 'feeling', 'craving', 'clinging', 'becoming', 'birth', 'aging and death'];
+addViz('th', {
+  tab: 'Dependent origination', title: 'The Twelve Links', kind: 'Classical (Paṭicca-samuppāda)', group: 'Insight',
+  lead: 'Each link conditions the next around the wheel. Click on a link between two nodes to break it and see everything downstream go dark. Cut between feeling and craving to see why that gap matters.',
+  controls: [{ btn: 'Cut feeling → craving', fn: S => { S.st.cut = 6; } }, { btn: 'Restore', fn: S => { S.st.cut = -1; } }],
+  init(S) { S.st.cut = -1; S.st.lit = NID.map(() => 1); },
+  click(S, x, y) {
+    const cx = S.w / 2, cy = S.h / 2, R = Math.min(S.w * .34, S.h * .4); let best = -1, bd = 40;
+    for (let i = 0; i < 12; i++) { const a1 = (i + .5) / 12 * TAU - Math.PI / 2, mx = cx + Math.cos(a1) * R * 1.25, my = cy + Math.sin(a1) * R; const d = Math.hypot(mx - x, my - y); if (d < bd) { bd = d; best = i; } }
+    if (best >= 0 && best < 11) S.st.cut = S.st.cut === best ? -1 : best;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2, R = Math.min(w * .34, h * .4), pos = NID.map((_, i) => { const a = i / 12 * TAU - Math.PI / 2; return [cx + Math.cos(a) * R * 1.25, cy + Math.sin(a) * R]; });
+    NID.forEach((_, i) => { const target = st.cut >= 0 && i > st.cut ? 0 : 1; st.lit[i] = lerp(st.lit[i], target, .06); });
+    for (let i = 0; i < 12; i++) {
+      const a = pos[i], b = pos[(i + 1) % 12], cutHere = st.cut === i; const alive = i < 11 ? st.lit[i + 1] : st.lit[0] * .5;
+      c.strokeStyle = cutHere ? 'rgba(224,90,90,.9)' : 'rgba(212,175,55,' + (.15 + .45 * alive) + ')'; c.setLineDash(i === 11 ? [4, 5] : cutHere ? [3, 5] : []); c.beginPath(); c.moveTo(a[0], a[1]); c.lineTo(b[0], b[1]); c.stroke(); c.setLineDash([]);
+      if (cutHere) { const mx = (a[0] + b[0]) / 2, my = (a[1] + b[1]) / 2; c.strokeStyle = '#e05a5a'; c.beginPath(); c.moveTo(mx - 7, my - 7); c.lineTo(mx + 7, my + 7); c.moveTo(mx + 7, my - 7); c.lineTo(mx - 7, my + 7); c.stroke(); }
+      if (i < 11 && st.lit[i] > .3 && st.lit[i + 1] > .3 && !cutHere) { const u = (T * .5 + i * .27) % 1; c.fillStyle = 'rgba(255,244,208,' + st.lit[i + 1] + ')'; c.beginPath(); c.arc(lerp(a[0], b[0], u), lerp(a[1], b[1], u), 3, 0, TAU); c.fill(); }
+    }
+    NID.forEach((nm, i) => {
+      const q = pos[i], l = st.lit[i]; c.fillStyle = 'rgba(212,175,55,' + (.12 + .3 * l) + ')'; c.strokeStyle = 'rgba(212,175,55,' + (.25 + .6 * l) + ')'; c.beginPath(); c.arc(q[0], q[1], 9, 0, TAU); c.fill(); c.stroke();
+      const lx = cx + (q[0] - cx) * 1.28 + (q[0] < cx ? -4 : 4), ly = cy + (q[1] - cy) * 1.2;
+      txt(c, (i + 1) + ' ' + nm, lx, ly, 'rgba(242,236,216,' + (.3 + .7 * l) + ')', w < 520 ? 9 : 11, q[0] < cx - 4 ? 'right' : q[0] > cx + 4 ? 'left' : 'center');
+    });
+    txt(c, st.cut === -1 ? 'click a link to cut it' : 'cut between ' + NID[st.cut] + ' and ' + NID[st.cut + 1], cx, cy, '#e8d48b', 13);
+    S.cap(st.cut === 6 ? 'Feeling still arises. Craving, clinging, becoming, birth, and aging and death do not follow from it.' : st.cut >= 0 ? 'When a condition ceases, what depends on it ceases too.' : 'The wheel turns: each link conditions the next, and the last feeds back to ignorance.');
+  }
+});
+
+/* ================= THERAVADA 18: fire sermon ================= */
+addViz('th', {
+  tab: 'Fire sermon', title: 'The Fire Sermon', kind: 'Classical (Ādittapariyāya Sutta), modern rendering', group: 'Insight',
+  lead: 'The six sense bases are burning with passion, aversion and delusion. Reduce the fuel and the flames sink. The senses and their objects are still there. Only the burning goes out.',
+  controls: [{ k: 'pa', label: 'Passion', min: 0, max: 1, val: 1 }, { k: 'av', label: 'Aversion', min: 0, max: 1, val: 1 }, { k: 'de', label: 'Delusion', min: 0, max: 1, val: 1 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    const bases = ['eye', 'ear', 'nose', 'tongue', 'body', 'mind'], fuel = (st.pa + st.av + st.de) / 3, base = h * .72;
+    bases.forEach((nm, i) => {
+      const x = w * (i + .5) / 6, H = h * .5 * (.12 + .88 * fuel) * (.9 + .1 * Math.sin(T * 4 + i));
+      const cool = 1 - fuel;
+      for (let l = 0; l < 3; l++) {
+        const r = (30 - l * 8) * (.5 + fuel * .7), yy = base - H * (.35 + l * .18);
+        const g = c.createRadialGradient(x, yy, 0, x, yy, r * 2);
+        const rc = Math.round(lerp(255, 120, cool)), gc = Math.round(lerp(140 + st.pa * 40 - l * 30, 190, cool)), bc = Math.round(lerp(40, 255, cool));
+        g.addColorStop(0, 'rgba(' + rc + ',' + gc + ',' + bc + ',' + (.85 - l * .2) + ')'); g.addColorStop(1, 'rgba(' + rc + ',' + gc + ',' + bc + ',0)');
+        c.fillStyle = g; c.beginPath(); c.ellipse(x + Math.sin(T * 3 + i + l) * 3, yy, r * .8, H * .32, 0, 0, TAU); c.fill();
+      }
+      if (st.av > .3) for (let k = 0; k < 6; k++) { const u = (T * .4 + hsh(i * 9 + k)) % 1; c.fillStyle = 'rgba(60,40,40,' + (1 - u) * .5 * st.av + ')'; c.beginPath(); c.arc(x + Math.sin(u * 6 + k) * 12, base - H - u * 80, 4 + u * 8, 0, TAU); c.fill(); }
+      if (st.de > .3) haloGrad(c, x, base - H * .5, 50, 'rgba(120,120,120,A)', .12 * st.de);
+      c.fillStyle = 'rgba(232,212,139,.85)'; c.beginPath(); c.arc(x, base + 18 + 4 * Math.sin(T * 2 + i), 5, 0, TAU); c.fill();
+      txt(c, nm, x, base + 44, '#f2ecd8', 12);
+    });
+    txt(c, fuel > .66 ? 'burning' : fuel > .25 ? 'cooling' : 'cool', w / 2, 22, '#e8d48b', 15);
+    S.cap(fuel < .25 ? 'The senses still work. Seeing is seeing. What has gone out is the fire of wanting, resisting and not-knowing, which is what "nibbāna" points to: extinguishing.' : 'The fuel is passion, aversion and delusion, not the senses or what they meet.');
+  }
+});
+
+/* ================= THERAVADA 19: Kalama lab ================= */
+addViz('th', {
+  tab: 'Do not believe, look', title: 'Look For Yourself', kind: 'Modern rendering, in the spirit of the Kālāma Sutta', group: 'Insight',
+  lead: 'No claim is given here. A small field of experiences appears, and you look. Click any item and watch. Is it still there a moment later? Try to find one that is not changing.',
+  controls: [{ btn: 'Reset', fn: S => { S.st.items = []; S.st.seen = 0; S.st.n = 0; kInit(S); } }],
+  init(S) { kInit(S); },
+  click(S, x, y) {
+    let best = null, bd = 1e9; for (const it of S.st.items) { if (it.dead) continue; const d = Math.hypot(it.x - x, it.y - y); if (d < bd) { bd = d; best = it; } }
+    if (best && bd < 40) { best.watch = S.t; if (!best.counted) { best.counted = true; S.st.seen++; } }
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    const glyphs = ['sound', 'thought', 'itch', 'memory', 'image', 'mood', 'urge', 'breath'];
+    for (const it of st.items) {
+      it.x += Math.sin(T * .6 + it.k) * .15; it.y += Math.cos(T * .5 + it.k) * .15;
+      let a = .8;
+      if (it.watch) { const u = (T - it.watch) / 2.2; a = .95 * (1 - u); if (u >= 1) it.dead = true; c.strokeStyle = 'rgba(255,255,255,' + a + ')'; c.beginPath(); c.arc(it.x, it.y, 22 + u * 20, 0, TAU); c.stroke(); }
+      if (it.dead) continue;
+      c.fillStyle = 'rgba(232,212,139,' + a + ')'; c.beginPath(); c.arc(it.x, it.y, 8 + 3 * Math.sin(T * 2 + it.k), 0, TAU); c.fill(); txt(c, glyphs[it.k % 8], it.x, it.y + 20, 'rgba(220,214,190,' + a + ')', 11);
+    }
+    st.items = st.items.filter(it => !it.dead || T - (it.watch || 0) < 3);
+    if (st.items.filter(i => !i.dead).length < 9 && Math.random() < .03) st.items.push({ x: rand(40, w - 40), y: rand(50, h - 50), k: st.n++ });
+    txt(c, 'examined so far: ' + st.seen, 14, 18, '#9a9690', 12, 'left');
+    const q = st.seen === 0 ? 'Click something, and watch it.' : st.seen < 6 ? 'Was it still there? Try another.' : 'Nothing you looked at stayed. Keep looking, and do not take this on trust.';
+    txt(c, q, w / 2, h - 16, '#f2ecd8', 14); S.cap('Early Buddhism invites investigation over belief: "come and see". This is a small version of that.');
+  }
+});
+function kInit(S) { S.st.items = Array.from({ length: 8 }, (_, i) => ({ x: rand(40, S.w - 40), y: rand(50, S.h - 50), k: i })); S.st.seen = 0; S.st.n = 8; }
+
+/* ================= THERAVADA 20: jhana factors ================= */
+addViz('th', {
+  tab: 'Jhāna factors', title: 'From Scattered to Absorbed', kind: 'Classical (the four jhānas), structural rendering only', group: 'Concentration',
+  lead: 'The classical factors are shown as bars, not as an experience to expect. In the first jhāna: thought applied, thought sustained, rapture, pleasure, one-pointedness. Each higher stage lets one drop away.',
+  controls: [{ k: 'st', label: 'Stage (0 = ordinary mind)', min: 0, max: 4, step: 1, val: 0, play: 50 }],
+  init(S) { S.st.v = [0, 0, 0, 0, 0, 0]; S.st.n = 1; S.st.pt = Array.from({ length: 90 }, (_, i) => ({ x: hsh(i), y: hsh(i + 3), a: hsh(i + 6) * TAU })); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    const s = Math.round(st.st), tg = [[0, 0, 0, 0, 0, 0], [1, 1, 1, 1, 0, 1], [0, 0, 1, 1, 0, 1], [0, 0, 0, 1, .55, 1], [0, 0, 0, 0, 1, 1]][s];
+    st.v = st.v.map((v, i) => lerp(v, tg[i], .05)); st.n = lerp(st.n, s === 0 ? 1 : 0, .04);
+    const cx = w * .3, cy = h * .5;
+    st.pt.forEach(p => {
+      const k = st.n, x = lerp(cx + Math.cos(p.a + T * .1) * 10 * (1 + p.y * 2), p.x * w * .6, k), y = lerp(cy + Math.sin(p.a + T * .1) * 10 * (1 + p.y * 2), p.y * h, k) + Math.sin(T * (1 + p.x * 3) + p.a) * 8 * k;
+      c.fillStyle = 'rgba(200,190,150,' + (.15 + .35 * k) + ')'; c.beginPath(); c.arc(x, y, 2, 0, TAU); c.fill();
+    });
+    haloGrad(c, cx, cy, 20 + 70 * st.v[5] + 20 * st.v[3], 'rgba(255,245,200,A)', .2 + .6 * st.v[5]);
+    const nm = ['vitakka', 'vicāra', 'pīti', 'sukha', 'upekkhā', 'ekaggatā'], desc = ['applied thought', 'sustained thought', 'rapture', 'pleasure', 'equanimity', 'one-pointedness'];
+    nm.forEach((n, i) => gbar(c, w * .55, 40 + i * (h - 60) / 6, w * .38, 10, st.v[i], i === 4 ? '#8fb0d6' : '#e8d48b', n + ' · ' + desc[i]));
+    txt(c, s === 0 ? 'ordinary, scattered mind' : ['', 'first jhāna', 'second jhāna', 'third jhāna', 'fourth jhāna'][s], cx, h - 22, '#f2ecd8', 14);
+    S.cap('This is the classical structure only, drawn as a diagram. What any meditator actually meets varies, and none of it is a target to aim at.');
+  }
+});
+
+/* ================= THERAVADA 21: kasina ================= */
+const KAS = ['earth', 'water', 'fire', 'air', 'blue', 'yellow', 'red', 'white', 'light', 'space'];
+addViz('th', {
+  tab: 'Ten kasiṇas', title: 'The Ten Kasiṇas', kind: 'Classical (Visuddhimagga), non-prescriptive rendering', group: 'Concentration',
+  lead: 'Ten objects for gathering attention. Slide "Simplify" and the distractions fall away. Slide "Inward" and the physical object gives way to a smooth, steady sign. Traditional accounts vary, so this is illustration, not instruction.',
+  controls: KAS.map(k => ({ btn: k, fn: S => { S.st.k = k; } })).concat([{ k: 'sim', label: 'Simplify', min: 0, max: 1, val: 0 }, { k: 'inw', label: 'Inward', min: 0, max: 1, val: 0 }]),
+  init(S) { S.st.k = S.st.k || 'earth'; S.st.gr = Array.from({ length: 180 }, (_, i) => ({ a: hsh(i) * TAU, r: Math.sqrt(hsh(i + 3)), s: hsh(i + 8) })); },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h * .5, R = Math.min(w, h) * (.3 - .1 * st.inw), k = st.k;
+    for (let i = 0; i < 60; i++) { const x = hsh(i + 100) * w, y = hsh(i + 130) * h; c.fillStyle = 'rgba(200,200,220,' + (.18 * (1 - st.sim)) + ')'; c.beginPath(); c.arc(x + Math.sin(T + i) * 6, y + Math.cos(T * .8 + i) * 6, 1 + hsh(i) * 3, 0, TAU); c.fill(); }
+    const tex = 1 - st.inw; c.save(); c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.clip();
+    if (k === 'earth') { c.fillStyle = '#7a5a3a'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); st.gr.forEach(g => { c.fillStyle = 'rgba(' + (160 + g.s * 60) + ',' + (120 + g.s * 40) + ',80,' + tex + ')'; c.beginPath(); c.arc(cx + Math.cos(g.a) * g.r * R, cy + Math.sin(g.a) * g.r * R, 2 + g.s * 4, 0, TAU); c.fill(); }); }
+    else if (k === 'water') { c.fillStyle = '#1e4d78'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); c.strokeStyle = 'rgba(160,210,255,' + .5 * tex + ')'; for (let i = 1; i < 9; i++) { c.beginPath(); c.arc(cx, cy, ((i / 9 + T * .1) % 1) * R * 1.4, 0, TAU); c.stroke(); } }
+    else if (k === 'fire') { c.fillStyle = '#301008'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); for (let i = 0; i < 60; i++) { const u = (T * .8 + hsh(i)) % 1, x = cx + (hsh(i + 2) - .5) * R * 1.2 * (1 - u * .8) * (1 + .2 * tex), y = cy + R - u * R * 2; haloGrad(c, x, y, 18 + 10 * (1 - u), 'rgba(255,' + (150 + 90 * u | 0) + ',50,A)', (1 - u) * (.5 + .3 * st.inw)); } }
+    else if (k === 'air') { c.fillStyle = '#1b2a36'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); c.strokeStyle = 'rgba(200,235,255,' + .5 * tex + ')'; for (let i = 0; i < 10; i++) { c.beginPath(); for (let x = -R; x <= R; x += 6) { const y = -R + (i + .5) * R / 5 + Math.sin(x * .03 + T * 1.5 + i) * 14; x === -R ? c.moveTo(cx + x, cy + y) : c.lineTo(cx + x, cy + y); } c.stroke(); } }
+    else if (['blue', 'yellow', 'red'].includes(k)) { const col = { blue: [40, 90, 230], yellow: [245, 215, 60], red: [220, 40, 40] }[k]; c.fillStyle = 'rgb(' + col + ')'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); }
+    else if (k === 'white') { const g = c.createRadialGradient(cx - R * .3, cy - R * .3, R * .1, cx, cy, R); g.addColorStop(0, '#fff'); g.addColorStop(1, '#bfc4d0'); c.fillStyle = g; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); }
+    else if (k === 'light') { c.fillStyle = '#fff4c8'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); c.strokeStyle = 'rgba(255,255,255,' + .6 * tex + ')'; for (let i = 0; i < 24; i++) { c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + Math.cos(i / 24 * TAU + T * .2) * R * 1.4, cy + Math.sin(i / 24 * TAU + T * .2) * R * 1.4); c.stroke(); } }
+    else { c.fillStyle = '#02030a'; c.fillRect(cx - R, cy - R, 2 * R, 2 * R); for (let i = 0; i < 40; i++) { const u = (T * .04 + hsh(i)) % 1; c.fillStyle = 'rgba(180,200,255,' + (1 - u) * .5 * tex + ')'; c.beginPath(); c.arc(cx + (hsh(i + 3) - .5) * 2 * R * u, cy + (hsh(i + 7) - .5) * 2 * R * u, 1.2, 0, TAU); c.fill(); } }
+    c.restore();
+    if (st.inw > 0) { const hc = { earth: '255,200,140', water: '150,200,255', fire: '255,190,100', air: '210,235,255', blue: '120,150,255', yellow: '255,240,140', red: '255,120,120', white: '255,255,255', light: '255,250,210', space: '160,180,255' }[k]; haloGrad(c, cx, cy, R * 2.4, 'rgba(' + hc + ',A)', st.inw * .55); }
+    c.strokeStyle = 'rgba(255,255,255,.25)'; c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.stroke();
+    txt(c, k, cx, 20, '#e8d48b', 14);
+    S.cap('Huayan adds more and more relationships. Here the practice runs the other way: fewer and fewer distractions. The "sign" is described differently by different teachers, so nothing here says what yours should look like.');
+  }
+});
+
+/* ================= THERAVADA 22: body to elements ================= */
+addViz('th', {
+  tab: 'Body to elements', title: 'Decay of the Body, Abstracted', kind: 'Classical (Satipaṭṭhāna cemetery contemplations, asubha), abstract rendering', group: 'Death',
+  lead: 'The classical charnel-ground contemplations compare the corpse with one\'s own body: "this body too is of such a nature". Here it is shown without graphic detail: form, decay, fragments, bones, dust, elements, then back to a living body. The aim is impermanence, not horror.',
+  controls: [{ k: 'p', label: 'Time', min: 0, max: 1, val: 0, play: 40 }],
+  init(S) {
+    const cv = document.createElement('canvas'); cv.width = 160; cv.height = 240; const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.strokeStyle = '#fff'; standFig(g, 80, 230, 220, 20);
+    const d = g.getImageData(0, 0, 160, 240).data, pts = [];
+    for (let y = 0; y < 240; y += 3) for (let x = 0; x < 160; x += 3) if (d[(y * 160 + x) * 4 + 3] > 128) pts.push({ x: x / 160 - .5, y: y / 240, th: Math.random(), e: Math.floor(Math.random() * 4), b: Math.floor(x / 40) + Math.floor(y / 40) * 5, r: Math.random() });
+    S.st.pts = pts;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, p = S.st.p, T = S.t; c.clearRect(0, 0, w, h);
+    const H = h * .82, cx = w / 2, top = h * .07, sx = H * .667;
+    const decay = sstep(.12, .4, p), frag = sstep(.35, .58, p), dust = sstep(.62, .82, p), elem = sstep(.82, .97, p), ret = sstep(.985, 1, p);
+    const cols = ['#c69c6d', '#5fa8d3', '#e8743b', '#b9e3d6'];
+    for (const q of S.st.pts) {
+      let x = cx + q.x * sx * 1.5, y = top + q.y * H;
+      if (q.th < decay * .75) continue;
+      x += (Math.sin(q.b * 3.1) * 22) * frag; y += (Math.cos(q.b * 2.3) * 10) * frag;
+      let a = 1 - decay * .35;
+      const skel = sstep(.5, .6, p) * (1 - sstep(.62, .72, p)); if (q.r > .3 && p > .55 && p < .72) a *= (1 - skel * .85);
+      y += dust * (H * .95 - q.y * H) * (.6 + .4 * q.r) + dust * 0;
+      x += dust * (q.r - .5) * 50;
+      const ex = elem; const ecx = cx + (q.e - 1.5) * w * .18;
+      let ey = q.e === 0 ? h * .85 : q.e === 1 ? h * .7 : q.e === 2 ? h * .5 - (T * 20 + q.r * 90) % 60 : h * .35 + Math.sin(T + q.r * 9) * 25;
+      x = lerp(x, ecx + (q.r - .5) * 60, ex); y = lerp(y, ey + (q.th - .5) * 30, ex);
+      const col = ex > .1 ? cols[q.e] : lerp3(decay);
+      c.globalAlpha = a * (1 - ret * .0); c.fillStyle = col; c.fillRect(x, y, 3, 3);
+    }
+    c.globalAlpha = 1;
+    const skel = sstep(.5, .6, p) * (1 - sstep(.62, .72, p));
+    if (skel > 0) { c.strokeStyle = 'rgba(235,228,205,' + skel * .8 + ')'; c.lineWidth = 2; c.beginPath(); c.arc(cx, top + H * .1, H * .055, 0, TAU); c.moveTo(cx, top + H * .16); c.lineTo(cx, top + H * .55); for (let i = 0; i < 5; i++) { const yy = top + H * (.22 + i * .05); c.moveTo(cx, yy); c.quadraticCurveTo(cx - H * .1, yy + 8, cx - H * .09, yy + 24); c.moveTo(cx, yy); c.quadraticCurveTo(cx + H * .1, yy + 8, cx + H * .09, yy + 24); } c.moveTo(cx, top + H * .55); c.lineTo(cx - H * .07, top + H * .98); c.moveTo(cx, top + H * .55); c.lineTo(cx + H * .07, top + H * .98); c.stroke(); c.lineWidth = 1; }
+    if (elem > .5) ['earth', 'water', 'fire', 'air'].forEach((n, i) => txt(c, n, cx + (i - 1.5) * w * .18, h - 14, cols[i], 12));
+    const names = [[0, 'form'], [.12, 'decay'], [.35, 'fragmentation'], [.5, 'bones'], [.62, 'dust'], [.82, 'elements']]; let cur = 'form'; names.forEach(n => { if (p >= n[0]) cur = n[1]; }); if (p > .985) cur = 'and a living body again';
+    txt(c, cur, cx, 16, '#e8d48b', 14);
+    S.cap('"This body too is of such a nature, will become like this, is not exempt." The point of the text is to see impermanence clearly, so that clinging loosens.');
+  }
+});
+function lerp3(d) { const a = [214, 190, 160], b = [140, 130, 120], r = a.map((v, i) => Math.round(lerp(v, b[i], d))); return 'rgb(' + r + ')'; }
+
+/* ================= THERAVADA 23: everything decays ================= */
+addViz('th', {
+  tab: 'Everything decays', title: 'Maraṇasati: Everything Decays', kind: 'Classical (maraṇasati), modern rendering', group: 'Death',
+  lead: 'Not a countdown. A flower, a photograph, a person, a building, a mountain, a civilization, each on its own timescale. At the end even the page starts to vanish. Then: what is happening right now?',
+  controls: [{ k: 't', label: 'Time (from days to ages)', min: 0, max: 1, val: 0, play: 60 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.st.t, T = S.t; c.clearRect(0, 0, w, h);
+    const ctl = S.card.querySelector('.controls'); ctl.style.opacity = 1 - .85 * sstep(.86, .97, t);
+    const gl = 1 - sstep(.88, .97, t), cols = 3, rows = 2, pw = w / cols, ph = h / rows / 1.05;
+    const labels = ['a flower', 'a photograph', 'a person', 'a building', 'a mountain', 'a civilization'], th = [[.02, .12], [.1, .3], [.2, .45], [.35, .62], [.55, .8], [.65, .9]];
+    c.globalAlpha = gl;
+    for (let i = 0; i < 6; i++) {
+      const px = (i % cols) * pw, py = Math.floor(i / cols) * (h / rows), cx = px + pw / 2, cy = py + (h / rows) / 2 + 4, d = sstep(th[i][0], th[i][1], t), s = Math.min(pw, ph) * .32;
+      c.strokeStyle = 'rgba(255,255,255,.08)'; c.strokeRect(px + 6, py + 6, pw - 12, h / rows - 12);
+      txt(c, labels[i], cx, py + 20, '#9a9690', 11);
+      if (i === 0) { for (let k = 0; k < 8; k++) { const a = k / 8 * TAU, fall = d * (k % 4 + 1) * .3; c.fillStyle = 'rgba(240,150,190,' + (1 - d * .8) + ')'; c.beginPath(); c.ellipse(cx + Math.cos(a) * s * .5 * (1 + fall), cy - s * .2 + Math.sin(a) * s * .5 + fall * s * 1.2 * (k % 2 + 1) * .5, s * .32, s * .16, a, 0, TAU); c.fill(); } c.fillStyle = 'rgba(255,220,120,' + (1 - d) + ')'; c.beginPath(); c.arc(cx, cy - s * .2, s * .16, 0, TAU); c.fill(); c.strokeStyle = 'rgba(100,160,80,' + (1 - d * .6) + ')'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx, cy + s); c.stroke(); }
+      if (i === 1) { c.fillStyle = 'rgba(240,235,220,' + (1 - d * .5) + ')'; c.fillRect(cx - s, cy - s * .7, s * 2, s * 1.4); c.fillStyle = 'rgba(90,130,180,' + (1 - d) * .8 + ')'; c.fillRect(cx - s * .85, cy - s * .55, s * 1.7, s * 1.1); c.fillStyle = 'rgba(255,220,120,' + (1 - d) + ')'; c.beginPath(); c.arc(cx + s * .4, cy - s * .2, s * .18, 0, TAU); c.fill(); c.fillStyle = 'rgba(50,90,60,' + (1 - d) + ')'; c.fillRect(cx - s * .85, cy + s * .2, s * 1.7, s * .35); }
+      if (i === 2) { c.fillStyle = 'rgba(220,200,180,' + (1 - d * .9) + ')'; c.strokeStyle = c.fillStyle; standFig(c, cx, cy + s * 1.1, s * 2.2, s * .2); }
+      if (i === 3) { for (let a = 0; a < 5; a++) for (let b = 0; b < 4; b++) { if (hsh(a * 7 + b) < d) continue; c.fillStyle = 'rgba(190,170,140,' + (1 - d * .5) + ')'; c.fillRect(cx - s + a * s * .4 + hsh(a + b) * d * 8, cy - s * .7 + b * s * .38 + d * hsh(a * 2 + b) * 10, s * .38, s * .36); } }
+      if (i === 4) { c.fillStyle = 'rgba(110,120,140,' + .9 + ')'; c.beginPath(); c.moveTo(cx - s * 1.2, cy + s * .7); c.lineTo(cx, cy + s * .7 - s * 1.6 * (1 - d * .85)); c.lineTo(cx + s * 1.2, cy + s * .7); c.closePath(); c.fill(); }
+      if (i === 5) { for (let a = 0; a < 14; a++) { if (hsh(a + 30) < d) continue; const bx = cx - s + (a % 7) * s * .3, by = cy + s * .5 - Math.floor(a / 7) * s * .5 - hsh(a) * s * .4; c.fillStyle = 'rgba(210,190,130,' + (1 - d * .5) + ')'; c.fillRect(bx, by, s * .22, s * .3 + hsh(a + 2) * s * .4); } }
+    }
+    c.globalAlpha = 1;
+    if (t > .9) {
+      const a = sstep(.9, 1, t), br = .5 - .5 * Math.cos(T * 1.05);
+      haloGrad(c, w / 2, h * .55, 40 + 30 * br, 'rgba(255,240,190,A)', a * .8);
+      txt(c, 'What is happening right now?', w / 2, h * .32, 'rgba(242,236,216,' + a + ')', 20); txt(c, 'breathing in, breathing out', w / 2, h * .8, 'rgba(232,212,139,' + a * .8 + ')', 13);
+    }
+    S.cap(t < .2 ? 'The flower goes in days.' : t < .55 ? 'A life, a house: each has its own span.' : t < .9 ? 'Mountains and civilizations change too, only slowly.' : 'When even this page goes, what remains is the present breath.');
+  },
+  hide(S) { S.card.querySelector('.controls').style.opacity = 1; }
+});
+
+/* ================= THERAVADA 24: flame to flame ================= */
+addViz('th', {
+  tab: 'Flame to flame', title: 'One Flame Lights Another', kind: 'Classical (Milindapañha simile), modern rendering', group: 'Death',
+  lead: 'A candle burns, lights a second one, and goes out. Is the second flame the first? The classical answer is that it is neither the same nor another. It continues because of the first, which is how the tradition speaks of continuity across death.',
+  controls: [{ k: 'p', label: 'Time', min: 0, max: 1, val: 0, play: 30 }],
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, p = S.st.p, T = S.t; c.clearRect(0, 0, w, h);
+    const by = h * .82, ax = w * .3, bx = w * .7, ch = h * .34;
+    const aBurn = sstep(0, .6, p), aOn = 1 - sstep(.56, .66, p), bOn = sstep(.45, .6, p), transfer = sstep(.38, .52, p) * (1 - sstep(.52, .6, p));
+    const candle = (x, hh, col) => { c.fillStyle = col; c.fillRect(x - 14, by - hh, 28, hh); c.strokeStyle = '#222'; c.beginPath(); c.moveTo(x, by - hh); c.lineTo(x, by - hh - 8); c.stroke(); };
+    candle(ax, ch * (1 - .55 * aBurn), '#e6dcc0'); candle(bx, ch, '#e6dcc0');
+    const flame = (x, y, s, a) => { if (a <= 0) return; haloGrad(c, x, y - 14 * s, 60 * s, 'rgba(255,190,90,A)', .4 * a); c.fillStyle = 'rgba(255,' + (180 + 50 * Math.sin(T * 8) | 0) + ',70,' + a + ')'; c.beginPath(); c.ellipse(x + Math.sin(T * 5) * 1.5, y - 16 * s, 7 * s, 18 * s, 0, 0, TAU); c.fill(); c.fillStyle = 'rgba(255,255,220,' + a + ')'; c.beginPath(); c.ellipse(x, y - 10 * s, 3 * s, 8 * s, 0, 0, TAU); c.fill(); };
+    flame(ax, by - ch * (1 - .55 * aBurn) - 8, 1 - .15 * aBurn, aOn); flame(bx, by - ch - 8, 1, bOn);
+    if (transfer > 0) { const u = sstep(.38, .52, p), x = lerp(ax, bx, u), y = by - ch - 60 - Math.sin(u * Math.PI) * 30; c.fillStyle = 'rgba(255,200,90,' + (1 - Math.abs(u - .5)) + ')'; c.beginPath(); c.arc(x, y, 5, 0, TAU); c.fill(); }
+    txt(c, p < .38 ? 'the first flame' : p < .6 ? 'passing on' : 'the second flame', w / 2, 24, '#e8d48b', 14);
+    if (p > .7) txt(c, 'not the same, not another', w / 2, h * .2, 'rgba(242,236,216,' + sstep(.7, .9, p) + ')', 17);
+    S.cap('The Milindapañha uses this image for continuity without a fixed self: what continues depends on what came before, and is not identical to it.');
+  }
+});
+
+/* ================= THERAVADA 25: four foundations wheel ================= */
+addViz('th', {
+  tab: 'Four foundations', title: 'The Four Foundations, and Letting Go', kind: 'Classical (Satipaṭṭhāna), modern rendering', group: 'Insight',
+  lead: 'Body, feeling, mind and dhammas around one centre: observing. Things arise and pass in all four. Slide holding down to zero and they stop clumping toward the centre. The screen empties, not into śūnyatā but into nothing needing to be held.',
+  controls: [{ k: 'hold', label: 'Holding', min: 0, max: 1, val: 1, play: 40 }],
+  init(S) { S.st.ev = []; S.st.next = 0; S.st.last = 0; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, st = S.st, T = S.t, dt = Math.min(.05, T - (st.last || T)); st.last = T; c.clearRect(0, 0, w, h);
+    const cx = w / 2, cy = h / 2, R = Math.min(w, h) * .42, cols = ['#d4af37', '#f0a3c0', '#4ecdc4', '#b7a6f5'], nm = ['BODY', 'FEELING', 'MIND', 'DHAMMAS'], ang = [-Math.PI / 2, 0, Math.PI / 2, Math.PI];
+    if (T > st.next) { st.next = T + .12; const q = Math.floor(Math.random() * 4); st.ev.push({ q, a: ang[q] + rand(-.6, .6), r: rand(.35, 1) * R, t0: T, life: rand(3, 6) * (.5 + .5 * st.hold) }); }
+    st.ev = st.ev.filter(e => T - e.t0 < e.life);
+    for (const e of st.ev) {
+      const u = (T - e.t0) / e.life, rr = e.r * (1 - st.hold * .55 * u), x = cx + Math.cos(e.a) * rr, y = cy + Math.sin(e.a) * rr * .8, a = Math.sin(Math.PI * u) * (.25 + .6 * st.hold);
+      c.fillStyle = cols[e.q]; c.globalAlpha = a; c.beginPath(); c.arc(x, y, 3 + 9 * st.hold * u, 0, TAU); c.fill(); if (st.hold > .5) { c.globalAlpha = a * .3; c.strokeStyle = cols[e.q]; c.beginPath(); c.moveTo(x, y); c.lineTo(cx, cy); c.stroke(); }
+    }
+    c.globalAlpha = 1;
+    nm.forEach((n, i) => txt(c, n, cx + Math.cos(ang[i]) * R * 1.08, cy + Math.sin(ang[i]) * R * .9, cols[i], 12));
+    haloGrad(c, cx, cy, 34 + 18 * (1 - st.hold), 'rgba(255,245,210,A)', .25 + .35 * (1 - st.hold)); txt(c, 'OBSERVING', cx, cy, '#f2ecd8', 12);
+    S.cap(st.hold > .6 ? 'Held tightly, experience piles up around the observer and feels heavy.' : st.hold > .2 ? 'The grip eases. Things still arise and pass, with less pull.' : 'Nothing needs to be held. It all arises and passes on its own.');
+  }
+});
+
+</script>
+</body>
+</html>

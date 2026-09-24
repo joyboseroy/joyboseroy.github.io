@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Empty World: Heart Sūtra and Nāgārjuna</title>
+<meta name="description" content="Nine interactive experiments on emptiness: the vanishing lotus, the cup and its conditions, the four extremes, the middle way, rope and snake, the ship of Theseus, and more.">
+<style>
+  :root{
+    --bg:#07070d; --card:rgba(18,18,32,.88); --gold:#d4af37; --gold2:#e8d48b;
+    --teal:#4ecdc4; --text:#e8e6e3; --muted:#9a9690; --rose:#f0b6cc;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Georgia,"Iowan Old Style","Palatino Linotype",serif;background:var(--bg);color:var(--text);line-height:1.65;overflow-x:hidden}
+  #stars{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  header{text-align:center;padding:3.2rem 1.25rem 1.6rem;background:linear-gradient(180deg,rgba(212,175,55,.09),transparent)}
+  header h1{font-weight:300;font-size:clamp(1.5rem,5vw,2.6rem);letter-spacing:.12em;color:var(--gold);margin-bottom:.7rem}
+  header p{color:var(--muted);max-width:760px;margin:0 auto;font-size:1.02rem}
+  nav{display:flex;flex-wrap:wrap;justify-content:center;gap:.6rem;margin-top:1.4rem}
+  nav a{color:var(--gold2);text-decoration:none;font:.86rem system-ui,sans-serif;padding:.4rem 1rem;border:1px solid rgba(212,175,55,.35);border-radius:2rem;transition:.2s}
+  nav a:hover{background:rgba(212,175,55,.15);border-color:var(--gold)}
+  main{max-width:1080px;margin:0 auto;padding:.5rem 1rem 3rem}
+  section{margin:2.6rem 0;background:var(--card);border:1px solid rgba(212,175,55,.13);border-radius:16px;padding:1.8rem 1.4rem;box-shadow:0 8px 32px rgba(0,0,0,.4)}
+  section>h2{font-weight:400;font-size:1.6rem;color:var(--gold);letter-spacing:.04em}
+  .sk{font-style:italic;color:var(--teal);font-size:.95rem;margin:.2rem 0 1rem}
+  section>p{margin-bottom:.9rem;font-size:1rem}
+  .principle{border-left:3px solid var(--gold);background:rgba(212,175,55,.06);color:var(--gold2);padding:.7rem 1rem;margin:1rem 0;font-style:italic}
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin:1.2rem 0 .8rem}
+  button,.tab{font:.85rem system-ui,sans-serif;background:transparent;border:1px solid rgba(212,175,55,.55);color:var(--gold2);padding:.4rem .95rem;border-radius:6px;cursor:pointer;transition:.2s}
+  button:hover{background:rgba(212,175,55,.16)}
+  .tab.active{background:rgba(212,175,55,.26);border-color:var(--gold2)}
+  .card{display:none}
+  .card.on{display:block}
+  .card h3{font-weight:400;font-size:1.2rem;color:var(--gold2);margin-bottom:.2rem}
+  .kind{font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--teal);margin-bottom:.45rem}
+  .tabgroup{flex-basis:100%;font:.72rem system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-top:.5rem}
+  .tabgroup:first-child{margin-top:0}
+  .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:.6rem;margin:1rem 0;font-size:.92rem}
+  .legend div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.65rem .9rem}
+  .legend b{color:var(--teal);font-weight:400}
+  .lead{color:var(--muted);font-size:.95rem;margin-bottom:.7rem}
+  .controls{display:flex;flex-wrap:wrap;gap:.7rem 1.1rem;align-items:center;margin:.5rem 0}
+  .controls label{display:flex;align-items:center;gap:.6rem;font:.82rem system-ui,sans-serif;color:var(--muted)}
+  .controls input[type=range]{width:min(240px,55vw);accent-color:var(--gold)}
+  .stage{position:relative;width:100%;height:clamp(300px,58vh,440px);border-radius:12px;overflow:hidden;background:#06060c;border:1px solid rgba(255,255,255,.07)}
+  .stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:pan-y}
+  .cap{min-height:3.2em;margin-top:.7rem;color:var(--gold2);font-size:.97rem;font-style:italic}
+  .analogies{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.8rem;margin:1rem 0}
+  .analogies div{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:.8rem 1rem;font-size:.93rem}
+  .analogies b{color:var(--teal);font-weight:400}
+  footer{text-align:center;padding:2rem 1rem 3rem;color:var(--muted);font:.88rem system-ui,sans-serif;border-top:1px solid rgba(255,255,255,.06)}
+  @media(max-width:600px){section{padding:1.3rem .9rem}.stage{height:clamp(280px,52vh,380px)}}
+
+  nav a[aria-current=page]{background:rgba(212,175,55,.22);border-color:var(--gold2)}
+  .hub{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem;margin:1.6rem 0 .5rem}
+  .hub a{display:block;text-decoration:none;color:var(--text);background:var(--card);border:1px solid rgba(212,175,55,.2);border-radius:14px;padding:1.3rem 1.2rem;transition:.2s}
+  .hub a:hover{border-color:var(--gold);background:rgba(212,175,55,.08)}
+  .hub h2{font-weight:400;font-size:1.25rem;color:var(--gold);margin-bottom:.15rem}
+  .hub .sk{margin:0 0 .7rem}
+  .hub p{font-size:.95rem;color:var(--muted)}
+  .hub .count{display:block;margin-top:.8rem;font:.8rem system-ui,sans-serif;color:var(--gold2)}
+  .pager{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.8rem;margin:2rem 0 0;font:.9rem system-ui,sans-serif}
+  .pager a{color:var(--gold2);text-decoration:none;border:1px solid rgba(212,175,55,.35);border-radius:2rem;padding:.4rem 1rem}
+  .pager a:hover{background:rgba(212,175,55,.15)}
+  a.inline{color:var(--teal)}
+  header h1{font-size:clamp(1.25rem,3.7vw,2.3rem)}
+</style>
+</head>
+<body>
+<canvas id="stars"></canvas>
+<header>
+  <h1>EMPTINESS · INTERPENETRATION · PURE LAND</h1>
+  <p>Interactive contemplations on emptiness, interpenetration and the Pure Land. Each one is drawn live in your browser.</p>
+  <nav><a href="index.html">Home</a><a href="theravada.html">Early Buddhism</a><a href="heart-sutra.html" aria-current="page">Emptiness</a><a href="avatamsaka.html">Interpenetration</a><a href="pure-land.html">Pure Land</a><a href="three-visions.html">One reality</a><a href="combinations.html">Combinations</a></nav>
+</header>
+<main>
+<section id="emptiness">
+    <h2>The Empty World: Heart Sūtra and Nāgārjuna</h2>
+    <p class="sk">rūpaṃ śūnyatā, śūnyataiva rūpam · svabhāva-śūnyatā · pratītyasamutpāda</p>
+    <p>Emptiness does not mean nothing exists. It means nothing exists by its own independent nature (svabhāva). For Nāgārjuna, dependent arising, emptiness, dependent designation and the Middle Way are one insight seen from four sides. He also warns that emptiness itself must not become a new view or a hidden substance. So none of the experiments below end in blackness. Each one attacks a different intuition about inherent existence, and in each one the appearance carries on.</p>
+    <div class="principle">Do not tell the visitor what emptiness is. Give them situations in which their assumptions about "things" stop working.</div>
+    <div class="tabs" data-group="emp"></div>
+    <div class="cards" data-group="emp"></div>
+  </section>
+<section id="nagarjuna">
+    <h2>Nāgārjuna's Analogies</h2>
+    <p class="sk">svapna · marīci · pratibimba · māyā</p>
+    <p>Nāgārjuna and the Prajñāpāramitā literature use a small set of images to show how something can appear, function and matter while lacking any core. Several are built into the experiments above.</p>
+    <div class="analogies">
+      <div><b>Dream.</b> Vivid while it lasts, without the solidity it seemed to have. See the Dream Machine.</div>
+      <div><b>Rope and snake.</b> Fear is real, the snake is not, and the rope was never destroyed. See Rope and Snake.</div>
+      <div><b>Reflection and echo.</b> They arise in dependence on conditions and do not exist apart from them. See <a class="inline" href="avatamsaka.html">Indra's Net and the Hall of Mirrors</a>.</div>
+      <div><b>Illusion.</b> A conjured elephant can be seen and fought, yet has no elephant-nature. See the Cup and Its Conditions.</div>
+    </div>
+    <p style="font-size:.93rem;color:var(--muted)">In Nāgārjuna's own words, paraphrased: whatever arises dependently is what we call empty, this is a designation that depends on something else, and this is the middle path.</p>
+  </section>
+<div class="pager"><a href="theravada.html">&larr; Early Buddhism</a><a href="avatamsaka.html">Interpenetration &rarr;</a></div>
+</main>
+<footer>
+  <p>Contemplative visualizations for study and meditation. Everything on this page is drawn procedurally in your browser.</p>
+  <p style="margin-top:.5rem">May all beings realize the luminous openness of mind.</p>
+</footer>
+<script>
+/* ================= utilities ================= */
+const TAU = Math.PI * 2;
+const rand = (a, b) => a + Math.random() * (b - a);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const sstep = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
+const tri = x => { x = x % 1; if (x < 0) x += 1; return x < .5 ? x * 2 : 2 - x * 2; };
+function txt(c, s, x, y, col, size, align) {
+  c.fillStyle = col; c.font = (size || 13) + 'px system-ui, sans-serif';
+  c.textAlign = align || 'center'; c.textBaseline = 'middle'; c.fillText(s, x, y);
+}
+
+/* ================= starfield ================= */
+(function () {
+  const cv = document.getElementById('stars'), c = cv.getContext('2d');
+  let w, h, st = [];
+  function rs() {
+    w = cv.width = innerWidth; h = cv.height = innerHeight;
+    st = Array.from({ length: 140 }, () => ({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2 + .3, a: Math.random() * .5 + .15, p: Math.random() * TAU }));
+  }
+  rs(); addEventListener('resize', rs);
+  (function d(t) {
+    c.clearRect(0, 0, w, h);
+    for (const s of st) { c.beginPath(); c.arc(s.x, s.y, s.r, 0, TAU); c.fillStyle = 'rgba(220,210,180,' + (s.a * (.6 + .4 * Math.sin(t * .001 + s.p))) + ')'; c.fill(); }
+    requestAnimationFrame(d);
+  })(0);
+})();
+
+/* ================= visualization framework ================= */
+const VIZ = [];
+const GROUP_ORDER = { th: ['Breath', 'Body and feeling', 'Mind and self', 'Insight', 'Concentration', 'Death'], mix: ['Heart and net', 'Death and the net', 'Four grammars'], ava: ['Doctrine', "Fazang's demonstrations", 'Scale and time', 'Entering one into all', 'The net', 'Practice'] };
+function addViz(group, spec) {
+  const tabs = document.querySelector('.tabs[data-group=' + group + ']');
+  const cards = document.querySelector('.cards[data-group=' + group + ']');
+  if (!tabs._g) {
+    tabs._g = {};
+    (GROUP_ORDER[group] || []).forEach(n => { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = n; tabs.appendChild(gl); tabs._g[n] = gl; });
+  }
+  const tb = document.createElement('button'); tb.className = 'tab'; tb.textContent = spec.tab;
+  if (spec.group) {
+    if (!tabs._g[spec.group]) { const gl = document.createElement('span'); gl.className = 'tabgroup'; gl.textContent = spec.group; tabs.appendChild(gl); tabs._g[spec.group] = gl; }
+    const prev = tabs._g[spec.group]; prev.after(tb); tabs._g[spec.group] = tb;
+  } else tabs.appendChild(tb);
+  const card = document.createElement('div'); card.className = 'card';
+  card.innerHTML = '<h3></h3><p class="kind"></p><p class="lead"></p><div class="controls"></div><div class="stage"></div><p class="cap"></p>';
+  card.querySelector('h3').textContent = spec.title;
+  const kindEl = card.querySelector('.kind');
+  if (spec.kind) kindEl.textContent = spec.kind; else kindEl.remove();
+  card.querySelector('.lead').textContent = spec.lead;
+  cards.appendChild(card);
+  tb.onclick = () => {
+    tabs.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+    [...cards.children].forEach(b => b.classList.remove('on'));
+    tb.classList.add('active'); card.classList.add('on');
+  };
+  if (tabs.querySelector('.tab') === tb) tb.onclick();
+  const stage = card.querySelector('.stage'), ctl = card.querySelector('.controls'), capEl = card.querySelector('.cap');
+  const cv = document.createElement('canvas'); stage.appendChild(cv);
+  const S = { spec, card, cv, ctx: cv.getContext('2d'), w: 0, h: 0, dpr: 1, mx: -999, my: -999, t: 0, st: {}, vis: false, play: null, capText: '' };
+  S.cap = s => { if (s !== S.capText) { S.capText = s; capEl.textContent = s; } };
+  (spec.controls || []).forEach(c => {
+    if (c.btn) {
+      const b = document.createElement('button'); b.textContent = c.btn; b.onclick = () => c.fn(S, b); ctl.appendChild(b);
+    } else {
+      const lab = document.createElement('label'); const sp = document.createElement('span'); sp.textContent = c.label; lab.appendChild(sp);
+      const inp = document.createElement('input'); inp.type = 'range'; inp.min = c.min; inp.max = c.max; inp.step = c.step || .01; inp.value = c.val;
+      S.st[c.k] = +c.val; lab.appendChild(inp); ctl.appendChild(lab);
+      inp.oninput = () => { S.st[c.k] = +inp.value; if (S.play && S.play.k === c.k) { S.play.on = false; S.play.btn.textContent = 'Play'; } };
+      if (c.play) {
+        const pb = document.createElement('button'); pb.textContent = 'Play'; ctl.appendChild(pb);
+        S.play = { k: c.k, min: +c.min, max: +c.max, period: c.play, on: false, btn: pb, inp, t0: 0 };
+        pb.onclick = () => {
+          const P = S.play; P.on = !P.on; pb.textContent = P.on ? 'Pause' : 'Play';
+          if (P.on) { const nrm = (S.st[P.k] - P.min) / (P.max - P.min); P.t0 = S.t - (nrm / 2) * P.period; }
+        };
+      }
+    }
+  });
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (r.width < 2) return;
+    S.dpr = Math.min(devicePixelRatio || 1, 2);
+    cv.width = Math.round(r.width * S.dpr); cv.height = Math.round(r.height * S.dpr);
+    S.w = r.width; S.h = r.height;
+    S.ctx.setTransform(S.dpr, 0, 0, S.dpr, 0, 0);
+    if (spec.init) spec.init(S);
+  }
+  new ResizeObserver(resize).observe(stage);
+  new IntersectionObserver(es => es.forEach(e => S.vis = e.isIntersecting)).observe(stage);
+  cv.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top; });
+  cv.addEventListener('pointerleave', () => { S.mx = -999; S.my = -999; });
+  cv.addEventListener('pointerdown', e => {
+    const r = cv.getBoundingClientRect(); S.mx = e.clientX - r.left; S.my = e.clientY - r.top;
+    if (spec.click) spec.click(S, S.mx, S.my);
+  });
+  S.tabBtn = tb;
+  VIZ.push(S);
+  return S;
+}
+function showViz(title) {
+  const S = VIZ.find(v => v.spec.title === title || v.spec.tab === title);
+  if (!S) return;
+  S.tabBtn.click();
+  S.card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+(function frame(now) {
+  const T = now / 1000;
+  for (const S of VIZ) {
+    if (!S.vis || !S.w || S.card.offsetParent === null) {
+      if (S.wasActive) { S.wasActive = false; if (S.spec.hide) S.spec.hide(S); }
+      continue;
+    }
+    S.wasActive = true;
+    S.t = T;
+    if (S.play && S.play.on) {
+      const P = S.play; const v = P.min + tri((S.t - P.t0) / P.period) * (P.max - P.min);
+      S.st[P.k] = v; P.inp.value = v;
+    }
+    const c = S.ctx; c.setTransform(S.dpr, 0, 0, S.dpr, 0, 0); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over'; c.setLineDash([]);
+    try { S.spec.draw(S); } catch (e) { console.error(e); }
+  }
+  requestAnimationFrame(frame);
+})(0);
+
+/* shared lotus drawing */
+function lotus(c, x, y, s, open, alpha) {
+  c.save(); c.translate(x, y); c.globalAlpha = alpha;
+  for (let layer = 0; layer < 2; layer++) {
+    const n = layer ? 5 : 7;
+    for (let k = 0; k < n; k++) {
+      const f = (k / (n - 1)) * 2 - 1, th = f * (.25 + .9 * open) * (layer ? .7 : 1);
+      c.save(); c.rotate(th);
+      const L = (layer ? 20 : 28) * s * (.8 + .2 * open), W = (6 + 4 * open) * s;
+      c.beginPath(); c.ellipse(0, -L * .55, W, L * .55, 0, 0, TAU);
+      const g = c.createLinearGradient(0, 0, 0, -L);
+      g.addColorStop(0, 'rgba(240,170,200,.95)');
+      g.addColorStop(1, layer ? 'rgba(255,225,235,.95)' : 'rgba(215,120,170,.85)');
+      c.fillStyle = g; c.fill(); c.restore();
+    }
+  }
+  if (open > .3) {
+    const r = 10 * s * open, g = c.createRadialGradient(0, -8 * s, 0, 0, -8 * s, r * 2.4);
+    g.addColorStop(0, 'rgba(255,245,200,' + (.9 * open) + ')'); g.addColorStop(1, 'rgba(255,220,120,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(0, -8 * s, r * 2.4, 0, TAU); c.fill();
+  }
+  c.restore();
+}
+
+/* ================= EMPTINESS 1: vanishing essence ================= */
+addViz('emp', {
+  tab: 'Vanishing essence', title: 'The Vanishing Essence',
+  lead: 'Look closer and closer at a lotus. At the end nothing is left to find, but the lotus does not disappear.',
+  controls: [{ k: 'p', label: 'Look closer', min: 0, max: 1, val: 0, play: 18 }],
+  init(S) {
+    const L = Math.min(S.w, S.h) * .3, pts = [], N = 8;
+    for (let i = 0; i < N; i++) {
+      const a = i / N * TAU;
+      for (let u = .15; u <= .96; u += .16) {
+        const hw = L * .22 * Math.sin(Math.PI * clamp(u * .95 + .05));
+        for (let v = -1; v <= 1.01; v += .5) {
+          const al = u * L, ac = v * hw;
+          pts.push({ x: Math.cos(a) * al - Math.sin(a) * ac, y: Math.sin(a) * al + Math.cos(a) * ac });
+        }
+      }
+    }
+    const pairs = [];
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      if (Math.hypot(pts[i].x - pts[j].x, pts[i].y - pts[j].y) < L * .17) pairs.push([i, j]);
+    }
+    S.st.L = L; S.st.pts = pts; S.st.pairs = pairs;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, L = S.st.L, cx = w / 2, cy = h * .52, d = S.st.p * 4;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const solid = 1 - sstep(.15, 1.1, d), cells = sstep(.7, 1.4, d) * (1 - sstep(1.9, 2.6, d));
+    const mol = sstep(1.7, 2.4, d) * (1 - sstep(3, 3.6, d)), rel = sstep(2.6, 3.3, d), cond = sstep(3.3, 3.9, d);
+    const spread = .55 * sstep(.4, 2.4, d) + .25 * sstep(2.6, 3.6, d);
+    if (solid > .01) {
+      c.save(); c.translate(cx, cy);
+      for (let layer = 0; layer < 2; layer++) {
+        for (let i = 0; i < 8; i++) {
+          c.save(); c.rotate(i / 8 * TAU + (layer ? TAU / 16 : 0));
+          const len = layer ? L * .62 : L, wd = layer ? L * .17 : L * .22;
+          c.beginPath(); c.ellipse(len * .55 * (1 + spread), 0, len * .5, wd, 0, 0, TAU);
+          const g = c.createLinearGradient(0, 0, len, 0);
+          g.addColorStop(0, 'rgba(215,120,170,' + (.9 * solid) + ')'); g.addColorStop(1, 'rgba(255,225,235,' + (.9 * solid) + ')');
+          c.fillStyle = g; c.fill(); c.restore();
+        }
+      }
+      c.beginPath(); c.arc(0, 0, L * .12, 0, TAU); c.fillStyle = 'rgba(232,200,110,' + solid + ')'; c.fill();
+      c.restore();
+    }
+    const P = S.st.pts, k = 1 + spread;
+    if (cells > .01) {
+      c.strokeStyle = 'rgba(240,190,210,' + (.6 * cells) + ')'; c.lineWidth = 1;
+      for (const p of P) { c.beginPath(); c.arc(cx + p.x * k, cy + p.y * k, 5, 0, TAU); c.stroke(); }
+    }
+    if (mol > .01 || rel > .01) {
+      const a = Math.max(mol, rel * .7);
+      c.fillStyle = 'rgba(232,212,139,' + (.85 * a) + ')';
+      for (let i = 0; i < P.length; i++) {
+        const p = P[i], x = cx + p.x * k + Math.sin(t * 1.3 + i) * 1.5, y = cy + p.y * k + Math.cos(t * 1.1 + i) * 1.5;
+        c.beginPath(); c.arc(x, y, 1.9, 0, TAU); c.fill();
+      }
+    }
+    if (rel > .01) {
+      c.strokeStyle = 'rgba(78,205,196,' + (.32 * rel) + ')'; c.lineWidth = .8; c.beginPath();
+      for (const pr of S.st.pairs) { const a = P[pr[0]], b = P[pr[1]]; c.moveTo(cx + a.x * k, cy + a.y * k); c.lineTo(cx + b.x * k, cy + b.y * k); }
+      c.stroke();
+    }
+    if (cond > .01) {
+      const names = ['sun', 'water', 'mud', 'seed', 'seasons', 'bees', 'your eyes', 'the word "lotus"'], R2 = Math.min(w * .42, h * .44);
+      names.forEach((n, i) => {
+        const a = i / names.length * TAU + t * .05, x = cx + Math.cos(a) * R2, y = cy + Math.sin(a) * R2 * .92;
+        c.strokeStyle = 'rgba(232,212,139,' + (.16 * cond) + ')'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(x, y); c.stroke();
+        txt(c, n, x, y, 'rgba(232,212,139,' + (.9 * cond) + ')', 12);
+      });
+    }
+    const p = S.st.p;
+    S.cap(p < .06 ? 'A lotus. It seems to have a nature of its own.'
+      : p < .35 ? 'Petals, then cells. The lotus comes apart into parts.'
+      : p < .65 ? 'Molecules. Still no self-standing core anywhere.'
+      : p < .95 ? 'What remains is relations, and the conditions that hold them.'
+      : 'No lotus hides inside the lotus. Yet the lotus is here, and it flowers. Now let it return.');
+  }
+});
+
+/* ================= EMPTINESS 2: dependent designation (cup) ================= */
+addViz('emp', {
+  tab: 'Dependent designation', title: 'The Cup and Its Conditions',
+  lead: 'Tap a condition to remove it. The cup changes, and one removal changes only the name, not the clay.',
+  controls: [{ btn: 'Restore all', fn: S => { S.st.off = {}; S.st.last = ''; } }],
+  init(S) { S.st.off = S.st.off || {}; S.st.last = S.st.last || ''; },
+  click(S, x, y) {
+    for (const n of S.st.nodes || []) if (Math.hypot(x - n.x, y - n.y) < 38) { S.st.off[n.name] = !S.st.off[n.name]; S.st.last = S.st.off[n.name] ? n.name : ''; return; }
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, cx = w / 2, cy = h * .5, off = S.st.off;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const names = ['Clay', 'Potter', 'Water', 'Fire', 'Hand', 'Name'], R = Math.min(w * .38, h * .38);
+    S.st.nodes = names.map((n, i) => { const a = i / 6 * TAU - Math.PI / 2; return { name: n, x: cx + Math.cos(a) * R * 1.15, y: cy + Math.sin(a) * R }; });
+    for (const n of S.st.nodes) {
+      const on = !off[n.name];
+      c.setLineDash(on ? [] : [4, 5]); c.strokeStyle = on ? 'rgba(232,212,139,.35)' : 'rgba(150,150,150,.25)';
+      c.beginPath(); c.moveTo(n.x, n.y); c.lineTo(cx, cy); c.stroke(); c.setLineDash([]);
+      c.beginPath(); c.arc(n.x, n.y, 26, 0, TAU);
+      c.fillStyle = on ? 'rgba(212,175,55,.2)' : 'rgba(255,255,255,.03)'; c.fill();
+      c.strokeStyle = on ? 'rgba(212,175,55,.8)' : 'rgba(150,150,150,.4)'; c.stroke();
+      txt(c, n.name, n.x, n.y, on ? '#e8d48b' : '#777', 12);
+    }
+    const noClay = off.Clay, noPot = off.Potter, noFire = off.Fire;
+    c.save(); c.translate(cx, cy);
+    if (noClay) {
+      c.setLineDash([5, 6]); c.strokeStyle = 'rgba(200,200,200,.25)';
+      c.beginPath(); c.moveTo(-40, -40); c.lineTo(-30, 40); c.quadraticCurveTo(0, 52, 30, 40); c.lineTo(40, -40); c.stroke(); c.setLineDash([]);
+      txt(c, '?', 0, 0, 'rgba(200,200,200,.4)', 30);
+    } else if (noPot) {
+      c.beginPath(); c.ellipse(0, 20, 48, 26, 0, 0, TAU); c.fillStyle = '#9c6b45'; c.fill();
+      txt(c, 'a lump', 0, 60, '#8a7a6a', 12);
+    } else {
+      const sl = noFire ? .72 : 1;
+      c.beginPath(); c.moveTo(-40 * (noFire ? 1.15 : 1), -40 * sl); c.lineTo(-30, 40); c.quadraticCurveTo(0, 52, 30, 40); c.lineTo(40 * (noFire ? 1.15 : 1), -40 * sl); c.closePath();
+      const g = c.createLinearGradient(-40, 0, 40, 0);
+      g.addColorStop(0, noFire ? '#8d7562' : '#b0623a'); g.addColorStop(.5, noFire ? '#b39b86' : '#dd8a55'); g.addColorStop(1, noFire ? '#7f6a58' : '#9a5230');
+      c.fillStyle = g; c.fill();
+      c.beginPath(); c.arc(42, -4, 17, -Math.PI / 2, Math.PI / 2); c.lineWidth = 6; c.strokeStyle = noFire ? '#8d7562' : '#b0623a'; c.stroke(); c.lineWidth = 1;
+      c.beginPath(); c.ellipse(0, -40 * sl, 40 * (noFire ? 1.15 : 1), 8, 0, 0, TAU); c.fillStyle = '#2a1a12'; c.fill();
+      if (off.Water) { c.strokeStyle = 'rgba(30,15,8,.8)'; c.beginPath(); c.moveTo(-18, -30); c.lineTo(-8, -8); c.lineTo(-20, 12); c.moveTo(14, -34); c.lineTo(6, -6); c.lineTo(18, 20); c.stroke(); }
+      if (!off.Hand) {
+        c.strokeStyle = 'rgba(220,220,230,.35)';
+        for (let i = -1; i <= 1; i++) { c.beginPath(); for (let y = 0; y < 34; y += 3) { const x = i * 12 + Math.sin(y * .25 + t * 2 + i) * 4; y ? c.lineTo(x, -50 - y) : c.moveTo(x, -50); } c.stroke(); }
+      }
+    }
+    c.restore();
+    txt(c, off.Name ? '(no name)' : 'cup', cx, cy + 82, off.Name ? '#777' : '#e8d48b', 15);
+    const msg = {
+      Clay: 'Without clay there is no stuff to shape. The cup has no substance of its own.',
+      Potter: 'Without a maker there is only a lump. Shape depends on activity.',
+      Water: 'Without water the clay could not be worked, and it cracks. Even the dryness is a condition.',
+      Fire: 'Unfired clay slumps. The cup depends on the kiln.',
+      Hand: 'Nobody drinks from it. A cup is a cup partly by its use.',
+      Name: 'The word is gone and the shape remains. The category "cup" was designated, not found in the clay. This is dependent designation, not just "everything is connected".'
+    };
+    S.cap(S.st.last ? msg[S.st.last] : 'A cup. Tap any condition to take it away.');
+  }
+});
+
+/* ================= EMPTINESS 3: four extremes ================= */
+addViz('emp', {
+  tab: 'Four extremes', title: 'The Four Extremes (Catuṣkoṭi)',
+  lead: 'Try to place the thing in one of four positions. Tap each in turn and see what happens to it.',
+  controls: [{ btn: 'Reset', fn: S => { S.st.done = {}; S.st.focus = -1; } }],
+  init(S) { S.st.done = S.st.done || {}; S.st.focus = S.st.focus === undefined ? -1 : S.st.focus; },
+  click(S, x, y) {
+    (S.st.boxes || []).forEach((b, i) => { if (Math.abs(x - b.x) < b.w / 2 && Math.abs(y - b.y) < 26 && S.st.done[i] === undefined) { S.st.done[i] = S.t; S.st.focus = i; } });
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, cx = w / 2, cy = h / 2;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const bw = Math.min(150, w * .3), dx = Math.min(w * .32, 260), dy = Math.min(h * .34, 130);
+    const labels = ['It exists', 'It does not exist', 'Both', 'Neither'];
+    S.st.boxes = [{ x: cx, y: cy - dy, w: bw }, { x: cx + dx, y: cy, w: bw }, { x: cx, y: cy + dy, w: bw }, { x: cx - dx, y: cy, w: bw }];
+    let doneN = 0;
+    S.st.boxes.forEach((b, i) => {
+      const dt = S.st.done[i] === undefined ? -1 : t - S.st.done[i];
+      let al = 1;
+      if (dt >= 0) { doneN++; al = 1 - .92 * sstep(0, 1.6, dt); }
+      c.strokeStyle = 'rgba(232,212,139,' + (.12 * al) + ')'; c.beginPath(); c.moveTo(cx, cy); c.lineTo(b.x, b.y); c.stroke();
+      const jx = dt >= 0 && dt < 1.6 ? Math.sin(t * 40 + i) * 3 * (1 - dt / 1.6) : 0;
+      c.fillStyle = 'rgba(212,175,55,' + (.14 * al) + ')'; c.strokeStyle = 'rgba(212,175,55,' + (.8 * al) + ')';
+      c.fillRect(b.x - b.w / 2 + jx, b.y - 22, b.w, 44); c.strokeRect(b.x - b.w / 2 + jx, b.y - 22, b.w, 44);
+      txt(c, labels[i], b.x + jx, b.y, 'rgba(232,212,139,' + al + ')', 14);
+      if (dt >= 0 && dt < 1.8) {
+        for (let k = 0; k < 14; k++) {
+          const a = k / 14 * TAU, r = dt * 40 + k % 3 * 6;
+          c.fillStyle = 'rgba(232,212,139,' + (.7 * (1 - dt / 1.8)) + ')'; c.fillRect(b.x + Math.cos(a) * r, b.y + Math.sin(a) * r, 2, 2);
+        }
+      }
+    });
+    const glow = c.createRadialGradient(cx, cy, 0, cx, cy, 46);
+    glow.addColorStop(0, 'rgba(255,240,190,' + (.55 + .15 * Math.sin(t * 2)) + ')'); glow.addColorStop(1, 'rgba(255,240,190,0)');
+    c.fillStyle = glow; c.beginPath(); c.arc(cx, cy, 46, 0, TAU); c.fill();
+    c.beginPath(); c.arc(cx, cy, 13, 0, TAU); c.fillStyle = '#fff4d0'; c.fill();
+    const msgs = [
+      'Look for its own nature. It rests on causes, parts and a name. Nothing is found that stands alone.',
+      'Yet it appears and functions. The cup carries water. Denying it also fails.',
+      'Existing and not existing by the same standard cannot both be asserted. Each answer spoils the other.',
+      '"Neither" turns into one more position to hold. Nāgārjuna holds none.'
+    ];
+    if (doneN === 4) S.cap('What remains when you stop demanding that reality fit the four boxes? The thing still shines. Only the grasping fell away.');
+    else S.cap(S.st.focus >= 0 ? msgs[S.st.focus] : 'Tap a position.');
+  }
+});
+
+/* ================= EMPTINESS 4: middle way ================= */
+addViz('emp', {
+  tab: 'Middle way', title: 'The Middle Way Slider',
+  lead: 'Slide toward eternalism and the object hardens into an isolated crystal. Slide toward nihilism and it vanishes. In the middle it stays, and it depends.',
+  controls: [{ k: 's', label: 'Eternalism to nihilism', min: -1, max: 1, val: 0, step: .01, play: 20 }],
+  init(S) {
+    S.st.ps = Array.from({ length: 120 }, () => ({ a: rand(0, TAU), r: Math.sqrt(rand(.05, 1)), sp: rand(.4, 1.2), ph: rand(0, TAU), sx: rand(-1, 1), sy: rand(-1, 1) }));
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, s = S.st.s, cx = w / 2, cy = h * .47, R = Math.min(w, h) * .24;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const rig = clamp(-s * 1.7), van = clamp((s - .15) * 1.25), thr = clamp(1 - Math.abs(s) * 1.7);
+    const anchors = []; for (let i = 0; i < 8; i++) { const a = i / 8 * TAU + .3; anchors.push([cx + Math.cos(a) * w * .46, cy + Math.sin(a) * h * .46]); }
+    const pos = [];
+    S.st.ps.forEach((p, i) => {
+      let x = cx + Math.cos(p.a + t * .3 * p.sp) * p.r * R, y = cy + Math.sin(p.a + t * .3 * p.sp) * p.r * R;
+      const gx = cx + Math.round((x - cx) / 16) * 16, gy = cy + Math.round((y - cy) / 16) * 16;
+      x = lerp(x, gx, rig); y = lerp(y, gy, rig);
+      x += p.sx * van * 90 * Math.sin(t * .7 + p.ph); y += p.sy * van * 90 * Math.cos(t * .6 + p.ph);
+      pos.push([x, y]);
+    });
+    if (thr > .02) {
+      c.strokeStyle = 'rgba(78,205,196,' + (.22 * thr) + ')'; c.beginPath();
+      pos.forEach((p, i) => { if (i % 6 === 0) { const a = anchors[(i / 6) % 8]; c.moveTo(p[0], p[1]); c.lineTo(a[0], a[1]); } });
+      c.stroke();
+      anchors.forEach(a => { c.beginPath(); c.arc(a[0], a[1], 4, 0, TAU); c.fillStyle = 'rgba(78,205,196,' + (.5 * thr) + ')'; c.fill(); });
+    }
+    if (rig > .02) { c.strokeStyle = 'rgba(200,210,230,' + (.7 * rig) + ')'; c.lineWidth = 3; c.strokeRect(cx - R - 14, cy - R - 14, 2 * R + 28, 2 * R + 28); c.lineWidth = 1; }
+    const al = 1 - van;
+    pos.forEach(p => { c.beginPath(); c.arc(p[0], p[1], lerp(3, 4, rig), 0, TAU); c.fillStyle = rig > .5 ? 'rgba(190,205,230,' + al + ')' : 'rgba(240,210,120,' + al + ')'; c.fill(); });
+    txt(c, 'ETERNALISM', 60, h - 18, 'rgba(190,205,230,.7)', 11, 'left');
+    txt(c, 'NIHILISM', w - 60, h - 18, 'rgba(154,150,144,.8)', 11, 'right');
+    txt(c, 'MIDDLE WAY', cx, h - 18, 'rgba(232,212,139,' + (.3 + .7 * thr) + ')', 11);
+    S.cap(s < -.35 ? 'Eternalism: fixed, permanent, self-grounded, and therefore cut off from everything that could act on it.'
+      : s > .35 ? 'Nihilism: nothing at all, which contradicts the way things plainly work.'
+      : 'Dependent arising: the object functions and changes, and it is never self-grounded.');
+  }
+});
+
+/* ================= EMPTINESS 5: rope and snake ================= */
+addViz('emp', {
+  tab: 'Rope and snake', title: 'The Rope and the Snake',
+  lead: 'Change the light, the distance, and what you tell yourself. Appearance shifts while the rope stays a rope.',
+  controls: [
+    { k: 'light', label: 'Light', min: 0, max: 1, val: .25 },
+    { k: 'dist', label: 'Distance', min: 0, max: 1, val: .5 },
+    { btn: 'Say "snake"', fn: (S, b) => { S.st.lab = !S.st.lab; b.textContent = S.st.lab ? 'Stop naming' : 'Say "snake"'; } }
+  ],
+  init(S) { S.st.lab = S.st.lab || false; S.st.sa = S.st.sa || 0; },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, light = S.st.light, dist = S.st.dist;
+    const target = clamp((1 - light) * 1.25 * (.35 + .9 * dist) + (S.st.lab ? .38 : 0) - .1);
+    S.st.sa = lerp(S.st.sa, target, .08); const sa = S.st.sa, ra = 1 - sa * .85;
+    const bg = c.createLinearGradient(0, 0, 0, h); bg.addColorStop(0, '#2a2620'); bg.addColorStop(1, '#4b4032');
+    c.fillStyle = bg; c.fillRect(0, 0, w, h);
+    const sc = lerp(1.2, .55, dist), cx = w / 2, cy = h * .55, L = Math.min(w * .7, 420);
+    const P = u => ({ x: (u - .5) * L, y: Math.sin(u * TAU * 1.7 + .6) * 46 + Math.sin(u * 11) * 6 });
+    c.save(); c.translate(cx, cy); c.scale(sc, sc);
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    c.beginPath(); for (let u = 0; u <= 1.001; u += .01) { const p = P(u); u ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y); }
+    c.lineWidth = 15; c.strokeStyle = '#a9865a'; c.stroke();
+    c.lineWidth = 1.4; c.strokeStyle = 'rgba(70,45,20,' + ra + ')';
+    for (let u = 0; u < 1; u += .014) { const p = P(u); c.beginPath(); c.moveTo(p.x - 4, p.y - 5); c.lineTo(p.x + 4, p.y + 5); c.stroke(); }
+    if (sa > .02) {
+      c.globalAlpha = sa; c.beginPath(); for (let u = 0; u <= 1.001; u += .01) { const p = P(u); u ? c.lineTo(p.x, p.y) : c.moveTo(p.x, p.y); }
+      c.lineWidth = 17; c.strokeStyle = '#3d5a2c'; c.stroke();
+      c.fillStyle = '#233819'; for (let u = .02; u < 1; u += .03) { const p = P(u); c.beginPath(); c.arc(p.x, p.y, 4, 0, TAU); c.fill(); }
+      const hd = P(1), pr = P(.97), an = Math.atan2(hd.y - pr.y, hd.x - pr.x);
+      c.save(); c.translate(hd.x, hd.y); c.rotate(an);
+      c.beginPath(); c.ellipse(6, 0, 15, 10, 0, 0, TAU); c.fillStyle = '#3d5a2c'; c.fill();
+      if (S.st.lab || sa > .55) { c.fillStyle = '#ffe14d'; c.beginPath(); c.arc(9, -4, 2.4, 0, TAU); c.arc(9, 4, 2.4, 0, TAU); c.fill(); }
+      c.strokeStyle = '#c62828'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(20, 0); c.lineTo(30, 0); c.lineTo(35, -4); c.moveTo(30, 0); c.lineTo(35, 4); c.stroke();
+      c.restore(); c.globalAlpha = 1;
+    }
+    c.restore();
+    c.fillStyle = 'rgba(0,0,12,' + ((1 - light) * .58) + ')'; c.fillRect(0, 0, w, h);
+    const lg = c.createRadialGradient(w - 50, 40, 0, w - 50, 40, 20 + light * 70);
+    lg.addColorStop(0, 'rgba(255,240,180,' + (.3 + .7 * light) + ')'); lg.addColorStop(1, 'rgba(255,240,180,0)');
+    c.fillStyle = lg; c.beginPath(); c.arc(w - 50, 40, 20 + light * 70, 0, TAU); c.fill();
+    S.cap(sa > .6 ? 'A snake. The heart races. The fear is real, and the snake is not.'
+      : sa < .25 ? 'A rope. It was always a rope.'
+      : 'Ambiguous. What appears depends on light, distance and expectation. The rope was never destroyed, and the snake was never a snake.');
+  }
+});
+
+/* ================= EMPTINESS 6: ship of Theseus ================= */
+addViz('emp', {
+  tab: 'Ship of Theseus', title: 'The Ship of Theseus',
+  lead: 'Replace the planks one by one. Then build a second ship from the discarded ones. Where is the ship\'s own nature?',
+  controls: [{ k: 'p', label: 'Planks replaced', min: 0, max: 1, val: 0, play: 20 }],
+  init(S) {
+    const a = Array.from({ length: 32 }, (_, i) => i);
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    S.st.rank = a;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, p = S.st.p, k = Math.round(p * 32), W = Math.min(w * .6, 340);
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    function ship(cx, cy, fn) {
+      const ph = W * .05;
+      for (let r = 0; r < 4; r++) {
+        const rw = W * (1 - .13 * r), pw = rw / 8, x0 = cx - rw / 2;
+        for (let q = 0; q < 8; q++) fn(r * 8 + q, x0 + q * pw, cy + r * ph, pw - 1.5, ph - 1.5);
+      }
+      c.strokeStyle = '#6b5636'; c.lineWidth = 3; c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx, cy - W * .34); c.stroke(); c.lineWidth = 1;
+    }
+    const ay = h * .27, by = h * .7;
+    ship(w / 2, ay, (i, x, y, pw, ph) => { c.fillStyle = S.st.rank[i] < k ? '#e2c58a' : '#8a6a3f'; c.fillRect(x, y, pw, ph); });
+    c.fillStyle = 'rgba(240,235,220,.85)'; c.beginPath(); c.moveTo(w / 2 + 4, ay - W * .32); c.lineTo(w / 2 + 4, ay - 8); c.lineTo(w / 2 + W * .22, ay - 8); c.closePath(); c.fill();
+    ship(w / 2, by, (i, x, y, pw, ph) => {
+      if (S.st.rank[i] < k) { c.fillStyle = '#8a6a3f'; c.fillRect(x, y, pw, ph); }
+      else { c.strokeStyle = 'rgba(138,106,63,.25)'; c.setLineDash([2, 3]); c.strokeRect(x, y, pw, ph); c.setLineDash([]); }
+    });
+    txt(c, 'Ship A: ' + Math.round(p * 100) + '% new planks', w / 2, ay - W * .4, '#e8d48b', 13);
+    txt(c, 'Ship B: built from the discarded planks', w / 2, by + W * .05 * 4 + 18, '#e8d48b', 13);
+    S.cap(p < .05 ? 'One ship, with a name and a history.'
+      : p < .95 ? 'At what plank did it stop being the ship? In the planks, the shape, the name, the history? Where is its own nature?'
+      : 'Two ships, and no essence to award to either. "The ship" was always a convenient designation over changing conditions.');
+  }
+});
+
+/* ================= EMPTINESS 7: emptiness of emptiness ================= */
+addViz('emp', {
+  tab: 'Emptiness of emptiness', title: 'The Emptiness of Emptiness',
+  lead: 'Try to catch "ultimate emptiness". Move toward it, or tap near it.',
+  init(S) { S.st.o = { x: S.w * .6, y: S.h * .5, vx: 0, vy: 0, hide: 0 }; S.st.bursts = []; S.st.n = S.st.n || 0; },
+  click(S, x, y) {
+    const o = S.st.o; const d = Math.hypot(o.x - x, o.y - y);
+    if (d < 40 && o.hide <= 0) this.grasp(S); else if (d < 160) { o.vx += (o.x - x) / d * 5; o.vy += (o.y - y) / d * 5; }
+  },
+  grasp(S) {
+    const o = S.st.o; S.st.n++;
+    for (let i = 0; i < 40; i++) S.st.bursts.push({ x: o.x, y: o.y, vx: rand(-3, 3), vy: rand(-3, 3), l: 1 });
+    o.hide = 1.2;
+  },
+  draw(S) {
+    const c = S.ctx, w = S.w, h = S.h, t = S.t, o = S.st.o;
+    c.fillStyle = '#08080f'; c.fillRect(0, 0, w, h);
+    const lines = ['THING', 'empty of svabhāva', 'ŚŪNYATĀ', 'empty of itself', '?'];
+    lines.forEach((l, i) => txt(c, l, 22, 26 + i * 22, i === 4 ? 'rgba(232,212,139,.6)' : i % 2 ? 'rgba(78,205,196,.7)' : 'rgba(232,212,139,.85)', 12, 'left'));
+    if (o.hide > 0) {
+      o.hide -= 1 / 60;
+      if (o.hide <= 0) { o.x = rand(w * .25, w * .9); o.y = rand(h * .2, h * .85); o.vx = o.vy = 0; }
+    } else {
+      o.vx += Math.sin(t * .9 + 1) * .02; o.vy += Math.cos(t * .7) * .02;
+      const d = Math.hypot(o.x - S.mx, o.y - S.my);
+      if (d < 120) { o.vx += (o.x - S.mx) / d * .55; o.vy += (o.y - S.my) / d * .55; }
+      if (d < 22) this.grasp(S);
+      o.vx *= .94; o.vy *= .94; o.x += o.vx; o.y += o.vy;
+      if (o.x < 30 || o.x > w - 30) { o.vx *= -1; o.x = clamp(o.x, 30, w - 30); }
+      if (o.y < 30 || o.y > h - 30) { o.vy *= -1; o.y = clamp(o.y, 30, h - 30); }
+      const g = c.createRadialGradient(o.x, o.y, 0, o.x, o.y, 44);
+      g.addColorStop(0, 'rgba(255,245,210,.9)'); g.addColorStop(.35, 'rgba(78,205,196,.28)'); g.addColorStop(1, 'rgba(78,205,196,0)');
+      c.fillStyle = g; c.beginPath(); c.arc(o.x, o.y, 44, 0, TAU); c.fill();
+      c.beginPath(); c.arc(o.x, o.y, 9 + Math.sin(t * 3) * 1.5, 0, TAU); c.fillStyle = '#fff6da'; c.fill();
+    }
+    S.st.bursts = S.st.bursts.filter(b => b.l > 0);
+    for (const b of S.st.bursts) { b.x += b.vx; b.y += b.vy; b.l -= .02; c.fillStyle = 'rgba(255,240,190,' + b.l + ')'; c.fillRect(b.x, b.y, 2, 2); }
+    txt(c, 'grasp attempts: ' + S.st.n, w - 20, h - 16, 'rgba(154,150,144,.9)', 12, 'right');
+    S.cap(S.st.n === 0 ? 'Emptiness is not a thing behind things. Try to hold it.'
+      : 'Caught ' + S.st.n + ' time' + (S.st.n > 1 ? 's' : '') + '. Nothing was in the hand. No hidden substance, no absolute, no glowing Void.');
+  }
+});
+
+/* ================= EMPTINESS 8: form and emptiness (particle text) ================= */
+(function () {
+  function sampleText(S, text) {
+    const o = document.createElement('canvas'); o.width = Math.ceil(S.w); o.height = Math.ceil(S.h);
+    const g = o.getContext('2d'); let fs = Math.min(S.h * .4, 160);
+    g.font = '700 ' + fs + 'px Georgia, serif'; const mw = g.measureText(text).width;
+    if (mw > S.w * .86) { fs *= S.w * .86 / mw; g.font = '700 ' + fs + 'px Georgia, serif'; }
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(text, S.w / 2, S.h / 2);
+    const d = g.getImageData(0, 0, o.width, o.height).data, pts = [], step = Math.max(3, Math.round(fs / 22));
+    for (let y = 0; y < o.height; y += step) for (let x = 0; x < o.width; x += step) if (d[(y * o.width + x) * 4 + 3] > 128) pts.push([x, y]);
+    return pts;
+  }
+  addViz('emp', {
+    tab: 'Form and emptiness', title: 'Form Is Emptiness, Emptiness Is Form',
+    lead: 'The same particles spell both words. Move through them and they scatter, then gather again.',
+    controls: [{ btn: 'Swap word', fn: S => { S.st.off = (S.st.off + 1) % 2; } }],
+    init(S) {
+      S.st.targets = [sampleText(S, 'FORM'), sampleText(S, 'EMPTINESS')];
+      S.st.off = S.st.off || 0; S.st.idx = -1;
+      S.st.ps = Array.from({ length: 900 }, () => ({ x: rand(0, S.w), y: rand(0, S.h), vx: 0, vy: 0, tx: S.w / 2, ty: S.h / 2 }));
+    },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, idx = (Math.floor(S.t / 6) + S.st.off) % 2;
+      if (idx !== S.st.idx) {
+        S.st.idx = idx; const T = S.st.targets[idx];
+        for (const p of S.st.ps) { const q = T[Math.floor(Math.random() * T.length)]; p.tx = q[0]; p.ty = q[1]; p.vx = rand(-7, 7); p.vy = rand(-7, 7); }
+      }
+      c.fillStyle = 'rgba(8,8,15,.35)'; c.fillRect(0, 0, w, h);
+      c.fillStyle = idx ? 'rgba(78,205,196,.9)' : 'rgba(232,212,139,.9)';
+      for (const p of S.st.ps) {
+        p.vx += (p.tx - p.x) * .022; p.vy += (p.ty - p.y) * .022;
+        const dx = p.x - S.mx, dy = p.y - S.my, d = Math.hypot(dx, dy);
+        if (d < 80 && d > 0) { p.vx += dx / d * 2.2; p.vy += dy / d * 2.2; }
+        p.vx *= .87; p.vy *= .87; p.x += p.vx; p.y += p.vy;
+        c.fillRect(p.x, p.y, 2.2, 2.2);
+      }
+      S.cap(idx ? 'Emptiness. The same particles, and nothing new was added.' : 'Form. It holds together only while the conditions do.');
+    }
+  });
+})();
+
+/* ================= EMPTINESS 9: dream machine ================= */
+(function () {
+  function landscape(g, W, H) {
+    const sky = g.createLinearGradient(0, 0, 0, H * .62); sky.addColorStop(0, '#2b2f6b'); sky.addColorStop(.6, '#e58f6a'); sky.addColorStop(1, '#f6c987');
+    g.fillStyle = sky; g.fillRect(0, 0, W, H);
+    g.fillStyle = '#fff1c2'; g.beginPath(); g.arc(W * .7, H * .42, H * .09, 0, TAU); g.fill();
+    g.fillStyle = '#4b4a7a'; g.beginPath(); g.moveTo(0, H);
+    for (let x = 0; x <= W; x += 8) g.lineTo(x, H * .58 + Math.sin(x * .011 + 1) * H * .06 + Math.sin(x * .031) * H * .02);
+    g.lineTo(W, H); g.fill();
+    g.fillStyle = '#2f5d50'; g.beginPath(); g.moveTo(0, H);
+    for (let x = 0; x <= W; x += 8) g.lineTo(x, H * .68 + Math.sin(x * .017 + 3) * H * .04);
+    g.lineTo(W, H); g.fill();
+    const lk = g.createLinearGradient(0, H * .78, 0, H); lk.addColorStop(0, '#5a8fb0'); lk.addColorStop(1, '#2a4a6a');
+    g.fillStyle = lk; g.fillRect(0, H * .8, W, H * .2);
+    g.fillStyle = 'rgba(255,241,194,.5)'; g.fillRect(W * .69, H * .8, W * .03, H * .2);
+    g.fillStyle = '#3b2a20'; g.fillRect(W * .2, H * .45, 9, H * .28);
+    g.fillStyle = '#2c7a4b'; [[.2, .4, .09], [.17, .46, .07], [.23, .46, .07], [.2, .34, .06]].forEach(q => { g.beginPath(); g.arc(W * q[0] + 4, H * q[1], H * q[2], 0, TAU); g.fill(); });
+  }
+  addViz('emp', {
+    tab: 'Dream machine', title: 'The Dream Machine',
+    lead: 'A realistic landscape. Look closer and it turns to pixels, then patterns, then points of light. Nothing is destroyed, and nothing was as solid as it seemed.',
+    controls: [{ k: 'd', label: 'Look closer', min: 0, max: 1, val: 0, play: 22 }],
+    init(S) {
+      const b = document.createElement('canvas'); b.width = 640; b.height = 360; landscape(b.getContext('2d'), 640, 360);
+      const s = document.createElement('canvas'); s.width = 64; s.height = 36; const sg = s.getContext('2d'); sg.drawImage(b, 0, 0, 64, 36);
+      S.st.base = b; S.st.samp = sg.getImageData(0, 0, 64, 36).data; S.st.sm = document.createElement('canvas');
+    },
+    draw(S) {
+      const c = S.ctx, w = S.w, h = S.h, d = S.st.d, b = S.st.base;
+      c.fillStyle = '#05050a'; c.fillRect(0, 0, w, h);
+      const sc = Math.max(w / 640, h / 360), dw = 640 * sc, dh = 360 * sc, dx = (w - dw) / 2, dy = (h - dh) / 2;
+      const aSharp = 1 - sstep(.04, .2, d);
+      if (aSharp > .01) { c.globalAlpha = aSharp; c.drawImage(b, dx, dy, dw, dh); c.globalAlpha = 1; }
+      const aPix = sstep(.04, .2, d) * (1 - sstep(.42, .58, d));
+      if (aPix > .01) {
+        const px = lerp(3, 28, sstep(.04, .45, d)), sm = S.st.sm; sm.width = Math.ceil(w / px); sm.height = Math.ceil(h / px);
+        sm.getContext('2d').drawImage(b, 0, 0, 640, 360, (dx) / px, (dy) / px, dw / px, dh / px);
+        c.imageSmoothingEnabled = false; c.globalAlpha = aPix; c.drawImage(sm, 0, 0, sm.width * px, sm.height * px); c.globalAlpha = 1; c.imageSmoothingEnabled = true;
+      }
+      const cw = w / 64, ch = h / 36, D = S.st.samp;
+      const aPat = sstep(.42, .58, d) * (1 - sstep(.72, .84, d));
+      if (aPat > .01) {
+        c.lineWidth = 1.3; c.globalAlpha = aPat;
+        for (let r = 0; r < 36; r++) {
+          const mid = (r * 64 + 32) * 4; c.strokeStyle = 'rgb(' + D[mid] + ',' + D[mid + 1] + ',' + D[mid + 2] + ')'; c.beginPath();
+          for (let q = 0; q < 64; q++) { const i = (r * 64 + q) * 4, lum = (D[i] + D[i + 1] + D[i + 2]) / 765, y = r * ch + ch * .5 - lum * ch * 1.9; q ? c.lineTo(q * cw + cw / 2, y) : c.moveTo(cw / 2, y); }
+          c.stroke();
+        }
+        c.globalAlpha = 1;
+      }
+      const aLt = sstep(.72, .86, d);
+      if (aLt > .01) {
+        c.globalCompositeOperation = 'lighter';
+        for (let r = 0; r < 36; r++) for (let q = 0; q < 64; q++) {
+          const i = (r * 64 + q) * 4, lum = (D[i] + D[i + 1] + D[i + 2]) / 765;
+          c.fillStyle = 'rgba(' + D[i] + ',' + D[i + 1] + ',' + D[i + 2] + ',' + (aLt * .85) + ')';
+          c.beginPath(); c.arc(q * cw + cw / 2, r * ch + ch / 2, Math.max(.6, lum * ch * .8 * (1 + .2 * Math.sin(S.t * 2 + q + r))), 0, TAU); c.fill();
+        }
+        c.globalCompositeOperation = 'source-over';
+      }
+      S.cap(d < .08 ? 'A perfectly realistic landscape.' : d < .45 ? 'Pixels. Look closer.' : d < .75 ? 'Patterns of intensity.' : 'Points of light. "Dream-like" does not mean nothing appears. It means appearance lacks the solidity we project onto it.');
+    }
+  });
+})();
+
+
+</script>
+</body>
+</html>
