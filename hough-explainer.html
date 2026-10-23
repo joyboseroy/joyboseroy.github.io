@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teaching Computers to Spot Curves by Counting Votes | Joy Bose</title>
+<meta name="description" content="A plain-language explainer of the paper Beyond Lines: A Factorized Deep Hough Transform for Parametric Curve Detection.">
+<style>
+  :root {
+    --ink: #1c2130;
+    --navy: #1E2761;
+    --accent: #3D5AFE;
+    --muted: #5a6480;
+    --paper: #fdfdfb;
+    --wash: #f2f5fc;
+    --rule: #dfe4f0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.65 Georgia, "Times New Roman", serif;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 22px 80px; }
+  header { padding: 56px 0 8px; }
+  .eyebrow {
+    font: 600 13px/1 Verdana, Arial, sans-serif;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  h1 {
+    font-size: 34px;
+    line-height: 1.2;
+    color: var(--navy);
+    margin: 14px 0 10px;
+  }
+  .standfirst { color: var(--muted); font-style: italic; margin: 0 0 6px; }
+  .byline { font: 13px Verdana, Arial, sans-serif; color: var(--muted); }
+  h2 {
+    font-size: 22px;
+    color: var(--navy);
+    margin: 44px 0 10px;
+  }
+  p { margin: 0 0 16px; }
+  a { color: var(--accent); }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  figure { margin: 26px 0; }
+  figure img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; background: #fff; }
+  figcaption { font: 13px/1.5 Verdana, Arial, sans-serif; color: var(--muted); margin-top: 8px; }
+  /* signature element: the size comparison */
+  .contrast {
+    display: flex;
+    gap: 0;
+    margin: 30px 0;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+  }
+  .contrast > div { flex: 1; padding: 22px 12px 18px; }
+  .contrast .dense { background: var(--wash); }
+  .contrast .ours { background: var(--navy); color: #fff; }
+  .contrast .big {
+    display: block;
+    font: 700 40px/1 Georgia, serif;
+  }
+  .contrast .dense .big { color: var(--navy); }
+  .contrast .label {
+    display: block;
+    font: 12px/1.4 Verdana, Arial, sans-serif;
+    margin-top: 8px;
+  }
+  .contrast .dense .label { color: var(--muted); }
+  .contrast .ours .label { color: #CADCFC; }
+  .note {
+    border-left: 3px solid var(--accent);
+    background: var(--wash);
+    padding: 12px 16px;
+    margin: 22px 0;
+    font-size: 15.5px;
+  }
+  .links { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--rule); }
+  .links a { margin-right: 22px; font: 14px Verdana, Arial, sans-serif; }
+  footer { margin-top: 60px; font: 13px Verdana, Arial, sans-serif; color: var(--muted); }
+  @media (max-width: 540px) {
+    h1 { font-size: 27px; }
+    .contrast { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Plain-language explainer</div>
+  <h1>Teaching computers to spot curves by counting votes</h1>
+  <p class="standfirst">The idea behind my paper "Beyond Lines: A Factorized Deep Hough Transform for Parametric Curve Detection", explained without equations.</p>
+  <p class="byline">Joy Bose · 2026 · 6 minute read</p>
+</header>
+
+<h2>Finding shapes by voting</h2>
+<p>Suppose you want a computer to find a straight line in a noisy photo. One classic trick, invented in the 1960s and called the Hough transform, works like an election. Every bright pixel in the image gets to vote for all the lines that could pass through it. A pixel on its own knows very little, but if a real line exists in the picture, hundreds of pixels along it end up voting for the same candidate. Count the votes, find the winner, and you have found your line, even if parts of it are hidden or the image is noisy. No single pixel needs to be trustworthy. The agreement is what matters.</p>
+<p>A 2021 paper called the Deep Hough Transform gave this old idea a modern upgrade. Instead of letting raw pixels vote, it lets a neural network's learned features vote. The network learns what "looks like part of a meaningful line" and the voting machinery turns that local evidence into whole detected lines. It works well, and it is fast.</p>
+
+<h2>So why only straight lines?</h2>
+<p>Voting needs a ballot box for every possible candidate. A straight line can be described by two numbers, its angle and its distance from the center, so the full collection of candidate lines fits in a small two-dimensional table. Cheap.</p>
+<p>Most other shapes need more numbers. An ellipse, the shape of a tilted circle, needs five: where its center is, how long its two axes are, and how it is rotated. If you build a ballot box for every combination of five numbers, the table explodes. At the resolution used in my experiments, the difference looks like this:</p>
+
+<div class="contrast" role="img" aria-label="Memory comparison: a dense voting table for ellipses would need about 4 gigabytes, the factorized method needs 236 kilobytes">
+  <div class="dense">
+    <span class="big">~4&nbsp;GB</span>
+    <span class="label">one giant voting table<br>for every possible ellipse<br>(worked out, not built)</span>
+  </div>
+  <div class="ours">
+    <span class="big">236&nbsp;KB</span>
+    <span class="label">the factorized version<br>(measured in this paper)</span>
+  </div>
+</div>
+
+<p>One fair caveat: the 4 GB assumes 32 bins on every shape axis, while the cascade uses a coarser grid of 216 shapes. A dense table on that same coarser grid would be about 27 MB, so the like-for-like saving is roughly 117 times, not thousands.</p>
+<p>I never built the 4 GB table. That number is arithmetic, and the point is exactly that nobody would want to build it: it would not fit alongside a neural network on a typical graphics card. This is why the deep voting idea stayed with straight lines. The ballot boxes would not fit in the building.</p>
+
+<h2>The fix: ask "where" before "what"</h2>
+<p>The paper splits the election into two rounds. The same idea appears in older, non-neural Hough methods. The new part is making it work on learned features inside a network that trains end to end.</p>
+<p><strong>Round one asks only "where."</strong> Many curves have a natural anchor point: a parabola has a vertex, a circle and an ellipse have a center. Finding just the anchor is a cheap two-dimensional search, the same size as the original line problem, however complicated the full shape is.</p>
+<p><strong>Round two asks "what shape," but only at the winners.</strong> Once a handful of promising anchor locations are found, the method opens a small, detailed ballot box at each one: given that something is centered here, which curvature, size and tilt does the evidence support?</p>
+<p>Most of the giant table would have been spent on locations where nothing was happening. By committing to locations first, the method never builds it.</p>
+<p>One thing to be clear about: you tell the method which kind of curve to look for. It finds parabolas, or circles, or ellipses, as you choose. It does not discover shapes on its own. Classical Hough methods work the same way.</p>
+
+<figure>
+  <img src="hough-schematic.png" alt="Diagram comparing one large dense voting cube against a small 2D anchor map that spawns a few small shape ballots" loading="lazy">
+  <figcaption>Left: the dense voting table a direct approach would need. Right: the two-round version, drawn to scale with the sizes from the paper.</figcaption>
+</figure>
+
+<h2>Does it work?</h2>
+<p>Reasonably, and I tried to test it honestly. The test images are synthetic: noise, hidden patches and decoy line segments added to parabolas, circles and ellipses. For fairness, the detection threshold is chosen on separate validation images, and the competing methods get the same tuning.</p>
+<p>The result is a tie, not a win. Against RANSAC, a classical method that repeatedly guesses a curve from a few points and keeps the best fit, the new method scores the same on parabolas (0.71 against 0.70) and circles (0.74 against 0.74). On ellipses it is slightly behind (0.38 against 0.41). So the claim is not that voting detects curves better. It is that voting can now be done on learned features for these shapes without the memory blowing up.</p>
+
+<figure>
+  <img src="hough-parabola.png" alt="A noisy image of a parabola with the detected curve overlaid almost exactly on the ground truth curve" loading="lazy">
+  <figcaption>A parabola detected in a noisy, partly occluded image (dashed red: detection, green: truth). This example comes from an earlier version of the model.</figcaption>
+</figure>
+
+<p>I also compared against two small learned detectors that guess curve parameters directly, with no built-in geometry. They scored about 0.15 and 0.13 on parabolas, far below the geometric methods. I would not read too much into that. They were small and trained briefly, and I only ran them on parabolas.</p>
+
+<h2>Where it still fails</h2>
+<p>The two rounds are not equally good. If I hand round two the true anchor locations, it detects curves very well (0.94). With the anchors found by round one, the score drops to 0.71. So almost all the remaining error comes from the "where" step, not the "what shape" step.</p>
+<p>One failure is easy to see. When two curves have their anchors within about 8 pixels of each other, round one merges them into a single peak and the score falls by about 0.2. Giving round one more candidate shapes to try helps too: going from 6 to 16 raised the score on one test run from about 0.70 to 0.78, though I have only run that once. A further finding surprised me: how round one combines evidence from different guessed shapes matters a lot. Taking the best guess instead of a smoothed combination raised the score from 0.51 to 0.70.</p>
+
+<div class="note">
+  The limits, plainly: results come from small synthetic images, several experiments use a single run, and the real-photo test on lane markings is only a feasibility check, not a competition with real lane detectors. The paper lists these, and what I plan to fix first.
+</div>
+
+<h2>Why bother?</h2>
+<p>Curved structures are everywhere computers look: lane markings on roads, vessels and anatomical outlines in medical scans, tool and needle trajectories in surgical imaging. The Hough transform's voting principle is also a cousin of the mathematics behind CT scan reconstruction, which is part of what drew me to the problem. The paper is not a finished detector for any of these. It shows that deep voting can extend past straight lines with memory that stays small, and it pinpoints what to improve next.</p>
+
+<div class="links">
+  <a href="https://github.com/joyboseroy/curve-hough">Code and benchmark on GitHub</a>
+  <a href="https://joyboseroy.github.io/index.html">Back to my homepage</a>
+  <a href="https://doi.org/10.5281/zenodo.21424983">Read the paper (Zenodo, DOI)</a>
+</div>
+
+<footer>© 2026 Joy Bose. Figures are from the paper and generated by the released code.</footer>
+
+</div>
+
+
+</body></html>
